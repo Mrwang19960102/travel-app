@@ -2,260 +2,713 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>婚假旅行 · 云南+三亚</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    /* Semantic Color Tokens */
+    --primary: #0d9488;
+    --primary-light: #2dd4bf;
+    --primary-bg: #f0fdfa;
+    --primary-gradient: linear-gradient(135deg, #0d9488, #14b8a6);
+    --secondary: #f59e0b;
+    --secondary-light: #fbbf24;
+    --secondary-bg: #fffbeb;
+    --accent: #8b5cf6;
+    --accent-bg: #f5f3ff;
+    --success: #10b981;
+    --success-bg: #ecfdf5;
+    --surface: #ffffff;
+    --surface-alt: #fafafa;
+    --background: #f8f9fa;
+    --text-primary: #1a1a2e;
+    --text-secondary: #64748b;
+    --text-tertiary: #94a3b8;
+    --border: #f1f5f9;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
+    --shadow-lg: 0 10px 30px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
+    --shadow-primary: 0 4px 16px rgba(13,148,136,0.25);
+    --radius-sm: 10px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-xl: 24px;
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-normal: 250ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
-    background: #f0f2f5;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang SC', 'Helvetica Neue', sans-serif;
+    background: var(--background);
     max-width: 1200px;
     margin: 0 auto;
     min-height: 100vh;
+    min-height: 100dvh;
     position: relative;
     overflow-x: hidden;
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
   @media (max-width: 480px) {
     body { max-width: 100%; }
   }
-  .page { display: none; padding-bottom: 70px; min-height: 100vh; }
+
+  .page {
+    display: none;
+    padding-bottom: 80px;
+    min-height: 100vh;
+    min-height: 100dvh;
+    animation: pageIn var(--transition-normal) ease-out;
+  }
   .page.active { display: block; }
+
+  @keyframes pageIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.92); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+
+  @keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 0.4; }
+    100% { transform: scale(1.3); opacity: 0; }
+  }
 
   /* Tab Bar */
   .tabbar {
-    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 100%; max-width: 1200px;
-    background: #fff; border-top: 1px solid #e5e7eb;
-    display: flex; z-index: 100;
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 1200px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 0.5px solid rgba(0,0,0,0.06);
+    display: flex;
+    z-index: 100;
     padding-bottom: env(safe-area-inset-bottom);
+    padding-top: 6px;
   }
   @media (max-width: 480px) {
     .tabbar { max-width: 100%; }
   }
   .tab-item {
-    flex: 1; text-align: center; padding: 8px 0 6px;
-    cursor: pointer; transition: all 0.2s;
+    flex: 1;
+    text-align: center;
+    padding: 6px 0 8px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    min-height: 44px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    -webkit-user-select: none;
+    user-select: none;
   }
-  .tab-item.active .tab-icon { color: #0ea5e9; }
-  .tab-item.active .tab-text { color: #0ea5e9; }
-  .tab-icon { font-size: 22px; color: #9ca3af; margin-bottom: 2px; }
-  .tab-text { font-size: 11px; color: #9ca3af; }
+  .tab-item:active { transform: scale(0.92); }
+  .tab-item.active .tab-icon svg { stroke: var(--primary); }
+  .tab-item.active .tab-text { color: var(--primary); font-weight: 600; }
+  .tab-icon { margin-bottom: 2px; display: flex; align-items: center; justify-content: center; }
+  .tab-icon svg { width: 22px; height: 22px; stroke: var(--text-tertiary); transition: stroke var(--transition-fast); }
+  .tab-text { font-size: 11px; color: var(--text-tertiary); transition: all var(--transition-fast); }
 
   /* Nav Bar */
   .navbar {
-    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
-    color: #fff; padding: 44px 16px 12px;
-    text-align: center; font-size: 17px; font-weight: 600;
-    position: sticky; top: 0; z-index: 50;
+    background: var(--primary-gradient);
+    color: #fff;
+    padding: 48px 16px 14px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    letter-spacing: 0.5px;
+  }
+  .navbar::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 20px;
+    background: linear-gradient(to bottom, rgba(13,148,136,0.06), transparent);
   }
 
-  /* Home Page */
-  .hero { padding: 20px 16px; background: linear-gradient(180deg, #e0f2fe 0%, #f8fafc 100%); }
-  .hero-title { font-size: 28px; font-weight: 700; color: #0f172a; }
-  .hero-sub { font-size: 14px; color: #64748b; margin-top: 4px; }
-  .stats { display: flex; gap: 12px; padding: 0 16px; margin-top: 16px; flex-wrap: wrap; }
+  /* SVG Icon base */
+  .icon { display: inline-flex; align-items: center; justify-content: center; }
+  .icon svg { width: 100%; height: 100%; }
+
+  /* ===== HOME PAGE ===== */
+  .hero {
+    padding: 24px 16px 20px;
+    background: linear-gradient(180deg, var(--primary-bg) 0%, var(--background) 100%);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(13,148,136,0.08), transparent 70%);
+    animation: float 4s ease-in-out infinite;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(245,158,11,0.06), transparent 70%);
+    animation: float 5s ease-in-out infinite 1s;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--primary-gradient);
+    color: #fff;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    box-shadow: var(--shadow-primary);
+  }
+  .hero-badge svg { width: 16px; height: 16px; }
+  .hero-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.3;
+    letter-spacing: -0.5px;
+  }
+  .hero-sub {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+    line-height: 1.5;
+  }
+
+  .stats {
+    display: flex;
+    gap: 10px;
+    padding: 0 16px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
   .stat-card {
-    flex: 1; min-width: 140px; background: #fff; border-radius: 12px; padding: 16px;
-    text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    flex: 1;
+    min-width: 100px;
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: 14px 12px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
   }
-  .stat-val { font-size: 22px; font-weight: 700; color: #0ea5e9; }
-  .stat-label { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+  .stat-card:active { transform: scale(0.97); }
+  .stat-val { font-size: 20px; font-weight: 700; color: var(--primary); }
+  .stat-label { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; font-weight: 500; }
+
   .section { padding: 20px 16px; }
-  .section-title { font-size: 18px; font-weight: 600; color: #0f172a; margin-bottom: 12px; }
-  .trip-card {
-    background: #fff; border-radius: 12px; padding: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 12px;
+  .section-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
+  .section-title::before {
+    content: '';
+    width: 3px;
+    height: 18px;
+    border-radius: 2px;
+    background: var(--primary-gradient);
+  }
+
+  .trip-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    margin-bottom: 12px;
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+    animation: cardIn var(--transition-slow) ease-out both;
+  }
+  .trip-card:nth-child(1) { animation-delay: 50ms; }
+  .trip-card:nth-child(2) { animation-delay: 100ms; }
+  .trip-card:active { transform: scale(0.98); box-shadow: var(--shadow-md); }
   .trip-header { display: flex; align-items: center; margin-bottom: 12px; }
   .trip-icon-box {
-    width: 48px; height: 48px; border-radius: 10px;
-    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 24px; margin-right: 12px;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    flex-shrink: 0;
+    overflow: hidden;
   }
-  .trip-name { font-size: 16px; font-weight: 600; color: #0f172a; }
-  .trip-date { font-size: 13px; color: #64748b; margin-top: 2px; }
+  .trip-icon-box svg { width: 26px; height: 26px; }
+  .trip-icon-box.rose { background: var(--primary-gradient); }
+  .trip-icon-box.rose svg { stroke: #fff; }
+  .trip-icon-box.amber { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+  .trip-icon-box.amber svg { stroke: #fff; }
+  .trip-name { font-size: 16px; font-weight: 600; color: var(--text-primary); }
+  .trip-date { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
   .route-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
   .route-tag {
-    background: #e0f2fe; color: #0369a1; padding: 4px 12px;
-    border-radius: 20px; font-size: 13px;
+    background: var(--primary-bg);
+    color: var(--primary);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
   }
-  .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .action-card {
-    background: #fff; border-radius: 12px; padding: 20px 16px;
-    text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    cursor: pointer; transition: all 0.2s;
-  }
-  .action-card:active { transform: scale(0.97); opacity: 0.9; }
-  .action-icon {
-    width: 56px; height: 56px; border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px; margin: 0 auto 10px;
-  }
-  .action-icon.blue { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
-  .action-icon.orange { background: linear-gradient(135deg, #ffedd5, #fed7aa); }
-  .action-icon.green { background: linear-gradient(135deg, #dcfce7, #bbf7d0); }
-  .action-icon.purple { background: linear-gradient(135deg, #f3e8ff, #e9d5ff); }
-  .action-title { font-size: 15px; font-weight: 500; color: #0f172a; margin-bottom: 4px; }
-  .action-desc { font-size: 12px; color: #94a3b8; }
+  .route-tag.amber { background: var(--secondary-bg); color: #92400e; }
 
-  /* Itinerary Page */
-  .itinerary-page { background: #f8fafc; }
-  .day-card {
-    background: #fff; border-radius: 12px; padding: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin: 12px 16px;
+  .quick-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
   }
+  .action-card {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: 20px 16px;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    min-height: 44px;
+  }
+  .action-card:active { transform: scale(0.95); box-shadow: var(--shadow-md); }
+  .action-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+  }
+  .action-icon svg { width: 26px; height: 26px; }
+  .action-icon.rose { background: var(--primary-bg); }
+  .action-icon.rose svg { stroke: var(--primary); }
+  .action-icon.amber { background: var(--secondary-bg); }
+  .action-icon.amber svg { stroke: var(--secondary); }
+  .action-icon.emerald { background: var(--success-bg); }
+  .action-icon.emerald svg { stroke: var(--success); }
+  .action-icon.violet { background: var(--accent-bg); }
+  .action-icon.violet svg { stroke: var(--accent); }
+  .action-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 3px; }
+  .action-desc { font-size: 12px; color: var(--text-tertiary); }
+
+  /* ===== ITINERARY PAGE ===== */
+  .itinerary-page { background: var(--background); }
+  .day-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    margin: 12px 16px;
+    transition: transform var(--transition-fast);
+    animation: cardIn var(--transition-slow) ease-out both;
+  }
+  .day-card:nth-child(1) { animation-delay: 30ms; }
+  .day-card:nth-child(2) { animation-delay: 60ms; }
+  .day-card:nth-child(3) { animation-delay: 90ms; }
+  .day-card:nth-child(4) { animation-delay: 120ms; }
+  .day-card:nth-child(5) { animation-delay: 150ms; }
+  .day-card:nth-child(6) { animation-delay: 180ms; }
+  .day-card:nth-child(7) { animation-delay: 210ms; }
+  .day-card:active { transform: scale(0.99); }
   .day-header { display: flex; align-items: center; margin-bottom: 10px; }
   .day-badge {
-    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
-    color: #fff; padding: 4px 12px; border-radius: 20px;
-    font-size: 13px; font-weight: 500; margin-right: 10px;
+    background: var(--primary-gradient);
+    color: #fff;
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-right: 10px;
+    box-shadow: 0 2px 8px rgba(13,148,136,0.2);
   }
-  .day-date { font-size: 13px; color: #94a3b8; }
-  .day-title { font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 8px; line-height: 1.5; }
+  .day-date { font-size: 13px; color: var(--text-tertiary); font-weight: 500; }
+  .day-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 10px;
+    line-height: 1.5;
+  }
   .city-tag {
-    display: inline-block; background: #e0f2fe; color: #0369a1;
-    padding: 3px 10px; border-radius: 20px; font-size: 12px; margin-bottom: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--primary-bg);
+    color: var(--primary);
+    padding: 3px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 12px;
   }
+  .city-tag svg { width: 12px; height: 12px; }
   .highlight-item {
-    display: flex; align-items: flex-start; margin-bottom: 8px;
-    font-size: 14px; color: #475569; line-height: 1.6;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
   }
   .highlight-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: #0ea5e9; margin-right: 8px; margin-top: 8px; flex-shrink: 0;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--primary);
+    margin-right: 10px;
+    margin-top: 9px;
+    flex-shrink: 0;
   }
   .accommodation {
-    display: flex; align-items: center; padding-top: 10px;
-    border-top: 1px solid #f1f5f9; margin-top: 10px;
+    display: flex;
+    align-items: center;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    margin-top: 12px;
   }
-  .accommodation-label { font-size: 13px; color: #94a3b8; margin-right: 6px; }
-  .accommodation-value { font-size: 14px; color: #0f172a; font-weight: 500; }
+  .accommodation-label { font-size: 13px; color: var(--text-tertiary); margin-right: 6px; }
+  .accommodation-value { font-size: 14px; color: var(--text-primary); font-weight: 500; }
   .tip-box {
-    margin-top: 10px; padding: 10px; background: #fef3c7;
-    border-radius: 8px; border-left: 3px solid #f59e0b;
+    margin-top: 12px;
+    padding: 12px;
+    background: var(--secondary-bg);
+    border-radius: var(--radius-sm);
+    border-left: 3px solid var(--secondary);
   }
-  .tip-text { font-size: 12px; color: #92400e; line-height: 1.5; }
+  .tip-text { font-size: 12px; color: #92400e; line-height: 1.6; }
 
-  /* Expense Page */
-  .expense-page { background: #f8fafc; }
+  /* ===== EXPENSE PAGE ===== */
+  .expense-page { background: var(--background); }
   .summary-card {
-    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
-    border-radius: 12px; padding: 24px 20px; margin: 16px;
-    box-shadow: 0 4px 12px rgba(14,165,233,0.3);
+    background: var(--primary-gradient);
+    border-radius: var(--radius-lg);
+    padding: 28px 22px;
+    margin: 16px;
+    box-shadow: var(--shadow-primary);
+    position: relative;
+    overflow: hidden;
   }
-  .summary-title { font-size: 14px; color: rgba(255,255,255,0.9); }
-  .summary-amount { font-size: 36px; font-weight: 700; color: #fff; margin: 6px 0; }
-  .summary-unit { font-size: 13px; color: rgba(255,255,255,0.8); }
-  .summary-row { display: flex; justify-content: space-between; margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2); }
+  .summary-card::before {
+    content: '';
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+  .summary-card::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+  }
+  .summary-title { font-size: 14px; color: rgba(255,255,255,0.85); font-weight: 500; }
+  .summary-amount { font-size: 36px; font-weight: 800; color: #fff; margin: 6px 0; letter-spacing: -1px; }
+  .summary-unit { font-size: 13px; color: rgba(255,255,255,0.75); }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
   .summary-item { text-align: center; }
-  .summary-item-val { font-size: 18px; font-weight: 600; color: #fff; }
-  .summary-item-label { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 2px; }
+  .summary-item-val { font-size: 18px; font-weight: 700; color: #fff; }
+  .summary-item-label { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 2px; font-weight: 500; }
+
   .category-card {
-    background: #fff; border-radius: 12px; padding: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin: 12px 16px;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    margin: 12px 16px;
+    animation: cardIn var(--transition-slow) ease-out both;
   }
+  .category-card:nth-child(2) { animation-delay: 50ms; }
+  .category-card:nth-child(3) { animation-delay: 100ms; }
+  .category-card:nth-child(4) { animation-delay: 150ms; }
+  .category-card:nth-child(5) { animation-delay: 200ms; }
+  .category-card:nth-child(6) { animation-delay: 250ms; }
   .category-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
   }
-  .category-name { font-size: 16px; font-weight: 600; color: #0f172a; }
-  .category-total { font-size: 16px; font-weight: 700; color: #0ea5e9; }
-  .expense-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
-  .expense-name { font-size: 14px; color: #475569; flex: 1; }
-  .expense-amount { font-size: 14px; font-weight: 500; color: #0f172a; margin-left: 12px; }
-  .expense-note { font-size: 12px; color: #94a3b8; margin-top: 4px; line-height: 1.5; }
+  .category-name {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .category-name svg { width: 20px; height: 20px; }
+  .category-total { font-size: 16px; font-weight: 700; color: var(--primary); }
+  .expense-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+  }
+  .expense-name { font-size: 14px; color: var(--text-secondary); flex: 1; }
+  .expense-amount { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-left: 12px; font-variant-numeric: tabular-nums; }
+  .expense-note { font-size: 12px; color: var(--text-tertiary); margin-top: 2px; line-height: 1.5; }
+
   .not-included {
-    background: #fff; border-radius: 12px; padding: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin: 12px 16px 20px;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    margin: 12px 16px 20px;
   }
-  .not-included-title { font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 12px; }
+  .not-included-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .not-included-title svg { width: 18px; height: 18px; stroke: #ef4444; }
   .not-included-item {
-    display: flex; align-items: flex-start; margin-bottom: 8px;
-    font-size: 14px; color: #475569; line-height: 1.6;
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
   }
   .not-included-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: #ef4444; margin-right: 8px; margin-top: 8px; flex-shrink: 0;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #ef4444;
+    margin-right: 10px;
+    margin-top: 9px;
+    flex-shrink: 0;
   }
 
-  /* Mine Page */
-  .mine-page { background: #f8fafc; }
-  .mine-header { text-align: center; padding: 30px 16px 20px; }
+  /* ===== MINE PAGE ===== */
+  .mine-page { background: var(--background); }
+  .mine-header {
+    text-align: center;
+    padding: 28px 16px 20px;
+    animation: scaleIn var(--transition-slow) ease-out;
+  }
   .mine-avatar {
-    width: 80px; height: 80px; border-radius: 50%;
-    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 40px; margin: 0 auto 12px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 14px;
+    box-shadow: var(--shadow-primary);
+    position: relative;
   }
-  .mine-name { font-size: 20px; font-weight: 600; color: #0f172a; }
-  .mine-trip { font-size: 14px; color: #64748b; margin-top: 4px; }
+  .mine-avatar::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(13,148,136,0.15);
+    animation: pulse-ring 2s ease-out infinite;
+  }
+  .mine-avatar svg { width: 40px; height: 40px; stroke: #fff; }
+  .mine-name { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+  .mine-trip { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
+
   .tip-card {
-    background: #fff; border-radius: 12px; padding: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin: 12px 16px;
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    margin: 10px 16px;
+    transition: transform var(--transition-fast);
   }
+  .tip-card:active { transform: scale(0.98); }
   .tip-row { display: flex; align-items: flex-start; }
   .tip-icon-box {
-    width: 40px; height: 40px; border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; margin-right: 12px; flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    flex-shrink: 0;
   }
-  .tip-icon-box.blue { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
-  .tip-icon-box.orange { background: linear-gradient(135deg, #ffedd5, #fed7aa); }
-  .tip-icon-box.green { background: linear-gradient(135deg, #dcfce7, #bbf7d0); }
-  .tip-icon-box.purple { background: linear-gradient(135deg, #f3e8ff, #e9d5ff); }
+  .tip-icon-box svg { width: 22px; height: 22px; }
+  .tip-icon-box.rose { background: var(--primary-bg); }
+  .tip-icon-box.rose svg { stroke: var(--primary); }
+  .tip-icon-box.amber { background: var(--secondary-bg); }
+  .tip-icon-box.amber svg { stroke: var(--secondary); }
+  .tip-icon-box.emerald { background: var(--success-bg); }
+  .tip-icon-box.emerald svg { stroke: var(--success); }
+  .tip-icon-box.violet { background: var(--accent-bg); }
+  .tip-icon-box.violet svg { stroke: var(--accent); }
   .tip-content { flex: 1; }
-  .tip-title { font-size: 15px; font-weight: 500; color: #0f172a; margin-bottom: 4px; }
-  .tip-desc { font-size: 13px; color: #64748b; line-height: 1.5; }
+  .tip-title { font-size: 14px; font-weight: 600; color: var(--text-primary); margin-bottom: 3px; }
+  .tip-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.6; }
+
   .checklist-card {
-    background: #fff; border-radius: 12px; padding: 16px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin: 12px 16px 20px;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    margin: 12px 16px 20px;
   }
   .checklist-item {
-    display: flex; align-items: center; padding: 10px 0;
-    border-bottom: 1px solid #f1f5f9; cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    min-height: 44px;
+    transition: background var(--transition-fast);
+    border-radius: 8px;
+    padding-left: 4px;
+    padding-right: 4px;
   }
   .checklist-item:last-child { border-bottom: none; }
+  .checklist-item:active { background: var(--background); }
   .checkbox {
-    width: 22px; height: 22px; border-radius: 4px;
-    border: 2px solid #e2e8f0; margin-right: 12px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; transition: all 0.2s;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 2px solid #e2e8f0;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all var(--transition-fast);
   }
-  .checkbox.checked { background: #0ea5e9; border-color: #0ea5e9; }
-  .checkmark { color: #fff; font-size: 14px; display: none; }
+  .checkbox.checked {
+    background: var(--primary-gradient);
+    border-color: var(--primary);
+  }
+  .checkmark { color: #fff; font-size: 12px; display: none; font-weight: 700; }
   .checkbox.checked .checkmark { display: block; }
-  .checklist-text { font-size: 14px; color: #0f172a; }
+  .checklist-text { font-size: 14px; color: var(--text-primary); }
+  .checklist-text.done { text-decoration: line-through; color: var(--text-tertiary); }
 
-  /* Desktop responsive */
+  /* ===== DESKTOP RESPONSIVE ===== */
   @media (min-width: 768px) {
     .hero-title { font-size: 36px; }
     .hero-sub { font-size: 16px; }
-    .section-title { font-size: 22px; }
+    .section-title { font-size: 20px; }
     .trip-card { display: inline-block; width: calc(50% - 8px); vertical-align: top; margin-right: 12px; }
     .trip-card:nth-child(even) { margin-right: 0; }
     .expense-item { padding: 12px 0; }
     .expense-name { font-size: 15px; }
     .expense-amount { font-size: 15px; }
-    .navbar { padding: 20px 24px 16px; font-size: 20px; }
+    .navbar { padding: 24px 24px 18px; font-size: 20px; }
     .section { padding: 24px 24px; }
-    .hero { padding: 32px 24px; }
-    .stat-val { font-size: 28px; }
-    .stat-label { font-size: 13px; }
+    .hero { padding: 36px 24px; }
+    .stat-val { font-size: 24px; }
+    .stat-label { font-size: 12px; }
+    .quick-actions { grid-template-columns: repeat(4, 1fr); }
   }
   @media (min-width: 1024px) {
     .trip-card { width: calc(33.333% - 12px); margin-right: 12px; }
     .trip-card:nth-child(even) { margin-right: 12px; }
     .trip-card:nth-child(3n) { margin-right: 0; }
   }
+
+  /* Reduced Motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 </style>
 </head>
 <body>
 
-<!-- Home Page -->
+<!-- ===== HOME PAGE ===== -->
 <div id="page-home" class="page active">
-  <div class="navbar">💍 婚假旅行</div>
+  <div class="navbar">婚假旅行</div>
   <div class="hero">
+    <div class="hero-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+      蜜月之旅
+    </div>
     <div class="hero-title">婚假旅行</div>
     <div class="hero-sub">2人 · 云南+三亚 · 浪漫蜜月之旅</div>
   </div>
@@ -268,7 +721,9 @@
     <div class="section-title">行程概览</div>
     <div class="trip-card">
       <div class="trip-header">
-        <div class="trip-icon-box">️</div>
+        <div class="trip-icon-box rose">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
+        </div>
         <div><div class="trip-name">云南经典环线</div><div class="trip-date">10月7日 - 10月13日</div></div>
       </div>
       <div class="route-tags">
@@ -277,45 +732,58 @@
     </div>
     <div class="trip-card">
       <div class="trip-header">
-        <div class="trip-icon-box" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">🏖️</div>
+        <div class="trip-icon-box amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
         <div><div class="trip-name">三亚浪漫之旅</div><div class="trip-date">行程规划中...</div></div>
       </div>
       <div class="route-tags">
-        <span class="route-tag" style="background: #fef3c7; color: #92400e;">三亚</span>
-        <span class="route-tag" style="background: #fef3c7; color: #92400e;">待定</span>
+        <span class="route-tag amber">三亚</span>
+        <span class="route-tag amber">待定</span>
       </div>
     </div>
   </div>
   <div class="section">
     <div class="section-title">快速入口</div>
     <div class="quick-actions">
-      <div class="action-card" onclick="switchTab(1)">
-        <div class="action-icon blue">📅</div>
+      <div class="action-card" onclick="switchTab(1)" role="button" tabindex="0" aria-label="查看每日行程">
+        <div class="action-icon rose">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
         <div class="action-title">每日行程</div><div class="action-desc">查看详细安排</div>
       </div>
-      <div class="action-card" onclick="switchTab(2)">
-        <div class="action-icon orange">💰</div>
+      <div class="action-card" onclick="switchTab(2)" role="button" tabindex="0" aria-label="查看费用明细">
+        <div class="action-icon amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
         <div class="action-title">费用明细</div><div class="action-desc">查看预算 breakdown</div>
       </div>
-      <div class="action-card" onclick="switchTab(3)">
-        <div class="action-icon green">🌤️</div>
+      <div class="action-card" onclick="switchTab(3)" role="button" tabindex="0" aria-label="查看出行贴士">
+        <div class="action-icon emerald">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </div>
         <div class="action-title">出行贴士</div><div class="action-desc">注意事项</div>
       </div>
-      <div class="action-card" onclick="switchTab(3)">
-        <div class="action-icon purple"></div>
+      <div class="action-card" onclick="switchTab(3)" role="button" tabindex="0" aria-label="查看行李清单">
+        <div class="action-icon violet">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        </div>
         <div class="action-title">行李清单</div><div class="action-desc">准备物品</div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Itinerary Page -->
+<!-- ===== ITINERARY PAGE ===== -->
 <div id="page-itinerary" class="page itinerary-page">
   <div class="navbar">每日行程</div>
   <div class="day-card">
     <div class="day-header"><span class="day-badge">Day 1</span><span class="day-date">10月7日</span></div>
     <div class="day-title">各地 → 丽江 - 接站入住酒店</div>
-    <span class="city-tag">丽江</span>
+    <span class="city-tag">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      丽江
+    </span>
     <div class="highlight-item"><div class="highlight-dot"></div><span>根据航班时间安排接站入住酒店</span></div>
     <div class="highlight-item"><div class="highlight-dot"></div><span>今日不安排行程和用车，可自由逛丽江古城</span></div>
     <div class="highlight-item"><div class="highlight-dot"></div><span>推荐夜餐餐厅/酒吧街/狮子山</span></div>
@@ -324,7 +792,10 @@
   <div class="day-card">
     <div class="day-header"><span class="day-badge">Day 2</span><span class="day-date">10月8日</span></div>
     <div class="day-title">前往大理 · 海东线 · 兴盛大桥 · 圣托里尼 · 双廊</div>
-    <span class="city-tag">大理</span>
+    <span class="city-tag">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      大理
+    </span>
     <div class="highlight-item"><div class="highlight-dot"></div><span>【文笔村】沿海彩虹公路，沿海渔村</span></div>
     <div class="highlight-item"><div class="highlight-dot"></div><span>【双廊古镇】洱海保存最完好的临海小镇</span></div>
     <div class="highlight-item"><div class="highlight-dot"></div><span>【南诏风情岛】乘坐游船登岛，360度环游洱海</span></div>
@@ -334,7 +805,10 @@
   <div class="day-card">
     <div class="day-header"><span class="day-badge">Day 3</span><span class="day-date">10月9日</span></div>
     <div class="day-title">海西线 · 大理古城 · 龙龛码头 · 喜洲古镇 · 前往丽江</div>
-    <span class="city-tag">丽江</span>
+    <span class="city-tag">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      丽江
+    </span>
     <div class="highlight-item"><div class="highlight-dot"></div><span>【龙龛码头】红杉树，洱海观日出最佳地点</span></div>
     <div class="highlight-item"><div class="highlight-dot"></div><span>【大理古城】庭院里花木扶疏，五华楼，洋人街</span></div>
     <div class="highlight-item"><div class="highlight-dot"></div><span>【磻溪湾】大理最美S湾，可租自行车骑行</span></div>
@@ -344,18 +818,24 @@
   <div class="day-card">
     <div class="day-header"><span class="day-badge">Day 4</span><span class="day-date">10月10日</span></div>
     <div class="day-title">丽江 · 玉龙雪山 · 云杉坪索道 · 蓝月谷 · 束河古镇</div>
-    <span class="city-tag">丽江</span>
+    <span class="city-tag">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      丽江
+    </span>
     <div class="highlight-item"><div class="highlight-dot"></div><span>【东巴谷】观看玉龙雪山日照金山</span></div>
     <div class="highlight-item"><div class="highlight-dot"></div><span>【云杉坪索道】直达海拔3240米高山草甸</span></div>
     <div class="highlight-item"><div class="highlight-dot"></div><span>【蓝月谷】有着小九寨之称的蓝月谷</span></div>
     <div class="highlight-item"><div class="highlight-dot"></div><span>【束河古镇】CCTV评选中国十大名镇</span></div>
     <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">丽江酒店</span></div>
-    <div class="tip-box"><span class="tip-text">⚠️ 云杉坪索道需要实名制预定并且限票，定制师会教客人如何抢票</span></div>
+    <div class="tip-box"><span class="tip-text">云杉坪索道需要实名制预定并且限票，定制师会教客人如何抢票</span></div>
   </div>
   <div class="day-card">
     <div class="day-header"><span class="day-badge">Day 5</span><span class="day-date">10月11日</span></div>
     <div class="day-title">丽江 · 长江第一湾 · 虎跳峡 · 依拉草原 · 独克宗月光城</div>
-    <span class="city-tag">香格里拉</span>
+    <span class="city-tag">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      香格里拉
+    </span>
     <div class="highlight-item"><div class="highlight-dot"></div><span>【长江第一湾】途径长江第一湾拍照打卡</span></div>
     <div class="highlight-item"><div class="highlight-dot"></div><span>【虎跳峡】长江上第一大峡谷，以险奇闻名</span></div>
     <div class="highlight-item"><div class="highlight-dot"></div><span>【独克宗古城】建议前往山顶打卡转经筒</span></div>
@@ -366,7 +846,10 @@
   <div class="day-card">
     <div class="day-header"><span class="day-badge">Day 6</span><span class="day-date">10月12日</span></div>
     <div class="day-title">松赞林寺 · 普达措国家公园</div>
-    <span class="city-tag">香格里拉</span>
+    <span class="city-tag">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      香格里拉
+    </span>
     <div class="highlight-item"><div class="highlight-dot"></div><span>【松赞林寺】小布达拉宫，进藏之前必去景点</span></div>
     <div class="highlight-item"><div class="highlight-dot"></div><span>【普达措】天然氧吧5A国家森林公园，高原牧场</span></div>
     <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">香格里拉酒店</span></div>
@@ -378,7 +861,7 @@
   </div>
 </div>
 
-<!-- Expense Page -->
+<!-- ===== EXPENSE PAGE ===== -->
 <div id="page-expense" class="page expense-page">
   <div class="navbar">费用明细</div>
   <div class="summary-card">
@@ -392,7 +875,13 @@
     </div>
   </div>
   <div class="category-card">
-    <div class="category-header"><span class="category-name">门票</span><span class="category-total">¥563/人</span></div>
+    <div class="category-header">
+      <span class="category-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+        门票
+      </span>
+      <span class="category-total">¥563/人</span>
+    </div>
     <div class="expense-item"><span class="expense-name">玉龙雪山进山费</span><span class="expense-amount">¥100</span></div>
     <div class="expense-item"><span class="expense-name">云杉坪索道</span><span class="expense-amount">¥60</span></div>
     <div class="expense-item"><span class="expense-name">南诏风情岛</span><span class="expense-amount">¥60</span></div>
@@ -403,42 +892,71 @@
     <div class="expense-item"><span class="expense-name">大经幡</span><span class="expense-amount">¥10</span></div>
   </div>
   <div class="category-card">
-    <div class="category-header"><span class="category-name">接送</span><span class="category-total">¥80/人</span></div>
+    <div class="category-header">
+      <span class="category-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        接送
+      </span>
+      <span class="category-total">¥80/人</span>
+    </div>
     <div class="expense-item"><span class="expense-name">丽江接机</span><span class="expense-amount">¥40</span></div>
     <div class="expense-note">80一趟（两人共乘）</div>
     <div class="expense-item"><span class="expense-name">丽江送机</span><span class="expense-amount">¥40</span></div>
     <div class="expense-note">80一趟（两人共乘）</div>
   </div>
   <div class="category-card">
-    <div class="category-header"><span class="category-name">保险、服务费</span><span class="category-total">¥170/人</span></div>
+    <div class="category-header">
+      <span class="category-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        保险、服务费
+      </span>
+      <span class="category-total">¥170/人</span>
+    </div>
     <div class="expense-item"><span class="expense-name">保险</span><span class="expense-amount">¥50</span></div>
     <div class="expense-note">国内旅游意外保险A款（30万保障计划）</div>
     <div class="expense-item"><span class="expense-name">24小时旅行社服务费</span><span class="expense-amount">¥120</span></div>
     <div class="expense-note">服务费用20/人/天 合计6天</div>
   </div>
   <div class="category-card">
-    <div class="category-header"><span class="category-name">用车</span><span class="category-total">¥1,250/人</span></div>
+    <div class="category-header">
+      <span class="category-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        用车
+      </span>
+      <span class="category-total">¥1,250/人</span>
+    </div>
     <div class="expense-item"><span class="expense-name">五座车</span><span class="expense-amount">¥1,250</span></div>
     <div class="expense-note">实际用车5天，500元/天×5天=2500元，按2人平摊。含油费、停车费、司机服务费+住宿用餐费</div>
   </div>
   <div class="category-card">
-    <div class="category-header"><span class="category-name">酒店</span><span class="category-total">¥780/人</span></div>
+    <div class="category-header">
+      <span class="category-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        酒店
+      </span>
+      <span class="category-total">¥780/人</span>
+    </div>
     <div class="expense-item"><span class="expense-name">携程四钻酒店</span><span class="expense-amount">¥780</span></div>
     <div class="expense-note">旅行社合作协议价：260元/晚（人均130）共住6晚</div>
   </div>
   <div class="not-included">
-    <div class="not-included-title">费用不含</div>
+    <div class="not-included-title">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+      费用不含
+    </div>
     <div class="not-included-item"><div class="not-included-dot"></div><span>大交通 - 不含往返机票费</span></div>
     <div class="not-included-item"><div class="not-included-dot"></div><span>用餐：早餐酒店包含，中餐晚餐自理</span></div>
     <div class="not-included-item"><div class="not-included-dot"></div><span>景区景：景区内的观光车/小交通不含</span></div>
   </div>
 </div>
 
-<!-- Mine Page -->
+<!-- ===== MINE PAGE ===== -->
 <div id="page-mine" class="page mine-page">
   <div class="navbar">出行贴士</div>
   <div class="mine-header">
-    <div class="mine-avatar">💑</div>
+    <div class="mine-avatar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    </div>
     <div class="mine-name">我们的婚假旅行</div>
     <div class="mine-trip">云南+三亚 · 浪漫蜜月</div>
   </div>
@@ -447,7 +965,9 @@
   </div>
   <div class="tip-card">
     <div class="tip-row">
-      <div class="tip-icon-box blue">🌤️</div>
+      <div class="tip-icon-box rose">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/></svg>
+      </div>
       <div class="tip-content">
         <div class="tip-title">天气与穿着</div>
         <div class="tip-desc">10月云南秋高气爽，但高原地区早晚温差大（可达15℃），建议洋葱式穿衣法。</div>
@@ -456,7 +976,9 @@
   </div>
   <div class="tip-card">
     <div class="tip-row">
-      <div class="tip-icon-box orange">🏔️</div>
+      <div class="tip-icon-box amber">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+      </div>
       <div class="tip-content">
         <div class="tip-title">高原反应</div>
         <div class="tip-desc">香格里拉海拔3300米，建议提前服用红景天，避免剧烈运动，多喝水。</div>
@@ -465,7 +987,9 @@
   </div>
   <div class="tip-card">
     <div class="tip-row">
-      <div class="tip-icon-box green">📸</div>
+      <div class="tip-icon-box emerald">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      </div>
       <div class="tip-content">
         <div class="tip-title">拍照建议</div>
         <div class="tip-desc">玉龙雪山日照金山最佳6:00-7:00，洱海日出6:00左右，建议提前占位。</div>
@@ -474,7 +998,9 @@
   </div>
   <div class="tip-card">
     <div class="tip-row">
-      <div class="tip-icon-box purple">🍜</div>
+      <div class="tip-icon-box violet">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+      </div>
       <div class="tip-content">
         <div class="tip-title">美食推荐</div>
         <div class="tip-desc">丽江：腊排骨火锅；大理：乳扇、饵丝；香格里拉：酥油茶、牦牛肉火锅。</div>
@@ -483,7 +1009,9 @@
   </div>
   <div class="tip-card">
     <div class="tip-row">
-      <div class="tip-icon-box blue">🌊</div>
+      <div class="tip-icon-box rose">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+      </div>
       <div class="tip-content">
         <div class="tip-title">三亚预告</div>
         <div class="tip-desc">三亚行程正在规划中，将包含亚龙湾、蜈支洲岛、天涯海角等经典景点，敬请期待！</div>
@@ -509,19 +1037,23 @@
   </div>
 </div>
 
-<!-- Tab Bar -->
+<!-- ===== TAB BAR ===== -->
 <div class="tabbar">
-  <div class="tab-item active" onclick="switchTab(0)">
-    <div class="tab-icon">🏠</div><div class="tab-text">首页</div>
+  <div class="tab-item active" onclick="switchTab(0)" role="tab" aria-label="首页">
+    <div class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>
+    <div class="tab-text">首页</div>
   </div>
-  <div class="tab-item" onclick="switchTab(1)">
-    <div class="tab-icon">📅</div><div class="tab-text">行程</div>
+  <div class="tab-item" onclick="switchTab(1)" role="tab" aria-label="行程">
+    <div class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+    <div class="tab-text">行程</div>
   </div>
-  <div class="tab-item" onclick="switchTab(2)">
-    <div class="tab-icon">💰</div><div class="tab-text">费用</div>
+  <div class="tab-item" onclick="switchTab(2)" role="tab" aria-label="费用">
+    <div class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+    <div class="tab-text">费用</div>
   </div>
-  <div class="tab-item" onclick="switchTab(3)">
-    <div class="tab-icon">👤</div><div class="tab-text">我的</div>
+  <div class="tab-item" onclick="switchTab(3)" role="tab" aria-label="我的">
+    <div class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+    <div class="tab-text">我的</div>
   </div>
 </div>
 
@@ -541,6 +1073,7 @@ function switchTab(idx) {
 
 function toggleCheck(el) {
   el.querySelector('.checkbox').classList.toggle('checked');
+  el.querySelector('.checklist-text').classList.toggle('done');
 }
 </script>
 </body>
