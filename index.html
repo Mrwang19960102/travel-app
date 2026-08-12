@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>云南之旅 - 小程序预览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
+    background: #f0f2f5;
+    max-width: 430px;
+    margin: 0 auto;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+  .page { display: none; padding-bottom: 70px; min-height: 100vh; }
+  .page.active { display: block; }
+
+  /* Tab Bar */
+  .tabbar {
+    position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 100%; max-width: 430px;
+    background: #fff; border-top: 1px solid #e5e7eb;
+    display: flex; z-index: 100;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .tab-item {
+    flex: 1; text-align: center; padding: 8px 0 6px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .tab-item.active .tab-icon { color: #0ea5e9; }
+  .tab-item.active .tab-text { color: #0ea5e9; }
+  .tab-icon { font-size: 22px; color: #9ca3af; margin-bottom: 2px; }
+  .tab-text { font-size: 11px; color: #9ca3af; }
+
+  /* Nav Bar */
+  .navbar {
+    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+    color: #fff; padding: 44px 16px 12px;
+    text-align: center; font-size: 17px; font-weight: 600;
+    position: sticky; top: 0; z-index: 50;
+  }
+
+  /* Home Page */
+  .hero { padding: 20px 16px; background: linear-gradient(180deg, #e0f2fe 0%, #f8fafc 100%); }
+  .hero-title { font-size: 28px; font-weight: 700; color: #0f172a; }
+  .hero-sub { font-size: 14px; color: #64748b; margin-top: 4px; }
+  .stats { display: flex; gap: 12px; padding: 0 16px; margin-top: 16px; }
+  .stat-card {
+    flex: 1; background: #fff; border-radius: 12px; padding: 16px;
+    text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  }
+  .stat-val { font-size: 22px; font-weight: 700; color: #0ea5e9; }
+  .stat-label { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+  .section { padding: 20px 16px; }
+  .section-title { font-size: 18px; font-weight: 600; color: #0f172a; margin-bottom: 12px; }
+  .trip-card {
+    background: #fff; border-radius: 12px; padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 12px;
+  }
+  .trip-header { display: flex; align-items: center; margin-bottom: 12px; }
+  .trip-icon-box {
+    width: 48px; height: 48px; border-radius: 10px;
+    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; margin-right: 12px;
+  }
+  .trip-name { font-size: 16px; font-weight: 600; color: #0f172a; }
+  .trip-date { font-size: 13px; color: #64748b; margin-top: 2px; }
+  .route-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .route-tag {
+    background: #e0f2fe; color: #0369a1; padding: 4px 12px;
+    border-radius: 20px; font-size: 13px;
+  }
+  .quick-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .action-card {
+    background: #fff; border-radius: 12px; padding: 20px 16px;
+    text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .action-card:active { transform: scale(0.97); opacity: 0.9; }
+  .action-icon {
+    width: 56px; height: 56px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; margin: 0 auto 10px;
+  }
+  .action-icon.blue { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
+  .action-icon.orange { background: linear-gradient(135deg, #ffedd5, #fed7aa); }
+  .action-icon.green { background: linear-gradient(135deg, #dcfce7, #bbf7d0); }
+  .action-icon.purple { background: linear-gradient(135deg, #f3e8ff, #e9d5ff); }
+  .action-title { font-size: 15px; font-weight: 500; color: #0f172a; margin-bottom: 4px; }
+  .action-desc { font-size: 12px; color: #94a3b8; }
+
+  /* Itinerary Page */
+  .itinerary-page { background: #f8fafc; }
+  .day-card {
+    background: #fff; border-radius: 12px; padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin: 12px 16px;
+  }
+  .day-header { display: flex; align-items: center; margin-bottom: 10px; }
+  .day-badge {
+    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+    color: #fff; padding: 4px 12px; border-radius: 20px;
+    font-size: 13px; font-weight: 500; margin-right: 10px;
+  }
+  .day-date { font-size: 13px; color: #94a3b8; }
+  .day-title { font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 8px; line-height: 1.5; }
+  .city-tag {
+    display: inline-block; background: #e0f2fe; color: #0369a1;
+    padding: 3px 10px; border-radius: 20px; font-size: 12px; margin-bottom: 10px;
+  }
+  .highlight-item {
+    display: flex; align-items: flex-start; margin-bottom: 8px;
+    font-size: 14px; color: #475569; line-height: 1.6;
+  }
+  .highlight-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #0ea5e9; margin-right: 8px; margin-top: 8px; flex-shrink: 0;
+  }
+  .accommodation {
+    display: flex; align-items: center; padding-top: 10px;
+    border-top: 1px solid #f1f5f9; margin-top: 10px;
+  }
+  .accommodation-label { font-size: 13px; color: #94a3b8; margin-right: 6px; }
+  .accommodation-value { font-size: 14px; color: #0f172a; font-weight: 500; }
+  .tip-box {
+    margin-top: 10px; padding: 10px; background: #fef3c7;
+    border-radius: 8px; border-left: 3px solid #f59e0b;
+  }
+  .tip-text { font-size: 12px; color: #92400e; line-height: 1.5; }
+
+  /* Expense Page */
+  .expense-page { background: #f8fafc; }
+  .summary-card {
+    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+    border-radius: 12px; padding: 24px 20px; margin: 16px;
+    box-shadow: 0 4px 12px rgba(14,165,233,0.3);
+  }
+  .summary-title { font-size: 14px; color: rgba(255,255,255,0.9); }
+  .summary-amount { font-size: 36px; font-weight: 700; color: #fff; margin: 6px 0; }
+  .summary-unit { font-size: 13px; color: rgba(255,255,255,0.8); }
+  .summary-row { display: flex; justify-content: space-between; margin-top: 16px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.2); }
+  .summary-item { text-align: center; }
+  .summary-item-val { font-size: 18px; font-weight: 600; color: #fff; }
+  .summary-item-label { font-size: 12px; color: rgba(255,255,255,0.8); margin-top: 2px; }
+  .category-card {
+    background: #fff; border-radius: 12px; padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin: 12px 16px;
+  }
+  .category-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #f1f5f9;
+  }
+  .category-name { font-size: 16px; font-weight: 600; color: #0f172a; }
+  .category-total { font-size: 16px; font-weight: 700; color: #0ea5e9; }
+  .expense-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; }
+  .expense-name { font-size: 14px; color: #475569; flex: 1; }
+  .expense-amount { font-size: 14px; font-weight: 500; color: #0f172a; margin-left: 12px; }
+  .expense-note { font-size: 12px; color: #94a3b8; margin-top: 4px; line-height: 1.5; }
+  .not-included {
+    background: #fff; border-radius: 12px; padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin: 12px 16px 20px;
+  }
+  .not-included-title { font-size: 16px; font-weight: 600; color: #0f172a; margin-bottom: 12px; }
+  .not-included-item {
+    display: flex; align-items: flex-start; margin-bottom: 8px;
+    font-size: 14px; color: #475569; line-height: 1.6;
+  }
+  .not-included-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #ef4444; margin-right: 8px; margin-top: 8px; flex-shrink: 0;
+  }
+
+  /* Mine Page */
+  .mine-page { background: #f8fafc; }
+  .mine-header { text-align: center; padding: 30px 16px 20px; }
+  .mine-avatar {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 40px; margin: 0 auto 12px;
+  }
+  .mine-name { font-size: 20px; font-weight: 600; color: #0f172a; }
+  .mine-trip { font-size: 14px; color: #64748b; margin-top: 4px; }
+  .tip-card {
+    background: #fff; border-radius: 12px; padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin: 12px 16px;
+  }
+  .tip-row { display: flex; align-items: flex-start; }
+  .tip-icon-box {
+    width: 40px; height: 40px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; margin-right: 12px; flex-shrink: 0;
+  }
+  .tip-icon-box.blue { background: linear-gradient(135deg, #e0f2fe, #bae6fd); }
+  .tip-icon-box.orange { background: linear-gradient(135deg, #ffedd5, #fed7aa); }
+  .tip-icon-box.green { background: linear-gradient(135deg, #dcfce7, #bbf7d0); }
+  .tip-icon-box.purple { background: linear-gradient(135deg, #f3e8ff, #e9d5ff); }
+  .tip-content { flex: 1; }
+  .tip-title { font-size: 15px; font-weight: 500; color: #0f172a; margin-bottom: 4px; }
+  .tip-desc { font-size: 13px; color: #64748b; line-height: 1.5; }
+  .checklist-card {
+    background: #fff; border-radius: 12px; padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin: 12px 16px 20px;
+  }
+  .checklist-item {
+    display: flex; align-items: center; padding: 10px 0;
+    border-bottom: 1px solid #f1f5f9; cursor: pointer;
+  }
+  .checklist-item:last-child { border-bottom: none; }
+  .checkbox {
+    width: 22px; height: 22px; border-radius: 4px;
+    border: 2px solid #e2e8f0; margin-right: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.2s;
+  }
+  .checkbox.checked { background: #0ea5e9; border-color: #0ea5e9; }
+  .checkmark { color: #fff; font-size: 14px; display: none; }
+  .checkbox.checked .checkmark { display: block; }
+  .checklist-text { font-size: 14px; color: #0f172a; }
+</style>
+</head>
+<body>
+
+<!-- Home Page -->
+<div id="page-home" class="page active">
+  <div class="navbar">云南之旅</div>
+  <div class="hero">
+    <div class="hero-title">云南之旅</div>
+    <div class="hero-sub">2人 · 7天6晚 · 丽江-大理-香格里拉</div>
+  </div>
+  <div class="stats">
+    <div class="stat-card"><div class="stat-val">7天</div><div class="stat-label">行程天数</div></div>
+    <div class="stat-card"><div class="stat-val">6晚</div><div class="stat-label">住宿</div></div>
+    <div class="stat-card"><div class="stat-val">3城</div><div class="stat-label">途经城市</div></div>
+  </div>
+  <div class="section">
+    <div class="section-title">行程概览</div>
+    <div class="trip-card">
+      <div class="trip-header">
+        <div class="trip-icon-box">🏔️</div>
+        <div><div class="trip-name">云南经典环线</div><div class="trip-date">10月7日 - 10月13日</div></div>
+      </div>
+      <div class="route-tags">
+        <span class="route-tag">丽江</span><span class="route-tag">大理</span><span class="route-tag">香格里拉</span>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="section-title">快速入口</div>
+    <div class="quick-actions">
+      <div class="action-card" onclick="switchTab(1)">
+        <div class="action-icon blue">📅</div>
+        <div class="action-title">每日行程</div><div class="action-desc">查看详细安排</div>
+      </div>
+      <div class="action-card" onclick="switchTab(2)">
+        <div class="action-icon orange">💰</div>
+        <div class="action-title">费用明细</div><div class="action-desc">查看预算 breakdown</div>
+      </div>
+      <div class="action-card" onclick="switchTab(3)">
+        <div class="action-icon green">🌤️</div>
+        <div class="action-title">出行贴士</div><div class="action-desc">注意事项</div>
+      </div>
+      <div class="action-card" onclick="switchTab(3)">
+        <div class="action-icon purple"></div>
+        <div class="action-title">行李清单</div><div class="action-desc">准备物品</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Itinerary Page -->
+<div id="page-itinerary" class="page itinerary-page">
+  <div class="navbar">每日行程</div>
+  <div class="day-card">
+    <div class="day-header"><span class="day-badge">Day 1</span><span class="day-date">10月7日</span></div>
+    <div class="day-title">各地 → 丽江 - 接站入住酒店</div>
+    <span class="city-tag">丽江</span>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>根据航班时间安排接站入住酒店</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>今日不安排行程和用车，可自由逛丽江古城</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>推荐夜餐餐厅/酒吧街/狮子山</span></div>
+    <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">丽江酒店</span></div>
+  </div>
+  <div class="day-card">
+    <div class="day-header"><span class="day-badge">Day 2</span><span class="day-date">10月8日</span></div>
+    <div class="day-title">前往大理 · 海东线 · 兴盛大桥 · 圣托里尼 · 双廊</div>
+    <span class="city-tag">大理</span>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【文笔村】沿海彩虹公路，沿海渔村</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【双廊古镇】洱海保存最完好的临海小镇</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【南诏风情岛】乘坐游船登岛，360度环游洱海</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【理想邦圣托里尼】东方圣托里尼网红小镇</span></div>
+    <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">大理酒店</span></div>
+  </div>
+  <div class="day-card">
+    <div class="day-header"><span class="day-badge">Day 3</span><span class="day-date">10月9日</span></div>
+    <div class="day-title">海西线 · 大理古城 · 龙龛码头 · 喜洲古镇 · 前往丽江</div>
+    <span class="city-tag">丽江</span>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【龙龛码头】红杉树，洱海观日出最佳地点</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【大理古城】庭院里花木扶疏，五华楼，洋人街</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【磻溪湾】大理最美S湾，可租自行车骑行</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【喜洲古镇】白族聚居的城镇，风吹麦浪</span></div>
+    <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">丽江酒店</span></div>
+  </div>
+  <div class="day-card">
+    <div class="day-header"><span class="day-badge">Day 4</span><span class="day-date">10月10日</span></div>
+    <div class="day-title">丽江 · 玉龙雪山 · 云杉坪索道 · 蓝月谷 · 束河古镇</div>
+    <span class="city-tag">丽江</span>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【东巴谷】观看玉龙雪山日照金山</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【云杉坪索道】直达海拔3240米高山草甸</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【蓝月谷】有着小九寨之称的蓝月谷</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【束河古镇】CCTV评选中国十大名镇</span></div>
+    <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">丽江酒店</span></div>
+    <div class="tip-box"><span class="tip-text">⚠️ 云杉坪索道需要实名制预定并且限票，定制师会教客人如何抢票</span></div>
+  </div>
+  <div class="day-card">
+    <div class="day-header"><span class="day-badge">Day 5</span><span class="day-date">10月11日</span></div>
+    <div class="day-title">丽江 · 长江第一湾 · 虎跳峡 · 依拉草原 · 独克宗月光城</div>
+    <span class="city-tag">香格里拉</span>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【长江第一湾】途径长江第一湾拍照打卡</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【虎跳峡】长江上第一大峡谷，以险奇闻名</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【独克宗古城】建议前往山顶打卡转经筒</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【大经幡】拍照打卡很出片，每一次吹风经幡都是祈福</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【纳帕海依拉草原】夏天是湖，秋冬是草原</span></div>
+    <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">香格里拉酒店</span></div>
+  </div>
+  <div class="day-card">
+    <div class="day-header"><span class="day-badge">Day 6</span><span class="day-date">10月12日</span></div>
+    <div class="day-title">松赞林寺 · 普达措国家公园</div>
+    <span class="city-tag">香格里拉</span>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【松赞林寺】小布达拉宫，进藏之前必去景点</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>【普达措】天然氧吧5A国家森林公园，高原牧场</span></div>
+    <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">香格里拉酒店</span></div>
+  </div>
+  <div class="day-card">
+    <div class="day-header"><span class="day-badge">Day 7</span><span class="day-date">10月13日</span></div>
+    <div class="day-title">根据航班时间送机</div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>今日睡到自然醒 · 返回温暖的家</span></div>
+  </div>
+</div>
+
+<!-- Expense Page -->
+<div id="page-expense" class="page expense-page">
+  <div class="navbar">费用明细</div>
+  <div class="summary-card">
+    <div class="summary-title">费用总计（2人）</div>
+    <div class="summary-amount">¥5,686</div>
+    <div class="summary-unit">人均 ¥2,843</div>
+    <div class="summary-row">
+      <div class="summary-item"><div class="summary-item-val">7天</div><div class="summary-item-label">行程天数</div></div>
+      <div class="summary-item"><div class="summary-item-val">6晚</div><div class="summary-item-label">住宿</div></div>
+      <div class="summary-item"><div class="summary-item-val">5天</div><div class="summary-item-label">用车</div></div>
+    </div>
+  </div>
+  <div class="category-card">
+    <div class="category-header"><span class="category-name">门票</span><span class="category-total">¥563/人</span></div>
+    <div class="expense-item"><span class="expense-name">玉龙雪山进山费</span><span class="expense-amount">¥100</span></div>
+    <div class="expense-item"><span class="expense-name">云杉坪索道</span><span class="expense-amount">¥60</span></div>
+    <div class="expense-item"><span class="expense-name">南诏风情岛</span><span class="expense-amount">¥60</span></div>
+    <div class="expense-item"><span class="expense-name">喜洲扎染+小火车</span><span class="expense-amount">¥60</span></div>
+    <div class="expense-item"><span class="expense-name">虎跳峡</span><span class="expense-amount">¥45</span></div>
+    <div class="expense-item"><span class="expense-name">普达措国家公园</span><span class="expense-amount">¥138</span></div>
+    <div class="expense-item"><span class="expense-name">松赞林寺</span><span class="expense-amount">¥90</span></div>
+    <div class="expense-item"><span class="expense-name">大经幡</span><span class="expense-amount">¥10</span></div>
+  </div>
+  <div class="category-card">
+    <div class="category-header"><span class="category-name">接送</span><span class="category-total">¥80/人</span></div>
+    <div class="expense-item"><span class="expense-name">丽江接机</span><span class="expense-amount">¥40</span></div>
+    <div class="expense-note">80一趟（两人共乘）</div>
+    <div class="expense-item"><span class="expense-name">丽江送机</span><span class="expense-amount">¥40</span></div>
+    <div class="expense-note">80一趟（两人共乘）</div>
+  </div>
+  <div class="category-card">
+    <div class="category-header"><span class="category-name">保险、服务费</span><span class="category-total">¥170/人</span></div>
+    <div class="expense-item"><span class="expense-name">保险</span><span class="expense-amount">¥50</span></div>
+    <div class="expense-note">国内旅游意外保险A款（30万保障计划）</div>
+    <div class="expense-item"><span class="expense-name">24小时旅行社服务费</span><span class="expense-amount">¥120</span></div>
+    <div class="expense-note">服务费用20/人/天 合计6天</div>
+  </div>
+  <div class="category-card">
+    <div class="category-header"><span class="category-name">用车</span><span class="category-total">¥1,250/人</span></div>
+    <div class="expense-item"><span class="expense-name">五座车</span><span class="expense-amount">¥1,250</span></div>
+    <div class="expense-note">实际用车5天，500元/天×5天=2500元，按2人平摊。含油费、停车费、司机服务费+住宿用餐费</div>
+  </div>
+  <div class="category-card">
+    <div class="category-header"><span class="category-name">酒店</span><span class="category-total">¥780/人</span></div>
+    <div class="expense-item"><span class="expense-name">携程四钻酒店</span><span class="expense-amount">¥780</span></div>
+    <div class="expense-note">旅行社合作协议价：260元/晚（人均130）共住6晚</div>
+  </div>
+  <div class="not-included">
+    <div class="not-included-title">费用不含</div>
+    <div class="not-included-item"><div class="not-included-dot"></div><span>大交通 - 不含往返机票费</span></div>
+    <div class="not-included-item"><div class="not-included-dot"></div><span>用餐：早餐酒店包含，中餐晚餐自理</span></div>
+    <div class="not-included-item"><div class="not-included-dot"></div><span>景区景：景区内的观光车/小交通不含</span></div>
+  </div>
+</div>
+
+<!-- Mine Page -->
+<div id="page-mine" class="page mine-page">
+  <div class="navbar">出行贴士</div>
+  <div class="mine-header">
+    <div class="mine-avatar">👫</div>
+    <div class="mine-name">我们的旅行</div>
+    <div class="mine-trip">云南 · 7天6晚</div>
+  </div>
+  <div class="section" style="padding-top:0">
+    <div class="section-title">出行贴士</div>
+  </div>
+  <div class="tip-card">
+    <div class="tip-row">
+      <div class="tip-icon-box blue">🌤️</div>
+      <div class="tip-content">
+        <div class="tip-title">天气与穿着</div>
+        <div class="tip-desc">10月云南秋高气爽，但高原地区早晚温差大（可达15℃），建议洋葱式穿衣法。</div>
+      </div>
+    </div>
+  </div>
+  <div class="tip-card">
+    <div class="tip-row">
+      <div class="tip-icon-box orange">🏔️</div>
+      <div class="tip-content">
+        <div class="tip-title">高原反应</div>
+        <div class="tip-desc">香格里拉海拔3300米，建议提前服用红景天，避免剧烈运动，多喝水。</div>
+      </div>
+    </div>
+  </div>
+  <div class="tip-card">
+    <div class="tip-row">
+      <div class="tip-icon-box green">📸</div>
+      <div class="tip-content">
+        <div class="tip-title">拍照建议</div>
+        <div class="tip-desc">玉龙雪山日照金山最佳6:00-7:00，洱海日出6:00左右，建议提前占位。</div>
+      </div>
+    </div>
+  </div>
+  <div class="tip-card">
+    <div class="tip-row">
+      <div class="tip-icon-box purple">🍜</div>
+      <div class="tip-content">
+        <div class="tip-title">美食推荐</div>
+        <div class="tip-desc">丽江：腊排骨火锅；大理：乳扇、饵丝；香格里拉：酥油茶、牦牛肉火锅。</div>
+      </div>
+    </div>
+  </div>
+  <div class="section" style="padding-top:0">
+    <div class="section-title">行李清单</div>
+  </div>
+  <div class="checklist-card" id="checklist">
+    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">身份证/护照</span></div>
+    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">手机及充电器</span></div>
+    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">相机及充电器</span></div>
+    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">防晒霜（SPF50+）</span></div>
+    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">墨镜</span></div>
+    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">帽子</span></div>
+    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">保暖外套（高原温差大）</span></div>
+    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">舒适徒步鞋</span></div>
+    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">雨伞/雨衣</span></div>
+    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">常用药品</span></div>
+    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">高反药物（红景天等）</span></div>
+    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">保温杯</span></div>
+  </div>
+</div>
+
+<!-- Tab Bar -->
+<div class="tabbar">
+  <div class="tab-item active" onclick="switchTab(0)">
+    <div class="tab-icon">🏠</div><div class="tab-text">首页</div>
+  </div>
+  <div class="tab-item" onclick="switchTab(1)">
+    <div class="tab-icon">📅</div><div class="tab-text">行程</div>
+  </div>
+  <div class="tab-item" onclick="switchTab(2)">
+    <div class="tab-icon">💰</div><div class="tab-text">费用</div>
+  </div>
+  <div class="tab-item" onclick="switchTab(3)">
+    <div class="tab-icon">👤</div><div class="tab-text">我的</div>
+  </div>
+</div>
+
+<script>
+const pages = ['page-home', 'page-itinerary', 'page-expense', 'page-mine'];
+const tabs = document.querySelectorAll('.tab-item');
+
+function switchTab(idx) {
+  pages.forEach((p, i) => {
+    document.getElementById(p).classList.toggle('active', i === idx);
+  });
+  tabs.forEach((t, i) => {
+    t.classList.toggle('active', i === idx);
+  });
+  window.scrollTo(0, 0);
+}
+
+function toggleCheck(el) {
+  el.querySelector('.checkbox').classList.toggle('checked');
+}
+</script>
+</body>
+</html>
