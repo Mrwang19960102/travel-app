@@ -666,6 +666,143 @@
   .checklist-text { font-size: 14px; color: var(--text-primary); }
   .checklist-text.done { text-decoration: line-through; color: var(--text-tertiary); }
 
+  /* ===== HOME JUMP FEATURES ===== */
+  .countdown-bar {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 14px;
+    padding: 8px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .countdown-bar:active { transform: scale(0.96); }
+  .countdown-bar svg { width: 16px; height: 16px; stroke: var(--primary); }
+  .countdown-num { font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums; }
+
+  .city-nav {
+    display: flex;
+    gap: 10px;
+    padding: 16px 16px 4px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .city-nav::-webkit-scrollbar { display: none; }
+  .city-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+    padding: 8px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: all var(--transition-fast);
+    min-height: 44px;
+  }
+  .city-pill:active { transform: scale(0.95); background: var(--primary-bg); }
+  .city-pill svg { width: 16px; height: 16px; stroke: var(--primary); }
+
+  .spot-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 4px 16px 8px;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .spot-scroll::-webkit-scrollbar { display: none; }
+  .spot-card {
+    flex-shrink: 0;
+    width: 132px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px 12px;
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+  }
+  .spot-card:active { transform: scale(0.95); }
+  .spot-day {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--primary);
+    background: var(--primary-bg);
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+  .spot-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+  .spot-desc { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; line-height: 1.4; }
+
+  .expense-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 16px 4px;
+    padding: 14px 18px;
+    background: var(--primary-gradient);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-primary);
+    cursor: pointer;
+    transition: transform var(--transition-fast);
+    color: #fff;
+  }
+  .expense-bar:active { transform: scale(0.97); }
+  .expense-bar-left { display: flex; align-items: baseline; gap: 10px; }
+  .expense-bar-total { font-size: 18px; font-weight: 700; }
+  .expense-bar-avg { font-size: 12px; opacity: 0.85; }
+  .expense-bar-right { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 500; }
+  .expense-bar-right svg { width: 16px; height: 16px; stroke: #fff; }
+
+  .trip-arrow {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .trip-arrow svg { width: 18px; height: 18px; stroke: var(--text-tertiary); }
+
+  .day-card.highlight { animation: glowPulse 1.6s ease-out; }
+  @keyframes glowPulse {
+    0% { box-shadow: 0 0 0 0 rgba(13,148,136,0.45); border-color: var(--primary); }
+    70% { box-shadow: 0 0 0 12px rgba(13,148,136,0); }
+    100% { box-shadow: var(--shadow-sm); }
+  }
+
+  .toast {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: rgba(26,26,46,0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 14px;
+    z-index: 1000;
+    opacity: 0;
+    pointer-events: none;
+    transition: all var(--transition-normal);
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+
   /* ===== DESKTOP RESPONSIVE ===== */
   @media (min-width: 768px) {
     .hero-title { font-size: 36px; }
@@ -711,31 +848,55 @@
     </div>
     <div class="hero-title">婚假旅行</div>
     <div class="hero-sub">2人 · 云南+三亚 · 浪漫蜜月之旅</div>
+    <div class="countdown-bar" onclick="switchTab(1)" role="button" aria-label="查看出发倒计时">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <span id="countdown-text">计算中...</span>
+    </div>
   </div>
   <div class="stats">
     <div class="stat-card"><div class="stat-val">云南</div><div class="stat-label">7天6晚</div></div>
     <div class="stat-card"><div class="stat-val">三亚</div><div class="stat-label">待定</div></div>
     <div class="stat-card"><div class="stat-val">2人</div><div class="stat-label">甜蜜出行</div></div>
   </div>
+  <div class="city-nav">
+    <div class="city-pill" onclick="goToDay(1)" role="button" aria-label="查看丽江行程">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      丽江
+    </div>
+    <div class="city-pill" onclick="goToDay(2)" role="button" aria-label="查看大理行程">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      大理
+    </div>
+    <div class="city-pill" onclick="goToDay(5)" role="button" aria-label="查看香格里拉行程">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      香格里拉
+    </div>
+    <div class="city-pill" onclick="showToast('三亚行程规划中，敬请期待')" role="button" aria-label="三亚行程">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      三亚
+    </div>
+  </div>
   <div class="section">
     <div class="section-title">行程概览</div>
-    <div class="trip-card">
+    <div class="trip-card" onclick="goToDay(1)" role="button" aria-label="查看云南行程详情">
       <div class="trip-header">
         <div class="trip-icon-box rose">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></svg>
         </div>
         <div><div class="trip-name">云南经典环线</div><div class="trip-date">10月7日 - 10月13日</div></div>
+        <div class="trip-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
       </div>
       <div class="route-tags">
         <span class="route-tag">丽江</span><span class="route-tag">大理</span><span class="route-tag">香格里拉</span>
       </div>
     </div>
-    <div class="trip-card">
+    <div class="trip-card" onclick="showToast('三亚行程规划中，敬请期待')" role="button" aria-label="三亚行程">
       <div class="trip-header">
         <div class="trip-icon-box amber">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
         <div><div class="trip-name">三亚浪漫之旅</div><div class="trip-date">行程规划中...</div></div>
+        <div class="trip-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
       </div>
       <div class="route-tags">
         <span class="route-tag amber">三亚</span>
@@ -743,7 +904,41 @@
       </div>
     </div>
   </div>
-  <div class="section">
+  <div class="section" style="padding-top:8px;padding-bottom:12px">
+    <div class="section-title">热门景点</div>
+  </div>
+  <div class="spot-scroll">
+    <div class="spot-card" onclick="goToDay(4)" role="button" aria-label="查看玉龙雪山行程">
+      <span class="spot-day">Day 4</span><div class="spot-name">玉龙雪山</div><div class="spot-desc">日照金山</div>
+    </div>
+    <div class="spot-card" onclick="goToDay(2)" role="button" aria-label="查看洱海行程">
+      <span class="spot-day">Day 2</span><div class="spot-name">洱海</div><div class="spot-desc">沿海彩虹公路</div>
+    </div>
+    <div class="spot-card" onclick="goToDay(4)" role="button" aria-label="查看蓝月谷行程">
+      <span class="spot-day">Day 4</span><div class="spot-name">蓝月谷</div><div class="spot-desc">小九寨之称</div>
+    </div>
+    <div class="spot-card" onclick="goToDay(5)" role="button" aria-label="查看虎跳峡行程">
+      <span class="spot-day">Day 5</span><div class="spot-name">虎跳峡</div><div class="spot-desc">第一大峡谷</div>
+    </div>
+    <div class="spot-card" onclick="goToDay(5)" role="button" aria-label="查看独克宗行程">
+      <span class="spot-day">Day 5</span><div class="spot-name">独克宗</div><div class="spot-desc">月光城转经筒</div>
+    </div>
+    <div class="spot-card" onclick="goToDay(6)" role="button" aria-label="查看松赞林寺行程">
+      <span class="spot-day">Day 6</span><div class="spot-name">松赞林寺</div><div class="spot-desc">小布达拉宫</div>
+    </div>
+  </div>
+  <div class="section" style="padding-top:12px;padding-bottom:16px">
+    <div class="expense-bar" onclick="switchTab(2)" role="button" aria-label="查看费用明细">
+      <div class="expense-bar-left">
+        <span class="expense-bar-total">¥5,686</span>
+        <span class="expense-bar-avg">人均 ¥2,843</span>
+      </div>
+      <div class="expense-bar-right">明细
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+      </div>
+    </div>
+  </div>
+  <div class="section" style="padding-top:0">
     <div class="section-title">快速入口</div>
     <div class="quick-actions">
       <div class="action-card" onclick="switchTab(1)" role="button" tabindex="0" aria-label="查看每日行程">
@@ -777,7 +972,7 @@
 <!-- ===== ITINERARY PAGE ===== -->
 <div id="page-itinerary" class="page itinerary-page">
   <div class="navbar">每日行程</div>
-  <div class="day-card">
+  <div class="day-card" id="day-1">
     <div class="day-header"><span class="day-badge">Day 1</span><span class="day-date">10月7日</span></div>
     <div class="day-title">各地 → 丽江 - 接站入住酒店</div>
     <span class="city-tag">
@@ -789,7 +984,7 @@
     <div class="highlight-item"><div class="highlight-dot"></div><span>推荐夜餐餐厅/酒吧街/狮子山</span></div>
     <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">丽江酒店</span></div>
   </div>
-  <div class="day-card">
+  <div class="day-card" id="day-2">
     <div class="day-header"><span class="day-badge">Day 2</span><span class="day-date">10月8日</span></div>
     <div class="day-title">前往大理 · 海东线 · 兴盛大桥 · 圣托里尼 · 双廊</div>
     <span class="city-tag">
@@ -802,7 +997,7 @@
     <div class="highlight-item"><div class="highlight-dot"></div><span>【理想邦圣托里尼】东方圣托里尼网红小镇</span></div>
     <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">大理酒店</span></div>
   </div>
-  <div class="day-card">
+  <div class="day-card" id="day-3">
     <div class="day-header"><span class="day-badge">Day 3</span><span class="day-date">10月9日</span></div>
     <div class="day-title">海西线 · 大理古城 · 龙龛码头 · 喜洲古镇 · 前往丽江</div>
     <span class="city-tag">
@@ -815,7 +1010,7 @@
     <div class="highlight-item"><div class="highlight-dot"></div><span>【喜洲古镇】白族聚居的城镇，风吹麦浪</span></div>
     <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">丽江酒店</span></div>
   </div>
-  <div class="day-card">
+  <div class="day-card" id="day-4">
     <div class="day-header"><span class="day-badge">Day 4</span><span class="day-date">10月10日</span></div>
     <div class="day-title">丽江 · 玉龙雪山 · 云杉坪索道 · 蓝月谷 · 束河古镇</div>
     <span class="city-tag">
@@ -829,7 +1024,7 @@
     <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">丽江酒店</span></div>
     <div class="tip-box"><span class="tip-text">云杉坪索道需要实名制预定并且限票，定制师会教客人如何抢票</span></div>
   </div>
-  <div class="day-card">
+  <div class="day-card" id="day-5">
     <div class="day-header"><span class="day-badge">Day 5</span><span class="day-date">10月11日</span></div>
     <div class="day-title">丽江 · 长江第一湾 · 虎跳峡 · 依拉草原 · 独克宗月光城</div>
     <span class="city-tag">
@@ -843,7 +1038,7 @@
     <div class="highlight-item"><div class="highlight-dot"></div><span>【纳帕海依拉草原】夏天是湖，秋冬是草原</span></div>
     <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">香格里拉酒店</span></div>
   </div>
-  <div class="day-card">
+  <div class="day-card" id="day-6">
     <div class="day-header"><span class="day-badge">Day 6</span><span class="day-date">10月12日</span></div>
     <div class="day-title">松赞林寺 · 普达措国家公园</div>
     <span class="city-tag">
@@ -854,7 +1049,7 @@
     <div class="highlight-item"><div class="highlight-dot"></div><span>【普达措】天然氧吧5A国家森林公园，高原牧场</span></div>
     <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">香格里拉酒店</span></div>
   </div>
-  <div class="day-card">
+  <div class="day-card" id="day-7">
     <div class="day-header"><span class="day-badge">Day 7</span><span class="day-date">10月13日</span></div>
     <div class="day-title">根据航班时间送机</div>
     <div class="highlight-item"><div class="highlight-dot"></div><span>今日睡到自然醒 · 返回温暖的家</span></div>
@@ -1057,6 +1252,8 @@
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
 const pages = ['page-home', 'page-itinerary', 'page-expense', 'page-mine'];
 const tabs = document.querySelectorAll('.tab-item');
@@ -1075,6 +1272,44 @@ function toggleCheck(el) {
   el.querySelector('.checkbox').classList.toggle('checked');
   el.querySelector('.checklist-text').classList.toggle('done');
 }
+
+// 跳转到行程页指定天并高亮
+function goToDay(day) {
+  switchTab(1);
+  setTimeout(() => {
+    const el = document.getElementById('day-' + day);
+    if (!el) return;
+    el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    el.classList.remove('highlight');
+    void el.offsetWidth;
+    el.classList.add('highlight');
+    setTimeout(() => el.classList.remove('highlight'), 1700);
+  }, 80);
+}
+
+// 轻提示
+let toastTimer = null;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// 出发倒计时（10月7日）
+(function () {
+  const now = new Date();
+  let target = new Date(now.getFullYear(), 9, 7);
+  if (now > new Date(now.getFullYear(), 9, 13, 23, 59)) {
+    target = new Date(now.getFullYear() + 1, 9, 7);
+  }
+  const days = Math.ceil((target - now) / 86400000);
+  const el = document.getElementById('countdown-text');
+  el.innerHTML = days > 0
+    ? '距出发还有 <span class="countdown-num">' + days + '</span> 天'
+    : '旅途愉快，享受当下';
+})();
 </script>
 </body>
 </html>
