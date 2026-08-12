@@ -2,18 +2,21 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>云南之旅 - 小程序预览</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', sans-serif;
     background: #f0f2f5;
-    max-width: 430px;
+    max-width: 1200px;
     margin: 0 auto;
     min-height: 100vh;
     position: relative;
     overflow-x: hidden;
+  }
+  @media (max-width: 480px) {
+    body { max-width: 100%; }
   }
   .page { display: none; padding-bottom: 70px; min-height: 100vh; }
   .page.active { display: block; }
@@ -21,10 +24,13 @@
   /* Tab Bar */
   .tabbar {
     position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
-    width: 100%; max-width: 430px;
+    width: 100%; max-width: 1200px;
     background: #fff; border-top: 1px solid #e5e7eb;
     display: flex; z-index: 100;
     padding-bottom: env(safe-area-inset-bottom);
+  }
+  @media (max-width: 480px) {
+    .tabbar { max-width: 100%; }
   }
   .tab-item {
     flex: 1; text-align: center; padding: 8px 0 6px;
@@ -47,9 +53,9 @@
   .hero { padding: 20px 16px; background: linear-gradient(180deg, #e0f2fe 0%, #f8fafc 100%); }
   .hero-title { font-size: 28px; font-weight: 700; color: #0f172a; }
   .hero-sub { font-size: 14px; color: #64748b; margin-top: 4px; }
-  .stats { display: flex; gap: 12px; padding: 0 16px; margin-top: 16px; }
+  .stats { display: flex; gap: 12px; padding: 0 16px; margin-top: 16px; flex-wrap: wrap; }
   .stat-card {
-    flex: 1; background: #fff; border-radius: 12px; padding: 16px;
+    flex: 1; min-width: 140px; background: #fff; border-radius: 12px; padding: 16px;
     text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
   }
   .stat-val { font-size: 22px; font-weight: 700; color: #0ea5e9; }
@@ -220,6 +226,28 @@
   .checkmark { color: #fff; font-size: 14px; display: none; }
   .checkbox.checked .checkmark { display: block; }
   .checklist-text { font-size: 14px; color: #0f172a; }
+
+  /* Desktop responsive */
+  @media (min-width: 768px) {
+    .hero-title { font-size: 36px; }
+    .hero-sub { font-size: 16px; }
+    .section-title { font-size: 22px; }
+    .trip-card { display: inline-block; width: calc(50% - 8px); vertical-align: top; margin-right: 12px; }
+    .trip-card:nth-child(even) { margin-right: 0; }
+    .expense-item { padding: 12px 0; }
+    .expense-name { font-size: 15px; }
+    .expense-amount { font-size: 15px; }
+    .navbar { padding: 20px 24px 16px; font-size: 20px; }
+    .section { padding: 24px 24px; }
+    .hero { padding: 32px 24px; }
+    .stat-val { font-size: 28px; }
+    .stat-label { font-size: 13px; }
+  }
+  @media (min-width: 1024px) {
+    .trip-card { width: calc(33.333% - 12px); margin-right: 12px; }
+    .trip-card:nth-child(even) { margin-right: 12px; }
+    .trip-card:nth-child(3n) { margin-right: 0; }
+  }
 </style>
 </head>
 <body>
