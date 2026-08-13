@@ -666,6 +666,23 @@
   .checklist-text { font-size: 14px; color: var(--text-primary); }
   .checklist-text.done { text-decoration: line-through; color: var(--text-tertiary); }
 
+  .region-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 16px 4px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .region-divider::before, .region-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .region-divider svg { width: 16px; height: 16px; stroke: var(--secondary); }
+
   /* ===== HOME JUMP FEATURES ===== */
   .countdown-bar {
     display: inline-flex;
@@ -855,7 +872,7 @@
   </div>
   <div class="stats">
     <div class="stat-card"><div class="stat-val">云南</div><div class="stat-label">7天6晚</div></div>
-    <div class="stat-card"><div class="stat-val">三亚</div><div class="stat-label">待定</div></div>
+    <div class="stat-card"><div class="stat-val">三亚</div><div class="stat-label">6天5晚</div></div>
     <div class="stat-card"><div class="stat-val">2人</div><div class="stat-label">甜蜜出行</div></div>
   </div>
   <div class="city-nav">
@@ -871,7 +888,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
       香格里拉
     </div>
-    <div class="city-pill" onclick="showToast('三亚行程规划中，敬请期待')" role="button" aria-label="三亚行程">
+    <div class="city-pill" onclick="goToId('sday-1')" role="button" aria-label="查看三亚行程">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
       三亚
     </div>
@@ -890,17 +907,18 @@
         <span class="route-tag">丽江</span><span class="route-tag">大理</span><span class="route-tag">香格里拉</span>
       </div>
     </div>
-    <div class="trip-card" onclick="showToast('三亚行程规划中，敬请期待')" role="button" aria-label="三亚行程">
+    <div class="trip-card" onclick="goToId('sday-1')" role="button" aria-label="查看三亚行程详情">
       <div class="trip-header">
         <div class="trip-icon-box amber">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         </div>
-        <div><div class="trip-name">三亚浪漫之旅</div><div class="trip-date">行程规划中...</div></div>
+        <div><div class="trip-name">三亚浪漫之旅</div><div class="trip-date">10月13日 - 10月18日</div></div>
         <div class="trip-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></div>
       </div>
       <div class="route-tags">
-        <span class="route-tag amber">三亚</span>
-        <span class="route-tag amber">待定</span>
+        <span class="route-tag amber">大东海</span>
+        <span class="route-tag amber">海棠湾</span>
+        <span class="route-tag amber">亚龙湾</span>
       </div>
     </div>
   </div>
@@ -925,6 +943,18 @@
     </div>
     <div class="spot-card" onclick="goToDay(6)" role="button" aria-label="查看松赞林寺行程">
       <span class="spot-day">Day 6</span><div class="spot-name">松赞林寺</div><div class="spot-desc">小布达拉宫</div>
+    </div>
+    <div class="spot-card" onclick="goToId('sday-1')" role="button" aria-label="查看椰梦长廊行程">
+      <span class="spot-day" style="background:var(--secondary-bg);color:#92400e">三亚1</span><div class="spot-name">椰梦长廊</div><div class="spot-desc">橘子海日落</div>
+    </div>
+    <div class="spot-card" onclick="goToId('sday-2')" role="button" aria-label="查看鹿回头行程">
+      <span class="spot-day" style="background:var(--secondary-bg);color:#92400e">三亚2</span><div class="spot-name">鹿回头</div><div class="spot-desc">俯瞰三亚夜景</div>
+    </div>
+    <div class="spot-card" onclick="goToId('sday-3')" role="button" aria-label="查看免税城行程">
+      <span class="spot-day" style="background:var(--secondary-bg);color:#92400e">三亚3</span><div class="spot-name">免税城</div><div class="spot-desc">cdf海棠湾</div>
+    </div>
+    <div class="spot-card" onclick="goToId('sday-4')" role="button" aria-label="查看亚龙湾行程">
+      <span class="spot-day" style="background:var(--secondary-bg);color:#92400e">三亚4</span><div class="spot-name">亚龙湾</div><div class="spot-desc">万豪私滩</div>
     </div>
   </div>
   <div class="section" style="padding-top:12px;padding-bottom:16px">
@@ -1054,6 +1084,67 @@
     <div class="day-title">根据航班时间送机</div>
     <div class="highlight-item"><div class="highlight-dot"></div><span>今日睡到自然醒 · 返回温暖的家</span></div>
   </div>
+
+  <div class="region-divider">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 4.93l-1.41 1.41"/></svg>
+    三亚浪漫之旅 · 10月13日-18日
+  </div>
+  <div class="day-card" id="sday-1">
+    <div class="day-header"><span class="day-badge" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">Day 1</span><span class="day-date">10月13日</span></div>
+    <div class="day-title">落地 · 椰梦长廊日落 + 亿恒夜市</div>
+    <span class="city-tag" style="background:var(--secondary-bg);color:#92400e">三亚湾</span>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>13:15 凤凰机场T1落地</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>14:40 抵达【河东路亚朵】办理入住</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>15:40 打车前往椰梦长廊（海虹广场）</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>17:40 等候橘子海日落</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>19:00 晚餐，逛亿恒主题夜市</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>22:00 返回酒店</span></div>
+    <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">河东路亚朵</span></div>
+  </div>
+  <div class="day-card" id="sday-2">
+    <div class="day-header"><span class="day-badge" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">Day 2</span><span class="day-date">10月14日</span></div>
+    <div class="day-title">大东海 + 鹿回头风景区</div>
+    <span class="city-tag" style="background:var(--secondary-bg);color:#92400e">大东海</span>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>08:30 酒店早餐（亚朵自带海南粉）</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>09:30 打车到大东海沙滩玩水</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>15:30 鹿回头风景区（下午上山避暴晒，俯瞰全城，看完日落赏夜景）</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>晚上：第一市场品尝海鲜、糟粕醋</span></div>
+    <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">河东路亚朵</span></div>
+  </div>
+  <div class="day-card" id="sday-3">
+    <div class="day-header"><span class="day-badge" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">Day 3</span><span class="day-date">10月15日</span></div>
+    <div class="day-title">海棠湾免税城采购日</div>
+    <span class="city-tag" style="background:var(--secondary-bg);color:#92400e">海棠湾</span>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>10:00 打车：亚朵 → cdf三亚国际免税城（50分钟）</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>10:50-14:00 购物，商场简餐</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>14:30 返回市区酒店休整</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>傍晚自由散步，收拾行李，准备次日搬去亚龙湾</span></div>
+    <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">河东路亚朵</span></div>
+  </div>
+  <div class="day-card" id="sday-4">
+    <div class="day-header"><span class="day-badge" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">Day 4</span><span class="day-date">10月16日</span></div>
+    <div class="day-title">搬家入住亚龙湾万豪</div>
+    <span class="city-tag" style="background:var(--secondary-bg);color:#92400e">亚龙湾</span>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>10:00 亚朵退房，行李随车</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>10:40 打车前往亚龙湾万豪（约40分钟）</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>11:30 寄存行李，15点办理入住</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>下午：万豪私属沙滩、泳池休闲放松</span></div>
+    <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">亚龙湾万豪</span></div>
+  </div>
+  <div class="day-card" id="sday-5">
+    <div class="day-header"><span class="day-badge" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">Day 5</span><span class="day-date">10月17日</span></div>
+    <div class="day-title">全天万豪躺平日</div>
+    <span class="city-tag" style="background:var(--secondary-bg);color:#92400e">亚龙湾</span>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>全天自由度假</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>可选：提前联系万豪礼宾预约免费班车往返免税城补货</span></div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>沙滩、泳池拍照、海边散步</span></div>
+    <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">亚龙湾万豪</span></div>
+  </div>
+  <div class="day-card" id="sday-6">
+    <div class="day-header"><span class="day-badge" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">Day 6</span><span class="day-date">10月18日</span></div>
+    <div class="day-title">返程</div>
+    <div class="highlight-item"><div class="highlight-dot"></div><span>根据航班时间出发，万豪→凤凰机场预留45-60分钟车程</span></div>
+  </div>
 </div>
 
 <!-- ===== EXPENSE PAGE ===== -->
@@ -1063,6 +1154,7 @@
     <div class="summary-title">费用总计（2人）</div>
     <div class="summary-amount">¥5,686</div>
     <div class="summary-unit">人均 ¥2,843</div>
+    <div class="expense-note" style="color:rgba(255,255,255,0.75);margin-top:8px">* 以上为云南段费用，三亚段待补充</div>
     <div class="summary-row">
       <div class="summary-item"><div class="summary-item-val">7天</div><div class="summary-item-label">行程天数</div></div>
       <div class="summary-item"><div class="summary-item-val">6晚</div><div class="summary-item-label">住宿</div></div>
@@ -1133,6 +1225,18 @@
     </div>
     <div class="expense-item"><span class="expense-name">携程四钻酒店</span><span class="expense-amount">¥780</span></div>
     <div class="expense-note">旅行社合作协议价：260元/晚（人均130）共住6晚</div>
+  </div>
+  <div class="category-card">
+    <div class="category-header">
+      <span class="category-name">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--secondary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        三亚 · 住宿已定
+      </span>
+      <span class="category-total" style="color:var(--secondary)">待补充</span>
+    </div>
+    <div class="expense-item"><span class="expense-name">河东路亚朵（连住3晚）</span><span class="expense-amount">10.13-10.15</span></div>
+    <div class="expense-item"><span class="expense-name">亚龙湾万豪（2晚·私滩度假）</span><span class="expense-amount">10.16-10.17</span></div>
+    <div class="expense-note">全程只换1次酒店；10.18 万豪直接出发返程</div>
   </div>
   <div class="not-included">
     <div class="not-included-title">
@@ -1208,8 +1312,8 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
       </div>
       <div class="tip-content">
-        <div class="tip-title">三亚预告</div>
-        <div class="tip-desc">三亚行程正在规划中，将包含亚龙湾、蜈支洲岛、天涯海角等经典景点，敬请期待！</div>
+        <div class="tip-title">三亚实用贴士</div>
+        <div class="tip-desc">1. 电动车：市区可租电驴往返椰梦长廊、第一市场；严禁骑去海棠湾免税城、亚龙湾<br>2. 交通：全程网约车最灵活，不用卡点等免费班车<br>3. 接送机：亚朵、万豪均无免费接送机，网约车性价比更高<br>4. 订房认准全称：三亚政务中心河东路亚朵酒店，别订成凤凰路亚朵！</div>
       </div>
     </div>
   </div>
@@ -1273,11 +1377,11 @@ function toggleCheck(el) {
   el.querySelector('.checklist-text').classList.toggle('done');
 }
 
-// 跳转到行程页指定天并高亮
-function goToDay(day) {
+// 跳转到行程页指定卡片并高亮
+function goToId(id) {
   switchTab(1);
   setTimeout(() => {
-    const el = document.getElementById('day-' + day);
+    const el = document.getElementById(id);
     if (!el) return;
     el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     el.classList.remove('highlight');
@@ -1286,6 +1390,7 @@ function goToDay(day) {
     setTimeout(() => el.classList.remove('highlight'), 1700);
   }, 80);
 }
+function goToDay(day) { goToId('day-' + day); }
 
 // 轻提示
 let toastTimer = null;
