@@ -940,6 +940,24 @@
   }
   .empty-tip { text-align: center; color: var(--text-tertiary); font-size: 13px; padding: 16px 0 4px; }
 
+  .bless-card {
+    margin: 0 16px 12px; padding: 14px 16px; border-radius: var(--radius-md);
+    background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+  .bless-card svg { width: 18px; height: 18px; fill: var(--primary); flex-shrink: 0; margin-top: 2px; }
+  .bless-label { font-size: 11px; color: var(--text-tertiary); margin-bottom: 3px; }
+  .bless-text { font-size: 14px; color: var(--text-primary); line-height: 1.6; font-weight: 500; }
+  .wx-row { display: flex; gap: 10px; margin: 0 16px 12px; }
+  .wx-card {
+    flex: 1; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-md); padding: 12px 14px; box-shadow: var(--shadow-sm);
+  }
+  .wx-city { font-size: 12px; color: var(--text-tertiary); }
+  .wx-temp { font-size: 22px; font-weight: 700; color: var(--primary); margin: 2px 0; font-variant-numeric: tabular-nums; }
+  .wx-desc { font-size: 12px; color: var(--text-secondary); }
+  .wx-range { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
   /* ===== V2 FEATURES ===== */
   .today-card {
     margin: 0 16px 12px; padding: 14px 16px; border-radius: var(--radius-md);
@@ -1054,6 +1072,17 @@
     <div class="today-label">今日行程</div>
     <div class="today-title" id="today-title"></div>
     <div class="today-sub">点击查看完整安排 →</div>
+  </div>
+  <div class="bless-card">
+    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <div>
+      <div class="bless-label">每日祝福</div>
+      <div class="bless-text" id="bless-text"></div>
+    </div>
+  </div>
+  <div class="wx-row">
+    <div class="wx-card" id="wx-lijiang"><div class="wx-city">丽江 · 云南</div><div class="wx-temp">--°</div><div class="wx-desc">天气加载中…</div></div>
+    <div class="wx-card" id="wx-sanya"><div class="wx-city">三亚 · 海南</div><div class="wx-temp">--°</div><div class="wx-desc">天气加载中…</div></div>
   </div>
   <div class="stats">
     <div class="stat-card"><div class="stat-val">云南</div><div class="stat-label">7天6晚</div></div>
@@ -2228,6 +2257,48 @@ document.querySelectorAll('.city-tag').forEach(t => {
   const code = CITY_WX[t.textContent.trim()];
   if (code) t.insertAdjacentHTML('beforeend', '<a class="weather-link" target="_blank" rel="noopener" href="https://m.weather.com.cn/mweather/' + code + '.shtml">天气</a>');
 });
+
+// ===== 每日祝福 =====
+const BLESSINGS = [
+  '愿山海为证，岁月温柔待你们二人。',
+  '愿旅途每一天，都有阳光与欢笑。',
+  '手牵手，从雪山走向碧海。',
+  '愿爱如洱海辽阔，如亚龙湾温暖。',
+  '愿风云皆温柔，旅途平安顺遂。',
+  '愿每个日出日落，都有彼此相伴。',
+  '愿这趟蜜月，成为一生最甜的回忆。',
+  '愿所有美好风景，都装进你们的眼睛。',
+  '愿爱情如日照金山，灿烂闪耀。',
+  '愿走过的每一里路，都是写给彼此的情书。'
+];
+(function () {
+  const now = new Date();
+  const doy = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+  document.getElementById('bless-text').textContent = BLESSINGS[doy % BLESSINGS.length];
+})();
+
+// ===== 天气模块 =====
+async function loadWeather() {
+  const targets = [['wx-lijiang', '丽江', '101291401'], ['wx-sanya', '三亚', '101310201']];
+  for (const [id, city, code] of targets) {
+    const el = document.getElementById(id);
+    try {
+      const resp = await fetch('https://wttr.in/' + encodeURIComponent(city) + '?format=j1');
+      const j = await resp.json();
+      const cur = j.current_condition[0];
+      const today = j.weather[0];
+      const desc = (cur.lang_zh && cur.lang_zh[0] && cur.lang_zh[0].value) || cur.weatherDesc[0].value;
+      el.innerHTML = '<div class="wx-city">' + city + '</div>' +
+        '<div class="wx-temp">' + cur.temp_C + '°</div>' +
+        '<div class="wx-desc">' + desc + '</div>' +
+        '<div class="wx-range">' + today.mintempC + '° ~ ' + today.maxtempC + '°</div>';
+    } catch (e) {
+      el.innerHTML = '<div class="wx-city">' + city + '</div><div class="wx-temp">--°</div>' +
+        '<div class="wx-desc"><a class="weather-link" style="margin-left:0" target="_blank" rel="noopener" href="https://m.weather.com.cn/mweather/' + code + '.shtml">查看天气</a></div>';
+    }
+  }
+}
+loadWeather();
 
 applyRole();
 loadRecords();
