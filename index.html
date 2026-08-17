@@ -974,12 +974,17 @@
   .day-nav { display: flex; gap: 8px; overflow-x: auto; padding: 10px 16px; scrollbar-width: none; }
   .day-nav::-webkit-scrollbar { display: none; }
   .day-chip {
-    flex-shrink: 0; padding: 6px 14px; border-radius: 16px;
-    background: var(--surface); border: 1px solid var(--border);
-    font-size: 12px; font-weight: 600; color: var(--text-secondary);
-    cursor: pointer; min-height: 32px;
+    flex-shrink: 0; padding: 9px 0; width: 42px; text-align: center; border-radius: 12px;
+    font-size: 12px; font-weight: 700; cursor: pointer; border: none;
+    transition: transform var(--transition-fast);
   }
-  .day-chip:active { background: var(--primary-bg); color: var(--primary); }
+  .day-chip.teal { background: var(--primary-bg); color: var(--primary); }
+  .day-chip.amber { background: var(--secondary-bg); color: #92400e; }
+  .day-chip:active { transform: scale(0.9); }
+  .day-nav-label {
+    flex-shrink: 0; align-self: center; font-size: 11px; font-weight: 700;
+    color: var(--text-tertiary); margin-left: 6px;
+  }
   .weather-link {
     margin-left: 8px; font-size: 11px; font-weight: 600; color: var(--primary);
     text-decoration: underline; text-underline-offset: 2px;
@@ -1243,19 +1248,21 @@
 <div id="page-itinerary" class="page itinerary-page">
   <div class="navbar">每日行程</div>
   <div class="day-nav">
-    <span class="day-chip" onclick="goToId('day-1')">D1</span>
-    <span class="day-chip" onclick="goToId('day-2')">D2</span>
-    <span class="day-chip" onclick="goToId('day-3')">D3</span>
-    <span class="day-chip" onclick="goToId('day-4')">D4</span>
-    <span class="day-chip" onclick="goToId('day-5')">D5</span>
-    <span class="day-chip" onclick="goToId('day-6')">D6</span>
-    <span class="day-chip" onclick="goToId('day-7')">D7</span>
-    <span class="day-chip" onclick="goToId('sday-1')">三1</span>
-    <span class="day-chip" onclick="goToId('sday-2')">三2</span>
-    <span class="day-chip" onclick="goToId('sday-3')">三3</span>
-    <span class="day-chip" onclick="goToId('sday-4')">三4</span>
-    <span class="day-chip" onclick="goToId('sday-5')">三5</span>
-    <span class="day-chip" onclick="goToId('sday-6')">三6</span>
+    <span class="day-nav-label">云南</span>
+    <span class="day-chip teal" onclick="goToId('day-1')">D1</span>
+    <span class="day-chip teal" onclick="goToId('day-2')">D2</span>
+    <span class="day-chip teal" onclick="goToId('day-3')">D3</span>
+    <span class="day-chip teal" onclick="goToId('day-4')">D4</span>
+    <span class="day-chip teal" onclick="goToId('day-5')">D5</span>
+    <span class="day-chip teal" onclick="goToId('day-6')">D6</span>
+    <span class="day-chip teal" onclick="goToId('day-7')">D7</span>
+    <span class="day-nav-label">三亚</span>
+    <span class="day-chip amber" onclick="goToId('sday-1')">1</span>
+    <span class="day-chip amber" onclick="goToId('sday-2')">2</span>
+    <span class="day-chip amber" onclick="goToId('sday-3')">3</span>
+    <span class="day-chip amber" onclick="goToId('sday-4')">4</span>
+    <span class="day-chip amber" onclick="goToId('sday-5')">5</span>
+    <span class="day-chip amber" onclick="goToId('sday-6')">6</span>
   </div>
   <div class="day-card" id="day-1">
     <div class="day-header"><span class="day-badge">Day 1</span><span class="day-date">10月7日</span></div>
