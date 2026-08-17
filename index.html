@@ -779,17 +779,13 @@
   .city-pill svg { width: 16px; height: 16px; stroke: var(--primary); }
 
   .spot-scroll {
-    display: flex;
-    gap: 12px;
-    overflow-x: auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
     padding: 4px 16px 8px;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
   }
-  .spot-scroll::-webkit-scrollbar { display: none; }
   .spot-card {
-    flex-shrink: 0;
-    width: 132px;
+    width: auto;
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
@@ -965,6 +961,7 @@
     .stat-val { font-size: 24px; }
     .stat-label { font-size: 12px; }
     .quick-actions { grid-template-columns: repeat(4, 1fr); }
+    .spot-scroll { grid-template-columns: repeat(6, 1fr); }
   }
   @media (min-width: 1024px) {
     .trip-card { width: calc(33.333% - 12px); margin-right: 12px; }
@@ -1052,7 +1049,7 @@
     </div>
   </div>
   <div class="section" style="padding-top:8px;padding-bottom:12px">
-    <div class="section-title">热门景点</div>
+    <div class="section-title">热门景点 · 云南</div>
   </div>
   <div class="spot-scroll">
     <div class="spot-card" onclick="goToDay(4)" role="button" aria-label="查看玉龙雪山行程">
@@ -1073,6 +1070,11 @@
     <div class="spot-card" onclick="goToDay(6)" role="button" aria-label="查看松赞林寺行程">
       <span class="spot-day">Day 6</span><div class="spot-name">松赞林寺</div><div class="spot-desc">小布达拉宫</div>
     </div>
+  </div>
+  <div class="section" style="padding-top:8px;padding-bottom:12px">
+    <div class="section-title">热门景点 · 三亚</div>
+  </div>
+  <div class="spot-scroll">
     <div class="spot-card" onclick="goToId('sday-1')" role="button" aria-label="查看椰梦长廊行程">
       <span class="spot-day" style="background:var(--secondary-bg);color:#92400e">三亚1</span><div class="spot-name">椰梦长廊</div><div class="spot-desc">骑行随停拍照</div>
     </div>
