@@ -958,6 +958,11 @@
   .wx-temp { font-size: 22px; font-weight: 700; color: var(--primary); margin: 2px 0; font-variant-numeric: tabular-nums; }
   .wx-desc { font-size: 12px; color: var(--text-secondary); }
   .wx-range { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+  .wx-forecast { margin-top: 8px; border-top: 1px solid var(--border); padding-top: 6px; }
+  .wx-f-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-tertiary); padding: 2px 0; }
+  .wx-f-row .d { flex: 0 0 34px; }
+  .wx-f-row .t { flex: 1; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .wx-f-row .r { flex-shrink: 0; font-variant-numeric: tabular-nums; }
 
   /* ===== V2 FEATURES ===== */
   .today-card {
@@ -1064,13 +1069,6 @@
     </div>
     <div class="hero-title">婚假旅行</div>
     <div class="hero-sub">2人 · 云南+三亚 · 浪漫蜜月之旅</div>
-    <div class="bless-card" style="margin:14px 0 12px;text-align:left">
-      <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-      <div>
-        <div class="bless-label">每日祝福</div>
-        <div class="bless-text" id="bless-text"></div>
-      </div>
-    </div>
     <div class="countdown-bar" onclick="switchTab(1)" role="button" aria-label="查看出发倒计时">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       <span id="countdown-text">计算中...</span>
@@ -1080,6 +1078,13 @@
     <div class="today-label">今日行程</div>
     <div class="today-title" id="today-title"></div>
     <div class="today-sub">点击查看完整安排 →</div>
+  </div>
+  <div class="bless-card">
+    <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    <div>
+      <div class="bless-label">每日祝福</div>
+      <div class="bless-text" id="bless-text"></div>
+    </div>
   </div>
   <div class="wx-row">
     <div class="wx-card" id="wx-lijiang"><div class="wx-city">丽江 · 云南</div><div class="wx-temp">--°</div><div class="wx-desc">天气加载中…</div></div>
@@ -2287,15 +2292,26 @@ async function loadWeather() {
   for (const [id, city, code] of targets) {
     const el = document.getElementById(id);
     try {
-      const resp = await fetch('https://wttr.in/' + encodeURIComponent(city) + '?format=j1');
+      const resp = await fetch('https://wttr.in/' + encodeURIComponent(city) + '?format=j1&lang=zh');
       const j = await resp.json();
       const cur = j.current_condition[0];
       const today = j.weather[0];
       const desc = (cur.lang_zh && cur.lang_zh[0] && cur.lang_zh[0].value) || cur.weatherDesc[0].value;
+      const WD = ['日', '一', '二', '三', '四', '五', '六'];
+      let fc = '<div class="wx-forecast">';
+      j.weather.slice(0, 3).forEach((w, i) => {
+        const d = new Date(w.date + 'T00:00:00');
+        const label = i === 0 ? '今天' : i === 1 ? '明天' : '周' + WD[d.getDay()];
+        const h = w.hourly[4] || w.hourly[0];
+        const fdesc = (h.lang_zh && h.lang_zh[0] && h.lang_zh[0].value) || h.weatherDesc[0].value;
+        fc += '<div class="wx-f-row"><span class="d">' + label + '</span><span class="t">' + fdesc +
+          '</span><span class="r">' + w.mintempC + '~' + w.maxtempC + '°</span></div>';
+      });
+      fc += '</div>';
       el.innerHTML = '<div class="wx-city">' + city + '</div>' +
         '<div class="wx-temp">' + cur.temp_C + '°</div>' +
         '<div class="wx-desc">' + desc + '</div>' +
-        '<div class="wx-range">' + today.mintempC + '° ~ ' + today.maxtempC + '°</div>';
+        '<div class="wx-range">' + today.mintempC + '° ~ ' + today.maxtempC + '°</div>' + fc;
     } catch (e) {
       el.innerHTML = '<div class="wx-city">' + city + '</div><div class="wx-temp">--°</div>' +
         '<div class="wx-desc"><a class="weather-link" style="margin-left:0" target="_blank" rel="noopener" href="https://m.weather.com.cn/mweather/' + code + '.shtml">查看天气</a></div>';
