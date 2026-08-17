@@ -818,25 +818,6 @@
   .spot-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
   .spot-desc { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; line-height: 1.4; }
 
-  .expense-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0 16px 4px;
-    padding: 14px 18px;
-    background: var(--primary-gradient);
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-primary);
-    cursor: pointer;
-    transition: transform var(--transition-fast);
-    color: #fff;
-  }
-  .expense-bar:active { transform: scale(0.97); }
-  .expense-bar-left { display: flex; align-items: baseline; gap: 10px; }
-  .expense-bar-total { font-size: 18px; font-weight: 700; }
-  .expense-bar-avg { font-size: 12px; opacity: 0.85; }
-  .expense-bar-right { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 500; }
-  .expense-bar-right svg { width: 16px; height: 16px; stroke: #fff; }
 
   .trip-arrow {
     margin-left: auto;
@@ -1107,17 +1088,6 @@
     <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('s5')" role="button" aria-label="查看免税城信息">
       <div class="spot-name">免税城</div><div class="spot-desc">cdf95折</div>
-    </div>
-  </div>
-  <div class="section" style="padding-top:12px;padding-bottom:16px">
-    <div class="expense-bar" onclick="switchTab(2)" role="button" aria-label="查看费用明细">
-      <div class="expense-bar-left">
-        <span class="expense-bar-total">¥5,686</span>
-        <span class="expense-bar-avg">人均 ¥2,843</span>
-      </div>
-      <div class="expense-bar-right">明细
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-      </div>
     </div>
   </div>
   <div class="section" style="padding-top:0">
