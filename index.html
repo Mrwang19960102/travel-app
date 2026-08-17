@@ -884,10 +884,6 @@
     .summary-pair .summary-item-val { font-size: 14px; }
     .summary-pair .summary-item-label { font-size: 10px; }
   }
-  .settle-box {
-    margin: 0 16px 12px; padding: 12px 14px; background: var(--success-bg);
-    border-radius: var(--radius-md); font-size: 13px; color: #065f46; line-height: 1.5;
-  }
   .record-list { margin-top: 14px; }
   .record-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
   .record-item:last-child { border-bottom: none; }
@@ -1271,7 +1267,6 @@
   </div>
 
   <!-- 实际花费记录 -->
-  <div class="settle-box" id="settle-box" style="display:none"></div>
   <div class="recorder-card">
     <div class="recorder-title">
       <h3>记一笔</h3>
@@ -1726,19 +1721,6 @@ function renderRecords() {
   document.getElementById('act-count').textContent = records.length;
   document.getElementById('act-lulu').textContent = '¥' + me.toFixed(0);
   document.getElementById('act-lumei').textContent = '¥' + ta.toFixed(0);
-  const box = document.getElementById('settle-box');
-  if (!records.length) {
-    box.style.display = 'none';
-  } else if (Math.abs(me - ta) < 0.01) {
-    box.style.display = 'block';
-    box.textContent = '噜噜和噜妹垫付一致，无需结算';
-  } else {
-    const half = Math.abs(me - ta) / 2;
-    box.style.display = 'block';
-    box.textContent = me > ta
-      ? '结算建议：噜噜垫 ¥' + me.toFixed(0) + '，噜妹垫 ¥' + ta.toFixed(0) + '，噜妹转噜噜 ¥' + half.toFixed(0)
-      : '结算建议：噜噜垫 ¥' + me.toFixed(0) + '，噜妹垫 ¥' + ta.toFixed(0) + '，噜噜转噜妹 ¥' + half.toFixed(0);
-  }
   const list = document.getElementById('record-list');
   if (!records.length) {
     list.innerHTML = '<div class="empty-tip">还没有记录，出发后在这里记第一笔</div>';
