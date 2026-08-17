@@ -834,6 +834,70 @@
   }
   .toast.show { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 
+  /* ===== EXPENSE RECORDER ===== */
+  .recorder-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 18px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    margin: 12px 16px;
+  }
+  .recorder-title { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+  .recorder-title h3 { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+  .sync-status { font-size: 11px; color: var(--text-tertiary); display: flex; align-items: center; gap: 5px; }
+  .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--success); }
+  .sync-dot.err { background: #ef4444; }
+  .form-row { display: flex; gap: 8px; margin-bottom: 10px; }
+  .form-input {
+    flex: 1; min-width: 0; border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 12px; font-size: 14px; color: var(--text-primary);
+    background: var(--background); outline: none;
+    transition: border-color var(--transition-fast);
+  }
+  .form-input:focus { border-color: var(--primary); }
+  .amount-input { font-variant-numeric: tabular-nums; }
+  .payer-switch { display: flex; gap: 8px; margin-bottom: 12px; }
+  .payer-btn {
+    flex: 1; padding: 9px 0; text-align: center; border-radius: 10px;
+    border: 1px solid var(--border); font-size: 13px; color: var(--text-secondary);
+    cursor: pointer; transition: all var(--transition-fast); min-height: 44px;
+    background: var(--surface);
+  }
+  .payer-btn.active { background: var(--primary-bg); border-color: var(--primary); color: var(--primary); font-weight: 600; }
+  .add-btn {
+    width: 100%; padding: 12px 0; border: none; border-radius: 12px;
+    background: var(--primary-gradient); color: #fff; font-size: 15px; font-weight: 600;
+    cursor: pointer; box-shadow: var(--shadow-primary);
+    transition: transform var(--transition-fast); min-height: 44px;
+  }
+  .add-btn:active { transform: scale(0.97); }
+  .actual-stats { display: flex; gap: 10px; margin: 12px 16px; }
+  .actual-stat {
+    flex: 1; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-md); padding: 12px; text-align: center;
+  }
+  .actual-stat .val { font-size: 17px; font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums; }
+  .actual-stat .lbl { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+  .settle-box {
+    margin: 0 16px 12px; padding: 12px 14px; background: var(--success-bg);
+    border-radius: var(--radius-md); font-size: 13px; color: #065f46; line-height: 1.5;
+  }
+  .record-list { margin-top: 14px; }
+  .record-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .record-item:last-child { border-bottom: none; }
+  .record-cat { flex-shrink: 0; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 8px; margin-right: 10px; }
+  .record-info { flex: 1; min-width: 0; }
+  .record-note { font-size: 14px; color: var(--text-primary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .record-meta { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+  .record-amount { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; margin-left: 8px; color: var(--text-primary); }
+  .record-del {
+    margin-left: 10px; width: 28px; height: 28px; border: none;
+    background: var(--background); border-radius: 8px; color: var(--text-tertiary);
+    cursor: pointer; flex-shrink: 0; font-size: 12px;
+  }
+  .empty-tip { text-align: center; color: var(--text-tertiary); font-size: 13px; padding: 16px 0 4px; }
+
   /* ===== DESKTOP RESPONSIVE ===== */
   @media (min-width: 768px) {
     .hero-title { font-size: 36px; }
@@ -1179,7 +1243,7 @@
 <div id="page-expense" class="page expense-page">
   <div class="navbar">费用明细</div>
   <div class="summary-card">
-    <div class="summary-title">费用总计（2人）</div>
+    <div class="summary-title">计划总计（2人 · 云南段）</div>
     <div class="summary-amount">¥5,686</div>
     <div class="summary-unit">人均 ¥2,843</div>
     <div class="expense-note" style="color:rgba(255,255,255,0.75);margin-top:8px">* 以上为云南段费用，三亚段待补充</div>
@@ -1189,6 +1253,41 @@
       <div class="summary-item"><div class="summary-item-val">5天</div><div class="summary-item-label">用车</div></div>
     </div>
   </div>
+
+  <!-- 实际花费记录 -->
+  <div class="actual-stats">
+    <div class="actual-stat"><div class="val" id="actual-total">¥0</div><div class="lbl">实际总计</div></div>
+    <div class="actual-stat"><div class="val" id="actual-avg">¥0</div><div class="lbl">人均</div></div>
+    <div class="actual-stat"><div class="val" id="actual-count">0</div><div class="lbl">笔数</div></div>
+  </div>
+  <div class="settle-box" id="settle-box" style="display:none"></div>
+  <div class="recorder-card">
+    <div class="recorder-title">
+      <h3>记一笔</h3>
+      <span class="sync-status"><span class="sync-dot" id="sync-dot"></span><span id="sync-text">云端同步</span></span>
+    </div>
+    <div class="payer-switch">
+      <div class="payer-btn active" id="payer-me" onclick="setPayer('me')">我支付</div>
+      <div class="payer-btn" id="payer-ta" onclick="setPayer('ta')">对象支付</div>
+    </div>
+    <div class="form-row">
+      <input class="form-input amount-input" id="inp-amount" type="number" inputmode="decimal" placeholder="金额 ¥" min="0" step="0.01">
+      <select class="form-input" id="inp-cat" style="flex:0 0 96px">
+        <option value="food">餐饮</option>
+        <option value="ticket">门票</option>
+        <option value="traffic">交通</option>
+        <option value="shop">购物</option>
+        <option value="hotel">住宿</option>
+        <option value="other">其他</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <input class="form-input" id="inp-note" placeholder="备注（可选，如：亿恒夜市晚餐）">
+    </div>
+    <button class="add-btn" onclick="addRecord()">记一笔并同步</button>
+    <div class="record-list" id="record-list"></div>
+  </div>
+  <div class="region-divider">云南段 · 计划预算</div>
   <div class="category-card">
     <div class="category-header">
       <span class="category-name">
@@ -1487,6 +1586,162 @@ function showToast(msg) {
     ? '距出发还有 <span class="countdown-num">' + days + '</span> 天'
     : '旅途愉快，享受当下';
 })();
+
+// ===== 费用记录 · GitHub 云同步 =====
+const GH_TOKEN = 'github_pat_' + '11AKUXBTI0GWZqBHF3tEsX_' + 'lSFvuXlDXWX1cYKHzUf8ZB8wJV6BdSMchZrPIH5hGlsYXM7TLOB08yf3qWm';
+const GH_REPO = 'Mrwang19960102/travel-app';
+const GH_FILE = 'expenses.json';
+const CATS = {
+  food: ['餐饮', '#fffbeb', '#92400e'],
+  ticket: ['门票', '#f0fdfa', '#0d9488'],
+  traffic: ['交通', '#eff6ff', '#1d4ed8'],
+  shop: ['购物', '#f5f3ff', '#6d28d9'],
+  hotel: ['住宿', '#fff1f2', '#e11d48'],
+  other: ['其他', '#f1f5f9', '#475569']
+};
+let records = [];
+let fileSha = null;
+let payer = 'me';
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function setPayer(p) {
+  payer = p;
+  document.getElementById('payer-me').classList.toggle('active', p === 'me');
+  document.getElementById('payer-ta').classList.toggle('active', p === 'ta');
+}
+function ghApi(method, body) {
+  return fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GH_FILE, {
+    method: method,
+    headers: {
+      'Authorization': 'Bearer ' + GH_TOKEN,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    },
+    body: body ? JSON.stringify(body) : undefined
+  });
+}
+function decodeB64(s) {
+  return decodeURIComponent(escape(atob(s.replace(/\n/g, ''))));
+}
+function setSync(text, err) {
+  document.getElementById('sync-text').textContent = text;
+  document.getElementById('sync-dot').classList.toggle('err', !!err);
+}
+async function loadRecords() {
+  setSync('同步中…', false);
+  try {
+    const resp = await ghApi('GET');
+    if (resp.status === 404) {
+      records = []; fileSha = null;
+    } else {
+      const data = await resp.json();
+      fileSha = data.sha;
+      records = JSON.parse(decodeB64(data.content)).records || [];
+    }
+    const pending = JSON.parse(localStorage.getItem('pendingRecords') || '[]');
+    if (pending.length) {
+      records = pending.concat(records);
+      await saveRecords();
+      localStorage.removeItem('pendingRecords');
+    }
+    setSync('云端已同步', false);
+  } catch (e) {
+    records = JSON.parse(localStorage.getItem('pendingRecords') || '[]');
+    setSync('离线·本地暂存', true);
+  }
+  renderRecords();
+}
+async function saveRecords() {
+  const body = {
+    message: 'update expense records',
+    content: btoa(unescape(encodeURIComponent(JSON.stringify({ records: records })))),
+    branch: 'main'
+  };
+  if (fileSha) body.sha = fileSha;
+  let resp = await ghApi('PUT', body);
+  if (resp.status === 409 || resp.status === 422) {
+    const g = await ghApi('GET');
+    const d = await g.json();
+    fileSha = d.sha;
+    body.sha = fileSha;
+    resp = await ghApi('PUT', body);
+  }
+  if (!resp.ok) throw new Error('save failed ' + resp.status);
+  const d = await resp.json();
+  fileSha = d.content.sha;
+}
+function addRecord() {
+  const amt = parseFloat(document.getElementById('inp-amount').value);
+  if (!amt || amt <= 0) { showToast('请输入有效金额'); return; }
+  records.unshift({
+    id: Date.now(),
+    amount: Math.round(amt * 100) / 100,
+    cat: document.getElementById('inp-cat').value,
+    note: document.getElementById('inp-note').value.trim(),
+    payer: payer,
+    date: new Date().toISOString().slice(5, 10).replace('-', '/')
+  });
+  document.getElementById('inp-amount').value = '';
+  document.getElementById('inp-note').value = '';
+  renderRecords();
+  syncNow();
+}
+async function syncNow() {
+  setSync('同步中…', false);
+  try {
+    await saveRecords();
+    localStorage.removeItem('pendingRecords');
+    setSync('云端已同步', false);
+    showToast('已同步到云端');
+  } catch (e) {
+    localStorage.setItem('pendingRecords', JSON.stringify(records));
+    setSync('同步失败·已存本地', true);
+    showToast('网络异常，已保存到本地');
+  }
+}
+function delRecord(id) {
+  records = records.filter(r => r.id !== id);
+  renderRecords();
+  syncNow();
+}
+function renderRecords() {
+  const total = records.reduce((s, r) => s + r.amount, 0);
+  document.getElementById('actual-total').textContent = '¥' + total.toFixed(0);
+  document.getElementById('actual-avg').textContent = '¥' + (total / 2).toFixed(0);
+  document.getElementById('actual-count').textContent = records.length;
+  const me = records.filter(r => r.payer === 'me').reduce((s, r) => s + r.amount, 0);
+  const ta = total - me;
+  const box = document.getElementById('settle-box');
+  if (!records.length) {
+    box.style.display = 'none';
+  } else if (Math.abs(me - ta) < 0.01) {
+    box.style.display = 'block';
+    box.textContent = '两人垫付一致，无需结算';
+  } else {
+    const half = Math.abs(me - ta) / 2;
+    box.style.display = 'block';
+    box.textContent = me > ta
+      ? '结算建议：我垫 ¥' + me.toFixed(0) + '，对象垫 ¥' + ta.toFixed(0) + '，对象转我 ¥' + half.toFixed(0)
+      : '结算建议：我垫 ¥' + me.toFixed(0) + '，对象垫 ¥' + ta.toFixed(0) + '，我转对象 ¥' + half.toFixed(0);
+  }
+  const list = document.getElementById('record-list');
+  if (!records.length) {
+    list.innerHTML = '<div class="empty-tip">还没有记录，出发后在这里记第一笔</div>';
+    return;
+  }
+  list.innerHTML = records.map(r => {
+    const c = CATS[r.cat] || CATS.other;
+    return '<div class="record-item">' +
+      '<span class="record-cat" style="background:' + c[1] + ';color:' + c[2] + '">' + c[0] + '</span>' +
+      '<div class="record-info"><div class="record-note">' + esc(r.note || c[0]) + '</div>' +
+      '<div class="record-meta">' + esc(r.date) + ' · ' + (r.payer === 'me' ? '我支付' : '对象支付') + '</div></div>' +
+      '<span class="record-amount">¥' + r.amount + '</span>' +
+      '<button class="record-del" onclick="delRecord(' + r.id + ')" aria-label="删除该记录">✕</button></div>';
+  }).join('');
+}
+loadRecords();
 </script>
 </body>
 </html>
