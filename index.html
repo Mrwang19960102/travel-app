@@ -439,7 +439,39 @@
     margin-top: 12px;
   }
   .accommodation-label { font-size: 13px; color: var(--text-tertiary); margin-right: 6px; }
-  .accommodation-value { font-size: 14px; color: var(--text-primary); font-weight: 500; }
+  .accommodation-value {
+    font-size: 14px; color: var(--primary); font-weight: 500;
+    cursor: pointer; text-decoration: underline; text-decoration-style: dotted;
+    text-underline-offset: 3px;
+  }
+  .expense-name.hotel {
+    color: var(--primary); cursor: pointer;
+    text-decoration: underline; text-decoration-style: dotted; text-underline-offset: 3px;
+  }
+  .modal-mask {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    z-index: 900; display: none; align-items: flex-end; justify-content: center;
+  }
+  .modal-mask.show { display: flex; }
+  .hotel-sheet {
+    background: var(--surface); width: 100%; max-width: 1200px;
+    border-radius: 20px 20px 0 0; padding: 12px 20px calc(20px + env(safe-area-inset-bottom));
+    max-height: 80vh; overflow-y: auto; animation: sheetUp 250ms ease-out;
+  }
+  @keyframes sheetUp {
+    from { transform: translateY(40px); opacity: 0.6; }
+    to { transform: none; opacity: 1; }
+  }
+  .sheet-bar { width: 40px; height: 4px; border-radius: 2px; background: var(--border); margin: 0 auto 14px; }
+  .hotel-title { font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+  .hotel-status { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 10px; margin-bottom: 12px; }
+  .hotel-status.ok { background: var(--success-bg); color: #065f46; }
+  .hotel-status.wait { background: var(--secondary-bg); color: #92400e; }
+  .hotel-row { display: flex; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .hotel-row:last-of-type { border-bottom: none; }
+  .hotel-row .k { flex: 0 0 76px; color: var(--text-tertiary); }
+  .hotel-row .v { flex: 1; color: var(--text-primary); line-height: 1.5; }
+  .hotel-section { font-size: 13px; font-weight: 700; color: var(--text-secondary); margin: 14px 0 6px; }
   .tip-box {
     margin-top: 12px;
     padding: 12px;
@@ -1384,7 +1416,7 @@
       </span>
       <span class="category-total">¥780/人</span>
     </div>
-    <div class="expense-item"><span class="expense-name">携程四钻酒店</span><span class="expense-amount">¥780</span></div>
+    <div class="expense-item"><span class="expense-name hotel">携程四钻酒店</span><span class="expense-amount">¥780</span></div>
     <div class="expense-note">旅行社合作协议价：260元/晚（人均130）共住6晚</div>
   </div>
   <div class="category-card">
@@ -1395,8 +1427,8 @@
       </span>
       <span class="category-total" style="color:var(--secondary)">待补充</span>
     </div>
-    <div class="expense-item"><span class="expense-name">亚朵·高级大床房·含2早（已订）</span><span class="expense-amount">10.13-10.16</span></div>
-    <div class="expense-item"><span class="expense-name">亚龙湾万豪（2晚·私滩度假）</span><span class="expense-amount">10.16-10.17</span></div>
+    <div class="expense-item"><span class="expense-name hotel">亚朵·高级大床房·含2早（已订）</span><span class="expense-amount">10.13-10.16</span></div>
+    <div class="expense-item"><span class="expense-name hotel">亚龙湾万豪（2晚·私滩度假）</span><span class="expense-amount">10.16-10.17</span></div>
     <div class="expense-note">亚朵地址：吉阳区河东路216号；全程只换1次酒店；10.18 万豪直接出发返程</div>
   </div>
   <div class="not-included">
@@ -1558,6 +1590,15 @@
   <div class="tab-item" onclick="switchTab(3)" role="tab" aria-label="我的">
     <div class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
     <div class="tab-text">我的</div>
+  </div>
+</div>
+
+<!-- 酒店详情弹窗 -->
+<div class="modal-mask" id="hotel-modal" onclick="closeHotel()">
+  <div class="hotel-sheet" onclick="event.stopPropagation()">
+    <div class="sheet-bar"></div>
+    <div id="hotel-sheet-body"></div>
+    <button class="logout-btn" onclick="closeHotel()">关闭</button>
   </div>
 </div>
 
@@ -1800,6 +1841,71 @@ function renderRecords() {
       (role !== 'guest' ? '<button class="record-del" onclick="delRecord(' + r.id + ')" aria-label="删除该记录">✕</button>' : '') + '</div>';
   }).join('');
 }
+// ===== 酒店详情弹窗 =====
+const HOTELS = {
+  atour: {
+    name: '三亚政务中心河东路亚朵酒店',
+    status: ['已预订', 'ok'],
+    rows: [
+      ['地址', '海南省三亚市吉阳区河东路216号'],
+      ['房型', '高级大床房 ×1（25㎡ · 1.8m床 · 外窗 · 市景）'],
+      ['入离', '2026-10-13 入住 → 2026-10-16 离店 · 3晚'],
+      ['早餐', '每日含2份早餐'],
+      ['入住人', '王**，夏**'],
+      ['订单号', '1000559979148'],
+      ['权益', '免费早餐、消费积分'],
+      ['接送机', '无，网约车往返凤凰机场约30分钟']
+    ],
+    tips: '认准全称预定，别订成凤凰路亚朵；订单备注蜜月可获小惊喜'
+  },
+  marriott: {
+    name: '亚龙湾万豪度假酒店',
+    status: ['待预订', 'wait'],
+    rows: [
+      ['地址', '三亚市亚龙湾国家旅游度假区（私属沙滩）'],
+      ['入离', '2026-10-16 入住 → 2026-10-18 离店 · 2晚'],
+      ['亮点', '私滩、泳池、沙滩直达'],
+      ['礼宾', '16号入住当天预约免税城往返班车 + 开通cdf95折'],
+      ['寄存', '16号上午可先寄存行李再去潜水，14:00办入住'],
+      ['返程', '18号13:30出发，预留45-60分钟到凤凰机场']
+    ],
+    tips: '提前1-2天致电告知蜜月，通常有免费房间布置/水果/蛋糕，甚至升级房型'
+  },
+  yunnan: {
+    name: '云南段酒店（丽江/大理/香格里拉）',
+    status: ['套餐含', 'ok'],
+    rows: [
+      ['标准', '携程四钻酒店 · 协议价260元/晚'],
+      ['晚数', '共6晚：丽江3晚 / 大理1晚 / 香格里拉2晚'],
+      ['费用', '¥780/人（人均130/晚）'],
+      ['分布', 'Day1/3/4 丽江 · Day2 大理 · Day5/6 香格里拉']
+    ],
+    tips: '具体酒店名由定制师安排，均为四钻标准，含早餐'
+  }
+};
+function openHotel(id) {
+  const h = HOTELS[id];
+  if (!h) return;
+  document.getElementById('hotel-sheet-body').innerHTML =
+    '<div class="hotel-title">' + h.name + '</div>' +
+    '<span class="hotel-status ' + h.status[1] + '">' + h.status[0] + '</span>' +
+    h.rows.map(r => '<div class="hotel-row"><span class="k">' + r[0] + '</span><span class="v">' + r[1] + '</span></div>').join('') +
+    '<div class="hotel-section">贴士</div>' +
+    '<div style="font-size:13px;color:var(--text-secondary);line-height:1.6">' + h.tips + '</div>';
+  document.getElementById('hotel-modal').classList.add('show');
+}
+function closeHotel() {
+  document.getElementById('hotel-modal').classList.remove('show');
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('.accommodation-value, .expense-name.hotel');
+  if (!t) return;
+  const txt = t.textContent;
+  if (txt.includes('亚朵')) openHotel('atour');
+  else if (txt.includes('万豪')) openHotel('marriott');
+  else if (txt.includes('四钻')) openHotel('yunnan');
+});
+
 applyRole();
 loadRecords();
 </script>
