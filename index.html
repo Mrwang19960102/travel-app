@@ -4,6 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>婚假旅行 · 云南+三亚</title>
+<meta name="theme-color" content="#0d9488">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
 <style>
   :root {
     /* Semantic Color Tokens */
@@ -937,6 +940,66 @@
   }
   .empty-tip { text-align: center; color: var(--text-tertiary); font-size: 13px; padding: 16px 0 4px; }
 
+  /* ===== V2 FEATURES ===== */
+  .today-card {
+    margin: 0 16px 12px; padding: 14px 16px; border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #fff;
+    box-shadow: 0 4px 16px rgba(245,158,11,0.3); cursor: pointer;
+  }
+  .today-card:active { transform: scale(0.98); }
+  .today-label { font-size: 11px; opacity: 0.85; }
+  .today-title { font-size: 16px; font-weight: 700; margin-top: 2px; }
+  .today-sub { font-size: 11px; opacity: 0.8; margin-top: 4px; }
+  .day-nav { display: flex; gap: 8px; overflow-x: auto; padding: 10px 16px; scrollbar-width: none; }
+  .day-nav::-webkit-scrollbar { display: none; }
+  .day-chip {
+    flex-shrink: 0; padding: 6px 14px; border-radius: 16px;
+    background: var(--surface); border: 1px solid var(--border);
+    font-size: 12px; font-weight: 600; color: var(--text-secondary);
+    cursor: pointer; min-height: 32px;
+  }
+  .day-chip:active { background: var(--primary-bg); color: var(--primary); }
+  .weather-link {
+    margin-left: 8px; font-size: 11px; font-weight: 600; color: var(--primary);
+    text-decoration: underline; text-underline-offset: 2px;
+  }
+  .route-card {
+    margin: 0 16px 12px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 14px 8px; box-shadow: var(--shadow-sm);
+  }
+  .route-card svg { width: 100%; height: auto; display: block; }
+  .check-progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .check-progress-row span { font-size: 12px; color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
+  .check-progress { flex: 1; height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
+  .check-progress-bar { height: 100%; width: 0; background: var(--primary-gradient); border-radius: 3px; transition: width var(--transition-normal); }
+  .check-group-title { font-size: 12px; font-weight: 700; color: var(--text-tertiary); margin: 10px 0 2px; }
+  .cat-stat-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .cat-stat-row .lbl { flex: 0 0 40px; font-size: 12px; color: var(--text-secondary); }
+  .cat-stat-bar { flex: 1; height: 8px; border-radius: 4px; background: var(--border); overflow: hidden; }
+  .cat-stat-fill { height: 100%; border-radius: 4px; }
+  .cat-stat-row .amt { flex: 0 0 64px; text-align: right; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text-primary); }
+  .compare-card {
+    margin: 0 16px 12px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius-md); padding: 14px 16px;
+  }
+  .compare-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
+  .compare-bar { height: 8px; border-radius: 4px; background: var(--border); overflow: hidden; }
+  .compare-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 4px; transition: width var(--transition-normal); }
+  .compare-text { font-size: 12px; color: var(--text-tertiary); margin-top: 6px; }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --surface: #1e293b; --background: #0f172a; --border: #334155;
+      --text-primary: #f1f5f9; --text-secondary: #94a3b8; --text-tertiary: #64748b;
+      --primary-bg: rgba(13,148,136,0.16); --secondary-bg: rgba(245,158,11,0.16);
+      --success-bg: rgba(16,185,129,0.16); --accent-bg: rgba(139,92,246,0.16);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.4); --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+    }
+    .tabbar { background: rgba(30,41,59,0.92); border-top-color: rgba(255,255,255,0.08); }
+    .form-input { background: #0f172a; }
+    .hero { background: linear-gradient(180deg, rgba(13,148,136,0.12), var(--background)); }
+    .toast { background: rgba(241,245,249,0.9); color: #0f172a; }
+  }
+
   /* ===== DESKTOP RESPONSIVE ===== */
   @media (min-width: 768px) {
     .hero-title { font-size: 36px; }
@@ -986,6 +1049,11 @@
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       <span id="countdown-text">计算中...</span>
     </div>
+  </div>
+  <div class="today-card" id="today-card" style="display:none">
+    <div class="today-label">今日行程</div>
+    <div class="today-title" id="today-title"></div>
+    <div class="today-sub">点击查看完整安排 →</div>
   </div>
   <div class="stats">
     <div class="stat-card"><div class="stat-val">云南</div><div class="stat-label">7天6晚</div></div>
@@ -1037,6 +1105,27 @@
         <span class="route-tag amber">亚龙湾</span>
       </div>
     </div>
+  </div>
+  <div class="section" style="padding-top:8px;padding-bottom:12px">
+    <div class="section-title">路线概览</div>
+  </div>
+  <div class="route-card">
+    <svg viewBox="0 0 640 100">
+      <line x1="40" y1="45" x2="390" y2="45" stroke="#0d9488" stroke-width="2"/>
+      <line x1="390" y1="45" x2="560" y2="45" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6 5"/>
+      <circle cx="40" cy="45" r="6" fill="#0d9488"/><circle cx="150" cy="45" r="6" fill="#0d9488"/>
+      <circle cx="260" cy="45" r="6" fill="#0d9488"/><circle cx="390" cy="45" r="6" fill="#0d9488"/>
+      <circle cx="560" cy="45" r="6" fill="#f59e0b"/>
+      <path d="M462 32 l30 9 -30 9 7 -9 z" fill="#f59e0b"/>
+      <g font-size="16" fill="#64748b" text-anchor="middle">
+        <text x="40" y="78">丽江</text><text x="150" y="78">大理</text><text x="260" y="78">丽江</text>
+        <text x="390" y="78">香格里拉</text><text x="560" y="78">三亚</text>
+      </g>
+      <g font-size="12" fill="#94a3b8" text-anchor="middle">
+        <text x="40" y="22">D1</text><text x="150" y="22">D2</text><text x="260" y="22">D3-4</text>
+        <text x="390" y="22">D5-6</text><text x="560" y="22">D7-12</text>
+      </g>
+    </svg>
   </div>
   <div class="section" style="padding-top:8px;padding-bottom:12px">
     <div class="section-title">热门景点 · 云南</div>
@@ -1124,6 +1213,21 @@
 <!-- ===== ITINERARY PAGE ===== -->
 <div id="page-itinerary" class="page itinerary-page">
   <div class="navbar">每日行程</div>
+  <div class="day-nav">
+    <span class="day-chip" onclick="goToId('day-1')">D1</span>
+    <span class="day-chip" onclick="goToId('day-2')">D2</span>
+    <span class="day-chip" onclick="goToId('day-3')">D3</span>
+    <span class="day-chip" onclick="goToId('day-4')">D4</span>
+    <span class="day-chip" onclick="goToId('day-5')">D5</span>
+    <span class="day-chip" onclick="goToId('day-6')">D6</span>
+    <span class="day-chip" onclick="goToId('day-7')">D7</span>
+    <span class="day-chip" onclick="goToId('sday-1')">三1</span>
+    <span class="day-chip" onclick="goToId('sday-2')">三2</span>
+    <span class="day-chip" onclick="goToId('sday-3')">三3</span>
+    <span class="day-chip" onclick="goToId('sday-4')">三4</span>
+    <span class="day-chip" onclick="goToId('sday-5')">三5</span>
+    <span class="day-chip" onclick="goToId('sday-6')">三6</span>
+  </div>
   <div class="day-card" id="day-1">
     <div class="day-header"><span class="day-badge">Day 1</span><span class="day-date">10月7日</span></div>
     <div class="day-title">各地 → 丽江 - 接站入住酒店</div>
@@ -1285,13 +1389,13 @@
   <div class="navbar">费用明细</div>
   <div class="summary-pair">
     <div class="summary-card">
-      <div class="summary-title">计划 · 云南段</div>
-      <div class="summary-amount">¥5,686</div>
-      <div class="summary-unit">人均 ¥2,843</div>
+      <div class="summary-title">计划 · 总计（含估算）</div>
+      <div class="summary-amount">¥13,486</div>
+      <div class="summary-unit">人均 ¥6,743</div>
       <div class="summary-row">
-        <div class="summary-item"><div class="summary-item-val">7天</div><div class="summary-item-label">行程</div></div>
-        <div class="summary-item"><div class="summary-item-val">6晚</div><div class="summary-item-label">住宿</div></div>
-        <div class="summary-item"><div class="summary-item-val">5天</div><div class="summary-item-label">用车</div></div>
+        <div class="summary-item"><div class="summary-item-val">¥5,686</div><div class="summary-item-label">云南</div></div>
+        <div class="summary-item"><div class="summary-item-val">¥7,800</div><div class="summary-item-label">三亚估</div></div>
+        <div class="summary-item"><div class="summary-item-val">13天</div><div class="summary-item-label">全程</div></div>
       </div>
     </div>
     <div class="summary-card actual">
@@ -1304,6 +1408,12 @@
         <div class="summary-item"><div class="summary-item-val" id="act-lumei">¥0</div><div class="summary-item-label">噜妹付</div></div>
       </div>
     </div>
+  </div>
+
+  <div class="compare-card">
+    <div class="compare-title">计划 vs 实际</div>
+    <div class="compare-bar"><div class="compare-fill" id="compare-fill"></div></div>
+    <div class="compare-text" id="compare-text">记账后自动对比</div>
   </div>
 
   <!-- 实际花费记录 -->
@@ -1342,6 +1452,10 @@
       <button class="logout-btn" onclick="logout()">退出管理</button>
     </div>
     <div class="record-list" id="record-list"></div>
+  </div>
+  <div class="category-card" id="cat-stats-card" style="display:none">
+    <div class="category-header"><span class="category-name">实际花费 · 分类统计</span></div>
+    <div id="cat-stats"></div>
   </div>
   <div class="region-divider">云南段 · 计划预算</div>
   <div class="category-card">
@@ -1420,6 +1534,17 @@
     <div class="expense-item"><span class="expense-name hotel">亚朵·高级大床房·含2早（已订）</span><span class="expense-amount">10.13-10.16</span></div>
     <div class="expense-item"><span class="expense-name hotel">亚龙湾万豪（2晚·私滩度假）</span><span class="expense-amount">10.16-10.17</span></div>
     <div class="expense-note">亚朵地址：吉阳区河东路216号；全程只换1次酒店；10.18 万豪直接出发返程</div>
+  </div>
+  <div class="category-card">
+    <div class="category-header">
+      <span class="category-name">三亚 · 计划（估算）</span>
+      <span class="category-total" style="color:var(--secondary)">¥7,800估</span>
+    </div>
+    <div class="expense-item"><span class="expense-name">亚朵3晚</span><span class="expense-amount">¥1,100</span></div>
+    <div class="expense-item"><span class="expense-name">万豪2晚</span><span class="expense-amount">¥3,000</span></div>
+    <div class="expense-item"><span class="expense-name">西岛+水上项目（2人）</span><span class="expense-amount">¥1,000</span></div>
+    <div class="expense-item"><span class="expense-name">远海潜水（2人）</span><span class="expense-amount">¥1,200</span></div>
+    <div class="expense-item"><span class="expense-name">餐饮交通</span><span class="expense-amount">¥1,500</span></div>
   </div>
   <div class="not-included">
     <div class="not-included-title">
@@ -1550,19 +1675,16 @@
   <div class="section" style="padding-top:0">
     <div class="section-title">行李清单</div>
   </div>
-  <div class="checklist-card" id="checklist">
-    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">身份证/护照</span></div>
-    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">手机及充电器</span></div>
-    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">相机及充电器</span></div>
-    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">防晒霜（SPF50+）</span></div>
-    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">墨镜</span></div>
-    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">帽子</span></div>
-    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">保暖外套（高原温差大）</span></div>
-    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">舒适徒步鞋</span></div>
-    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">雨伞/雨衣</span></div>
-    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">常用药品</span></div>
-    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">高反药物（红景天等）</span></div>
-    <div class="checklist-item" onclick="toggleCheck(this)"><div class="checkbox"><span class="checkmark">✓</span></div><span class="checklist-text">保温杯</span></div>
+  <div class="checklist-card">
+    <div class="check-progress-row">
+      <span id="check-progress-text">0/0</span>
+      <div class="check-progress"><div class="check-progress-bar" id="check-progress-bar"></div></div>
+    </div>
+    <div id="checklist"></div>
+    <div class="form-row" style="margin-top:12px;margin-bottom:0">
+      <input class="form-input" id="inp-check" placeholder="添加物品，如：泳衣">
+      <button class="login-btn" onclick="addCheckItem()">添加</button>
+    </div>
   </div>
 </div>
 
@@ -1611,11 +1733,6 @@ function switchTab(idx) {
   window.scrollTo(0, 0);
 }
 
-function toggleCheck(el) {
-  el.querySelector('.checkbox').classList.toggle('checked');
-  el.querySelector('.checklist-text').classList.toggle('done');
-}
-
 // 跳转到行程页指定卡片并高亮
 function goToId(id) {
   switchTab(1);
@@ -1641,18 +1758,43 @@ function showToast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
 }
 
-// 出发倒计时（10月7日）
+// 倒计时 / 旅途中模式
 (function () {
   const now = new Date();
-  let target = new Date(now.getFullYear(), 9, 7);
-  if (now > new Date(now.getFullYear(), 9, 13, 23, 59)) {
-    target = new Date(now.getFullYear() + 1, 9, 7);
-  }
-  const days = Math.ceil((target - now) / 86400000);
+  const start = new Date(now.getFullYear(), 9, 7);
+  const end = new Date(now.getFullYear(), 9, 18, 23, 59, 59);
   const el = document.getElementById('countdown-text');
-  el.innerHTML = days > 0
-    ? '距出发还有 <span class="countdown-num">' + days + '</span> 天'
-    : '旅途愉快，享受当下';
+  if (now >= start && now <= end) {
+    const dayX = Math.floor((now - start) / 86400000) + 1;
+    el.innerHTML = '今天是旅途第 <span class="countdown-num">' + dayX + '</span> 天';
+    const key = (now.getMonth() + 1) + '-' + now.getDate();
+    const TODAY = {
+      '10-7': ['day-1', 'Day1 · 落地丽江'],
+      '10-8': ['day-2', 'Day2 · 大理洱海环线'],
+      '10-9': ['day-3', 'Day3 · 大理海西 → 丽江'],
+      '10-10': ['day-4', 'Day4 · 玉龙雪山 · 蓝月谷'],
+      '10-11': ['day-5', 'Day5 · 虎跳峡 → 香格里拉'],
+      '10-12': ['day-6', 'Day6 · 松赞林寺 · 普达措'],
+      '10-13': ['sday-1', 'Day7 · 飞三亚 · 椰梦长廊'],
+      '10-14': ['sday-2', '三亚2 · 大东海水上项目'],
+      '10-15': ['sday-3', '三亚3 · 西岛一日游'],
+      '10-16': ['sday-4', '三亚4 · 潜水 · 搬进万豪'],
+      '10-17': ['sday-5', '三亚5 · 半日免税城'],
+      '10-18': ['sday-6', '三亚6 · 返程回家']
+    };
+    const t = TODAY[key];
+    if (t) {
+      const card = document.getElementById('today-card');
+      card.style.display = 'block';
+      card.onclick = function () { goToId(t[0]); };
+      document.getElementById('today-title').textContent = t[1];
+    }
+  } else if (now > end) {
+    el.textContent = '旅途已完成 · 感谢同行';
+  } else {
+    const days = Math.ceil((start - now) / 86400000);
+    el.innerHTML = '距出发还有 <span class="countdown-num">' + days + '</span> 天';
+  }
 })();
 
 // ===== 费用记录 · GitHub 云同步 =====
@@ -1819,6 +1961,29 @@ function renderRecords() {
   document.getElementById('act-count').textContent = records.length;
   document.getElementById('act-lulu').textContent = '¥' + me.toFixed(0);
   document.getElementById('act-lumei').textContent = '¥' + ta.toFixed(0);
+  // 分类统计
+  const sums = {};
+  records.forEach(r => { sums[r.cat] = (sums[r.cat] || 0) + r.amount; });
+  const entries = Object.entries(sums).sort((a, b) => b[1] - a[1]);
+  const csCard = document.getElementById('cat-stats-card');
+  if (entries.length) {
+    csCard.style.display = 'block';
+    const max = entries[0][1];
+    const COLORS = { food: '#f59e0b', ticket: '#0d9488', traffic: '#3b82f6', shop: '#8b5cf6', hotel: '#e11d48', other: '#64748b' };
+    document.getElementById('cat-stats').innerHTML = entries.map(([c, v]) =>
+      '<div class="cat-stat-row"><span class="lbl">' + (CATS[c] || CATS.other)[0] + '</span>' +
+      '<div class="cat-stat-bar"><div class="cat-stat-fill" style="width:' + Math.round(v / max * 100) + '%;background:' + (COLORS[c] || '#64748b') + '"></div></div>' +
+      '<span class="amt">¥' + v + '</span></div>').join('');
+  } else {
+    csCard.style.display = 'none';
+  }
+  // 计划vs实际
+  const PLAN = 13486;
+  const pct = Math.min(100, Math.round(total / PLAN * 100));
+  document.getElementById('compare-fill').style.width = pct + '%';
+  document.getElementById('compare-text').textContent = total > PLAN
+    ? '实际 ¥' + total.toFixed(0) + ' · 超计划 ¥' + (total - PLAN).toFixed(0)
+    : '实际 ¥' + total.toFixed(0) + ' / 计划 ¥' + PLAN + ' · 已用 ' + pct + '% · 剩余 ¥' + (PLAN - total).toFixed(0);
   const list = document.getElementById('record-list');
   if (!records.length) {
     list.innerHTML = '<div class="empty-tip">还没有记录，出发后在这里记第一笔</div>';
@@ -1960,6 +2125,108 @@ document.addEventListener('click', e => {
   if (txt.includes('亚朵')) openHotel('atour');
   else if (txt.includes('万豪')) openHotel('marriott');
   else if (txt.includes('四钻')) openHotel('yunnan');
+});
+
+// ===== 行李清单 · 云同步 =====
+let checkItems = null;
+let clSha = null;
+const CHECK_DEFAULT = [
+  { id: 1, cat: '证件', text: '身份证/护照' },
+  { id: 2, cat: '电子', text: '手机及充电器' },
+  { id: 3, cat: '电子', text: '相机及充电器' },
+  { id: 4, cat: '防晒', text: '防晒霜（SPF50+）' },
+  { id: 5, cat: '防晒', text: '墨镜' },
+  { id: 6, cat: '防晒', text: '帽子' },
+  { id: 7, cat: '衣物', text: '保暖外套（高原温差大）' },
+  { id: 8, cat: '衣物', text: '舒适徒步鞋' },
+  { id: 9, cat: '衣物', text: '雨伞/雨衣' },
+  { id: 10, cat: '药品', text: '常用药品' },
+  { id: 11, cat: '药品', text: '高反药物（红景天等）' },
+  { id: 12, cat: '其他', text: '保温杯' }
+];
+const CAT_ORDER = ['证件', '电子', '防晒', '衣物', '药品', '其他', '自定义'];
+function clApi(method, body) {
+  return fetch('https://api.github.com/repos/' + GH_REPO + '/contents/checklist.json', {
+    method: method,
+    headers: {
+      'Authorization': 'Bearer ' + GH_TOKEN,
+      'Accept': 'application/vnd.github.v3+json',
+      'Content-Type': 'application/json'
+    },
+    body: body ? JSON.stringify(body) : undefined
+  });
+}
+async function loadChecklist() {
+  try {
+    const resp = await clApi('GET');
+    if (resp.status === 404) {
+      checkItems = CHECK_DEFAULT.map(i => Object.assign({ done: false }, i));
+    } else {
+      const d = await resp.json();
+      clSha = d.sha;
+      checkItems = JSON.parse(decodeB64(d.content)).items;
+    }
+  } catch (e) {
+    checkItems = CHECK_DEFAULT.map(i => Object.assign({ done: false }, i));
+  }
+  renderChecklist();
+}
+async function saveChecklist() {
+  const body = {
+    message: 'update checklist',
+    content: btoa(unescape(encodeURIComponent(JSON.stringify({ items: checkItems })))),
+    branch: 'main'
+  };
+  if (clSha) body.sha = clSha;
+  let resp = await clApi('PUT', body);
+  if (resp.status === 409 || resp.status === 422) {
+    const g = await clApi('GET');
+    const d = await g.json();
+    clSha = d.sha;
+    body.sha = clSha;
+    resp = await clApi('PUT', body);
+  }
+  if (!resp.ok) throw new Error('save failed');
+  clSha = (await resp.json()).content.sha;
+}
+function toggleCheckItem(id) {
+  const it = checkItems.find(i => i.id === id);
+  it.done = !it.done;
+  renderChecklist();
+  saveChecklist().catch(() => {});
+}
+function addCheckItem() {
+  const t = document.getElementById('inp-check').value.trim();
+  if (!t) { showToast('请输入物品名称'); return; }
+  checkItems.push({ id: Date.now(), cat: '自定义', text: t, done: false });
+  document.getElementById('inp-check').value = '';
+  renderChecklist();
+  saveChecklist().catch(() => {});
+}
+function renderChecklist() {
+  if (!checkItems) return;
+  const done = checkItems.filter(i => i.done).length;
+  document.getElementById('check-progress-text').textContent = done + '/' + checkItems.length;
+  document.getElementById('check-progress-bar').style.width = Math.round(done / checkItems.length * 100) + '%';
+  let html = '';
+  CAT_ORDER.forEach(cat => {
+    const items = checkItems.filter(i => i.cat === cat);
+    if (!items.length) return;
+    html += '<div class="check-group-title">' + cat + '</div>';
+    html += items.map(i =>
+      '<div class="checklist-item" onclick="toggleCheckItem(' + i.id + ')">' +
+      '<div class="checkbox' + (i.done ? ' checked' : '') + '"><span class="checkmark">✓</span></div>' +
+      '<span class="checklist-text' + (i.done ? ' done' : '') + '">' + esc(i.text) + '</span></div>').join('');
+  });
+  document.getElementById('checklist').innerHTML = html;
+}
+loadChecklist();
+
+// ===== 城市天气入口 =====
+const CITY_WX = { '丽江': '101291401', '大理': '101290201', '香格里拉': '101291301', '三亚湾': '101310201', '大东海': '101310201', '西岛': '101310201', '亚龙湾': '101310201', '海棠湾': '101310201' };
+document.querySelectorAll('.city-tag').forEach(t => {
+  const code = CITY_WX[t.textContent.trim()];
+  if (code) t.insertAdjacentHTML('beforeend', '<a class="weather-link" target="_blank" rel="noopener" href="https://m.weather.com.cn/mweather/' + code + '.shtml">天气</a>');
 });
 
 applyRole();
