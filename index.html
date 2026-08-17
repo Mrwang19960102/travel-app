@@ -745,12 +745,9 @@
     border: 1px solid var(--border);
     border-radius: 24px;
     box-shadow: var(--shadow-sm);
-    cursor: pointer;
-    transition: transform var(--transition-fast);
     font-size: 13px;
     color: var(--text-secondary);
   }
-  .countdown-bar:active { transform: scale(0.96); }
   .countdown-bar svg { width: 16px; height: 16px; stroke: var(--primary); }
   .countdown-num { font-weight: 700; color: var(--primary); font-variant-numeric: tabular-nums; }
 
@@ -1073,7 +1070,7 @@
       <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
       <div class="bless-text" id="bless-text"></div>
     </div>
-    <div class="countdown-bar" onclick="switchTab(1)" role="button" aria-label="查看出发倒计时">
+    <div class="countdown-bar">
       <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       <span id="countdown-text">计算中...</span>
     </div>
