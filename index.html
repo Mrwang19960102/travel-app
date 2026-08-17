@@ -884,6 +884,24 @@
     .summary-pair .summary-item-val { font-size: 14px; }
     .summary-pair .summary-item-label { font-size: 10px; }
   }
+  .role-badge {
+    font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
+    margin-left: 6px; vertical-align: 2px;
+    background: var(--primary-bg); color: var(--primary);
+  }
+  .role-badge.guest { background: var(--background); color: var(--text-tertiary); }
+  .login-btn {
+    flex-shrink: 0; border: none; border-radius: 10px; padding: 10px 20px;
+    background: var(--primary-gradient); color: #fff; font-size: 14px; font-weight: 600;
+    cursor: pointer; min-height: 44px;
+  }
+  .login-btn:active { transform: scale(0.97); }
+  .login-hint { font-size: 11px; color: var(--text-tertiary); margin-top: 6px; }
+  .logout-btn {
+    margin-top: 12px; width: 100%; padding: 10px 0;
+    border: 1px solid var(--border); background: var(--surface); border-radius: 10px;
+    color: var(--text-secondary); font-size: 13px; cursor: pointer; min-height: 40px;
+  }
   .record-list { margin-top: 14px; }
   .record-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
   .record-item:last-child { border-bottom: none; }
@@ -1269,28 +1287,38 @@
   <!-- 实际花费记录 -->
   <div class="recorder-card">
     <div class="recorder-title">
-      <h3>记一笔</h3>
+      <h3>记一笔<span id="role-badge" class="role-badge guest">查看模式</span></h3>
       <span class="sync-status"><span class="sync-dot" id="sync-dot"></span><span id="sync-text">云端同步</span></span>
     </div>
-    <div class="payer-switch">
-      <div class="payer-btn active" id="payer-me" onclick="setPayer('me')">噜噜</div>
-      <div class="payer-btn" id="payer-ta" onclick="setPayer('ta')">噜妹</div>
+    <div id="login-zone">
+      <div class="form-row" style="margin-bottom:6px">
+        <input class="form-input" id="inp-pin" type="password" inputmode="numeric" placeholder="管理员口令">
+        <button class="login-btn" onclick="login()">登录</button>
+      </div>
+      <div class="login-hint">噜噜/噜妹输入口令后可记账、删除；访客仅可查看</div>
     </div>
-    <div class="form-row">
-      <input class="form-input amount-input" id="inp-amount" type="number" inputmode="decimal" placeholder="金额 ¥" min="0" step="0.01">
-      <select class="form-input" id="inp-cat" style="flex:0 0 96px">
-        <option value="food">餐饮</option>
-        <option value="ticket">门票</option>
-        <option value="traffic">交通</option>
-        <option value="shop">购物</option>
-        <option value="hotel">住宿</option>
-        <option value="other">其他</option>
-      </select>
+    <div id="edit-zone" style="display:none">
+      <div class="payer-switch">
+        <div class="payer-btn active" id="payer-me" onclick="setPayer('me')">噜噜</div>
+        <div class="payer-btn" id="payer-ta" onclick="setPayer('ta')">噜妹</div>
+      </div>
+      <div class="form-row">
+        <input class="form-input amount-input" id="inp-amount" type="number" inputmode="decimal" placeholder="金额 ¥" min="0" step="0.01">
+        <select class="form-input" id="inp-cat" style="flex:0 0 96px">
+          <option value="food">餐饮</option>
+          <option value="ticket">门票</option>
+          <option value="traffic">交通</option>
+          <option value="shop">购物</option>
+          <option value="hotel">住宿</option>
+          <option value="other">其他</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <input class="form-input" id="inp-note" placeholder="备注（可选，如：亿恒夜市晚餐）">
+      </div>
+      <button class="add-btn" onclick="addRecord()">记一笔并同步</button>
+      <button class="logout-btn" onclick="logout()">退出管理</button>
     </div>
-    <div class="form-row">
-      <input class="form-input" id="inp-note" placeholder="备注（可选，如：亿恒夜市晚餐）">
-    </div>
-    <button class="add-btn" onclick="addRecord()">记一笔并同步</button>
     <div class="record-list" id="record-list"></div>
   </div>
   <div class="region-divider">云南段 · 计划预算</div>
@@ -1608,6 +1636,42 @@ const CATS = {
 let records = [];
 let fileSha = null;
 let payer = 'me';
+let role = localStorage.getItem('role') || 'guest';
+const PIN_HASHES = {
+  me: 'ed86ee25703b2b847e5f8ee94162e5079144f5f83acb1dfeaf9e267c5932ac54',
+  ta: '6ea0aa57ed114dd8146e8f2c7fc99a4e5739990651e529d7e5007155210be23f'
+};
+function sha256(t) {
+  return crypto.subtle.digest('SHA-256', new TextEncoder().encode(t)).then(b =>
+    Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2, '0')).join(''));
+}
+async function login() {
+  const pin = document.getElementById('inp-pin').value.trim();
+  if (!pin) { showToast('请输入口令'); return; }
+  const h = await sha256(pin);
+  if (h === PIN_HASHES.me) role = 'me';
+  else if (h === PIN_HASHES.ta) role = 'ta';
+  else { showToast('口令错误'); return; }
+  localStorage.setItem('role', role);
+  document.getElementById('inp-pin').value = '';
+  applyRole();
+  showToast((role === 'me' ? '噜噜' : '噜妹') + '，欢迎回来');
+}
+function logout() {
+  role = 'guest';
+  localStorage.removeItem('role');
+  applyRole();
+  showToast('已切换为查看模式');
+}
+function applyRole() {
+  const guest = role === 'guest';
+  document.getElementById('login-zone').style.display = guest ? 'block' : 'none';
+  document.getElementById('edit-zone').style.display = guest ? 'none' : 'block';
+  const badge = document.getElementById('role-badge');
+  badge.textContent = guest ? '查看模式' : (role === 'me' ? '噜噜·管理' : '噜妹·管理');
+  badge.classList.toggle('guest', guest);
+  renderRecords();
+}
 
 function esc(s) {
   return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
@@ -1733,9 +1797,10 @@ function renderRecords() {
       '<div class="record-info"><div class="record-note">' + esc(r.note || c[0]) + '</div>' +
       '<div class="record-meta">' + esc(r.date) + ' · ' + (r.payer === 'me' ? '噜噜支付' : '噜妹支付') + '</div></div>' +
       '<span class="record-amount">¥' + r.amount + '</span>' +
-      '<button class="record-del" onclick="delRecord(' + r.id + ')" aria-label="删除该记录">✕</button></div>';
+      (role !== 'guest' ? '<button class="record-del" onclick="delRecord(' + r.id + ')" aria-label="删除该记录">✕</button>' : '') + '</div>';
   }).join('');
 }
+applyRole();
 loadRecords();
 </script>
 </body>
