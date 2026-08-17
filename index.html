@@ -779,11 +779,14 @@
   .city-pill svg { width: 16px; height: 16px; stroke: var(--primary); }
 
   .spot-scroll {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
     padding: 4px 16px 8px;
   }
+  .spot-link { display: flex; align-items: center; }
+  .spot-link svg { width: 16px; height: 16px; stroke: var(--text-tertiary); }
   .spot-card {
     width: auto;
     background: var(--surface);
@@ -797,8 +800,6 @@
   }
   .spot-head { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
   .spot-head .spot-day { margin-bottom: 0; }
-  .spot-arrow { display: inline-flex; flex-shrink: 0; }
-  .spot-arrow svg { width: 12px; height: 12px; stroke: var(--text-tertiary); }
   .sheet-btn {
     margin-top: 14px; width: 100%; padding: 12px 0; border: none; border-radius: 12px;
     background: var(--primary-gradient); color: #fff; font-size: 14px; font-weight: 600;
@@ -972,7 +973,6 @@
     .stat-val { font-size: 24px; }
     .stat-label { font-size: 12px; }
     .quick-actions { grid-template-columns: repeat(4, 1fr); }
-    .spot-scroll { grid-template-columns: repeat(6, 1fr); }
   }
   @media (min-width: 1024px) {
     .trip-card { width: calc(33.333% - 12px); margin-right: 12px; }
@@ -1063,23 +1063,28 @@
     <div class="section-title">热门景点 · 云南</div>
   </div>
   <div class="spot-scroll">
-    <div class="spot-card" onclick="openSpot('y1')" role="button" aria-label="查看玉龙雪山信息">
-      <div class="spot-head"><span class="spot-day">Day 4</span><span class="spot-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span><div class="spot-name">玉龙雪山</div></div><div class="spot-desc">日照金山</div>
-    </div>
     <div class="spot-card" onclick="openSpot('y2')" role="button" aria-label="查看洱海信息">
-      <div class="spot-head"><span class="spot-day">Day 2</span><span class="spot-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span><div class="spot-name">洱海</div></div><div class="spot-desc">沿海彩虹公路</div>
+      <div class="spot-head"><span class="spot-day">Day 2</span><div class="spot-name">洱海</div></div><div class="spot-desc">沿海彩虹公路</div>
     </div>
+    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+    <div class="spot-card" onclick="openSpot('y1')" role="button" aria-label="查看玉龙雪山信息">
+      <div class="spot-head"><span class="spot-day">Day 4</span><div class="spot-name">玉龙雪山</div></div><div class="spot-desc">日照金山</div>
+    </div>
+    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('y3')" role="button" aria-label="查看蓝月谷信息">
-      <div class="spot-head"><span class="spot-day">Day 4</span><span class="spot-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span><div class="spot-name">蓝月谷</div></div><div class="spot-desc">小九寨之称</div>
+      <div class="spot-head"><span class="spot-day">Day 4</span><div class="spot-name">蓝月谷</div></div><div class="spot-desc">小九寨之称</div>
     </div>
+    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('y4')" role="button" aria-label="查看虎跳峡信息">
-      <div class="spot-head"><span class="spot-day">Day 5</span><span class="spot-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span><div class="spot-name">虎跳峡</div></div><div class="spot-desc">第一大峡谷</div>
+      <div class="spot-head"><span class="spot-day">Day 5</span><div class="spot-name">虎跳峡</div></div><div class="spot-desc">第一大峡谷</div>
     </div>
+    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('y5')" role="button" aria-label="查看独克宗信息">
-      <div class="spot-head"><span class="spot-day">Day 5</span><span class="spot-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span><div class="spot-name">独克宗</div></div><div class="spot-desc">月光城转经筒</div>
+      <div class="spot-head"><span class="spot-day">Day 5</span><div class="spot-name">独克宗</div></div><div class="spot-desc">月光城转经筒</div>
     </div>
+    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('y6')" role="button" aria-label="查看松赞林寺信息">
-      <div class="spot-head"><span class="spot-day">Day 6</span><span class="spot-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span><div class="spot-name">松赞林寺</div></div><div class="spot-desc">小布达拉宫</div>
+      <div class="spot-head"><span class="spot-day">Day 6</span><div class="spot-name">松赞林寺</div></div><div class="spot-desc">小布达拉宫</div>
     </div>
   </div>
   <div class="section" style="padding-top:8px;padding-bottom:12px">
@@ -1087,19 +1092,23 @@
   </div>
   <div class="spot-scroll">
     <div class="spot-card" onclick="openSpot('s1')" role="button" aria-label="查看椰梦长廊信息">
-      <div class="spot-head"><span class="spot-day" style="background:var(--secondary-bg);color:#92400e">三亚1</span><span class="spot-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span><div class="spot-name">椰梦长廊</div></div><div class="spot-desc">骑行随停拍照</div>
+      <div class="spot-head"><span class="spot-day" style="background:var(--secondary-bg);color:#92400e">三亚1</span><div class="spot-name">椰梦长廊</div></div><div class="spot-desc">骑行随停拍照</div>
     </div>
+    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('s2')" role="button" aria-label="查看大东海信息">
-      <div class="spot-head"><span class="spot-day" style="background:var(--secondary-bg);color:#92400e">三亚2</span><span class="spot-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span><div class="spot-name">大东海</div></div><div class="spot-desc">摩托艇香蕉船</div>
+      <div class="spot-head"><span class="spot-day" style="background:var(--secondary-bg);color:#92400e">三亚2</span><div class="spot-name">大东海</div></div><div class="spot-desc">摩托艇香蕉船</div>
     </div>
+    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('s3')" role="button" aria-label="查看西岛信息">
-      <div class="spot-head"><span class="spot-day" style="background:var(--secondary-bg);color:#92400e">三亚3</span><span class="spot-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span><div class="spot-name">西岛</div></div><div class="spot-desc">渔村礁石栈道</div>
+      <div class="spot-head"><span class="spot-day" style="background:var(--secondary-bg);color:#92400e">三亚3</span><div class="spot-name">西岛</div></div><div class="spot-desc">渔村礁石栈道</div>
     </div>
+    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('s4')" role="button" aria-label="查看远海潜水信息">
-      <div class="spot-head"><span class="spot-day" style="background:var(--secondary-bg);color:#92400e">三亚4</span><span class="spot-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span><div class="spot-name">远海潜水</div></div><div class="spot-desc">东西排船潜</div>
+      <div class="spot-head"><span class="spot-day" style="background:var(--secondary-bg);color:#92400e">三亚4</span><div class="spot-name">远海潜水</div></div><div class="spot-desc">东西排船潜</div>
     </div>
+    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('s5')" role="button" aria-label="查看免税城信息">
-      <div class="spot-head"><span class="spot-day" style="background:var(--secondary-bg);color:#92400e">三亚5</span><span class="spot-arrow"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span><div class="spot-name">免税城</div></div><div class="spot-desc">cdf95折</div>
+      <div class="spot-head"><span class="spot-day" style="background:var(--secondary-bg);color:#92400e">三亚5</span><div class="spot-name">免税城</div></div><div class="spot-desc">cdf95折</div>
     </div>
   </div>
   <div class="section" style="padding-top:12px;padding-bottom:16px">
