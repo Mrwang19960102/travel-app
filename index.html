@@ -948,10 +948,11 @@
   .bless-card svg { width: 18px; height: 18px; fill: var(--primary); flex-shrink: 0; margin-top: 2px; }
   .bless-label { font-size: 11px; color: var(--text-tertiary); margin-bottom: 3px; }
   .bless-text { font-size: 14px; color: var(--text-primary); line-height: 1.6; font-weight: 500; }
-  .wx-row { display: flex; gap: 10px; margin: 0 16px 12px; }
+  .wx-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 16px 12px; }
   .wx-card {
-    flex: 1 1 140px; background: var(--surface); border: 1px solid var(--border);
+    background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius-md); padding: 12px 14px; box-shadow: var(--shadow-sm);
+    min-width: 0;
   }
   .wx-city { font-size: 12px; color: var(--text-tertiary); }
   .wx-temp { font-size: 22px; font-weight: 700; color: var(--primary); margin: 2px 0; font-variant-numeric: tabular-nums; }
