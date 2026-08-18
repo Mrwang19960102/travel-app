@@ -1092,6 +1092,7 @@
   </div>
   <div class="wx-row">
     <div class="wx-card" id="wx-lijiang"><div class="wx-city">丽江</div><div class="wx-temp">--°</div><div class="wx-desc">天气加载中…</div></div>
+    <div class="wx-card" id="wx-dali"><div class="wx-city">大理</div><div class="wx-temp">--°</div><div class="wx-desc">天气加载中…</div></div>
     <div class="wx-card" id="wx-shangrila"><div class="wx-city">香格里拉</div><div class="wx-temp">--°</div><div class="wx-desc">天气加载中…</div></div>
     <div class="wx-card" id="wx-sanya"><div class="wx-city">三亚</div><div class="wx-temp">--°</div><div class="wx-desc">天气加载中…</div></div>
   </div>
@@ -2308,7 +2309,7 @@ function wxDesc(h) {
   return (h.lang_zh && h.lang_zh[0] && h.lang_zh[0].value) || WX_ZH[+h.weatherCode] || h.weatherDesc[0].value;
 }
 async function loadWeather() {
-  const targets = [['wx-lijiang', '丽江', '101291401'], ['wx-shangrila', '香格里拉', '101291301'], ['wx-sanya', '三亚', '101310201']];
+  const targets = [['wx-lijiang', '丽江', '101291401'], ['wx-dali', '大理', '101290201'], ['wx-shangrila', '香格里拉', '101291301'], ['wx-sanya', '三亚', '101310201']];
   for (const [id, city, code] of targets) {
     const el = document.getElementById(id);
     try {
