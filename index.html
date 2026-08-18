@@ -995,11 +995,20 @@
     margin-left: 8px; font-size: 11px; font-weight: 600; color: var(--primary);
     text-decoration: underline; text-underline-offset: 2px;
   }
-  .route-card {
+  .map-card {
     margin: 0 16px 12px; background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius-lg); padding: 14px 8px; box-shadow: var(--shadow-sm);
+    border-radius: var(--radius-lg); padding: 10px 6px; box-shadow: var(--shadow-sm);
   }
-  .route-card svg { width: 100%; height: auto; display: block; }
+  .map-card svg { width: 100%; height: auto; display: block; }
+  .map-node { cursor: pointer; }
+  .route-path { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+  .route-path.teal { stroke: #0d9488; }
+  .route-path.amber { stroke: #f59e0b; }
+  .route-path.dashed { stroke-dasharray: 0.02 0.012; stroke-dashoffset: 0; }
+  .route-path.draw { animation: pathDraw 1.8s ease forwards; }
+  @keyframes pathDraw { to { stroke-dashoffset: 0; } }
+  .pulse-ring { transform-box: fill-box; transform-origin: center; animation: mapPulse 1.8s ease-out infinite; }
+  @keyframes mapPulse { 0% { transform: scale(0.5); opacity: 0.8; } 100% { transform: scale(2.4); opacity: 0; } }
   .check-progress-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
   .check-progress-row span { font-size: 12px; color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
   .check-progress { flex: 1; height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
@@ -1149,23 +1158,64 @@
     </div>
   </div>
   <div class="section" style="padding-top:8px;padding-bottom:12px">
-    <div class="section-title">路线概览</div>
+    <div class="section-title">行程地图</div>
   </div>
-  <div class="route-card">
-    <svg viewBox="0 0 640 100">
-      <line x1="40" y1="45" x2="390" y2="45" stroke="#0d9488" stroke-width="2"/>
-      <line x1="390" y1="45" x2="560" y2="45" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6 5"/>
-      <circle cx="40" cy="45" r="6" fill="#0d9488"/><circle cx="150" cy="45" r="6" fill="#0d9488"/>
-      <circle cx="260" cy="45" r="6" fill="#0d9488"/><circle cx="390" cy="45" r="6" fill="#0d9488"/>
-      <circle cx="560" cy="45" r="6" fill="#f59e0b"/>
-      <path d="M462 32 l30 9 -30 9 7 -9 z" fill="#f59e0b"/>
-      <g font-size="16" fill="#64748b" text-anchor="middle">
-        <text x="40" y="78">丽江</text><text x="150" y="78">大理</text><text x="260" y="78">丽江</text>
-        <text x="390" y="78">香格里拉</text><text x="560" y="78">三亚</text>
+  <div class="map-card">
+    <svg viewBox="0 0 640 780">
+      <path d="M120,70 C200,25 320,35 400,75 C470,110 500,175 470,235 C440,295 350,325 260,315 C170,305 100,255 90,185 C85,135 90,100 120,70 Z" fill="rgba(13,148,136,0.08)" stroke="rgba(13,148,136,0.35)" stroke-width="1.5"/>
+      <text x="105" y="55" font-size="15" fill="#0d9488" font-weight="700">云南</text>
+      <path class="route-path teal" pathLength="1" d="M330,170 C300,205 275,225 250,250"/>
+      <path class="route-path teal" pathLength="1" d="M330,170 C320,140 310,115 300,90"/>
+      <path id="fly-path" class="route-path amber dashed" d="M340,185 C480,260 540,380 420,480 C370,520 300,570 255,630"/>
+      <text font-size="18" fill="#f59e0b">✈<animateMotion dur="7s" repeatCount="indefinite" rotate="auto"><mpath href="#fly-path"/></animateMotion></text>
+      <path d="M300,470 C380,448 480,468 532,528 C572,585 562,662 500,702 C430,747 320,747 250,707 C190,672 178,592 214,532 C240,492 262,480 300,470 Z" fill="rgba(245,158,11,0.08)" stroke="rgba(245,158,11,0.4)" stroke-width="1.5"/>
+      <text x="468" y="468" font-size="15" fill="#b45309" font-weight="700">海南</text>
+      <path class="route-path amber" pathLength="1" d="M330,660 C345,668 358,674 375,682 C335,692 295,694 255,695 C320,682 390,670 450,660 C468,640 484,620 500,600"/>
+      <path class="route-path amber" pathLength="1" d="M450,660 C380,655 310,648 250,640"/>
+      <g class="map-node" data-id="yn-sh" data-go="day-5" transform="translate(300,90)">
+        <circle class="ring" r="10" fill="none" stroke="#0d9488" stroke-width="2" opacity="0"/>
+        <circle r="6" fill="#0d9488" stroke="#fff" stroke-width="2"/>
+        <text y="-12" text-anchor="middle" font-size="13" fill="#475569">香格里拉 · D5-6</text>
       </g>
-      <g font-size="12" fill="#94a3b8" text-anchor="middle">
-        <text x="40" y="22">D1</text><text x="150" y="22">D2</text><text x="260" y="22">D3-4</text>
-        <text x="390" y="22">D5-6</text><text x="560" y="22">D7-12</text>
+      <g class="map-node" data-id="yn-lj" data-go="day-1" transform="translate(330,170)">
+        <circle class="ring" r="10" fill="none" stroke="#0d9488" stroke-width="2" opacity="0"/>
+        <circle r="6" fill="#0d9488" stroke="#fff" stroke-width="2"/>
+        <text x="14" y="5" font-size="13" fill="#475569">丽江 · D1/D3-4</text>
+      </g>
+      <g class="map-node" data-id="yn-dl" data-go="day-2" transform="translate(250,250)">
+        <circle class="ring" r="10" fill="none" stroke="#0d9488" stroke-width="2" opacity="0"/>
+        <circle r="6" fill="#0d9488" stroke="#fff" stroke-width="2"/>
+        <text y="24" text-anchor="middle" font-size="13" fill="#475569">大理 · D2</text>
+      </g>
+      <g class="map-node" data-id="hn-ap" data-go="sday-6" transform="translate(250,640)">
+        <circle class="ring" r="10" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0"/>
+        <circle r="6" fill="#f59e0b" stroke="#fff" stroke-width="2"/>
+        <text x="-12" y="4" text-anchor="end" font-size="13" fill="#475569">凤凰机场 · S6</text>
+      </g>
+      <g class="map-node" data-id="hn-at" data-go="sday-1" transform="translate(330,660)">
+        <circle class="ring" r="10" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0"/>
+        <circle r="6" fill="#f59e0b" stroke="#fff" stroke-width="2"/>
+        <text y="26" text-anchor="middle" font-size="13" fill="#475569">三亚市区·亚朵 S1</text>
+      </g>
+      <g class="map-node" data-id="hn-xd" data-go="sday-3" transform="translate(255,695)">
+        <circle class="ring" r="10" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0"/>
+        <circle r="6" fill="#f59e0b" stroke="#fff" stroke-width="2"/>
+        <text y="24" text-anchor="middle" font-size="13" fill="#475569">西岛 S3</text>
+      </g>
+      <g class="map-node" data-id="hn-dd" data-go="sday-2" transform="translate(375,682)">
+        <circle class="ring" r="10" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0"/>
+        <circle r="6" fill="#f59e0b" stroke="#fff" stroke-width="2"/>
+        <text y="26" text-anchor="middle" font-size="13" fill="#475569">大东海 S2</text>
+      </g>
+      <g class="map-node" data-id="hn-yl" data-go="sday-4" transform="translate(450,660)">
+        <circle class="ring" r="10" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0"/>
+        <circle r="6" fill="#f59e0b" stroke="#fff" stroke-width="2"/>
+        <text y="26" text-anchor="middle" font-size="13" fill="#475569">亚龙湾·万豪 S4</text>
+      </g>
+      <g class="map-node" data-id="hn-ht" data-go="sday-5" transform="translate(500,600)">
+        <circle class="ring" r="10" fill="none" stroke="#f59e0b" stroke-width="2" opacity="0"/>
+        <circle r="6" fill="#f59e0b" stroke="#fff" stroke-width="2"/>
+        <text x="12" y="4" font-size="13" fill="#475569">海棠湾·免税城 S5</text>
       </g>
     </svg>
   </div>
@@ -2341,6 +2391,31 @@ async function loadWeather() {
   }
 }
 loadWeather();
+
+// ===== 行程地图：交互 + 阶段感知 =====
+document.querySelectorAll('.map-node').forEach(n => {
+  n.addEventListener('click', () => goToId(n.dataset.go));
+});
+const mapIO = new IntersectionObserver(es => es.forEach(e => {
+  if (e.isIntersecting) { e.target.classList.add('draw'); mapIO.unobserve(e.target); }
+}), { threshold: 0.3 });
+document.querySelectorAll('.route-path:not(.dashed)').forEach(p => mapIO.observe(p));
+(function mapPhase() {
+  const now = new Date();
+  const key = (now.getMonth() + 1) + '-' + now.getDate();
+  const start = new Date(now.getFullYear(), 9, 7);
+  const end = new Date(now.getFullYear(), 9, 18, 23, 59, 59);
+  let nodeId = null;
+  if (now < start) nodeId = 'yn-lj';
+  else if (now <= end) {
+    const M = { '10-7': 'yn-lj', '10-8': 'yn-dl', '10-9': 'yn-lj', '10-10': 'yn-lj', '10-11': 'yn-sh', '10-12': 'yn-sh', '10-13': 'hn-at', '10-14': 'hn-dd', '10-15': 'hn-xd', '10-16': 'hn-yl', '10-17': 'hn-ht', '10-18': 'hn-ap' };
+    nodeId = M[key];
+  }
+  if (nodeId) {
+    const ring = document.querySelector('.map-node[data-id="' + nodeId + '"] .ring');
+    if (ring) { ring.setAttribute('opacity', '1'); ring.classList.add('pulse-ring'); }
+  }
+})();
 
 applyRole();
 loadRecords();
