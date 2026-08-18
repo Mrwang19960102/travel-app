@@ -957,6 +957,9 @@
   .wx-temp { font-size: 22px; font-weight: 700; color: var(--primary); margin: 2px 0; font-variant-numeric: tabular-nums; }
   .wx-desc { font-size: 12px; color: var(--text-secondary); }
   .wx-range { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+  .wx-main { display: flex; align-items: center; gap: 8px; }
+  .wx-icon { font-size: 24px; line-height: 1; }
+  .wx-f-row .i { flex: 0 0 18px; font-size: 12px; }
   .wx-forecast { margin-top: 8px; border-top: 1px solid var(--border); padding-top: 6px; }
   .wx-f-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-tertiary); padding: 2px 0; }
   .wx-f-row .d { flex: 0 0 34px; }
@@ -2290,6 +2293,19 @@ const BLESSINGS = [
 })();
 
 // ===== 天气模块 =====
+function wxIcon(code) {
+  code = +code;
+  if (code === 113) return '☀️';
+  if (code <= 122) return '☁️';
+  if (code >= 386) return '⛈️';
+  if (code >= 323) return '🌨️';
+  if (code >= 176) return '🌧️';
+  return '🌤️';
+}
+const WX_ZH = { 113: '晴', 116: '多云', 119: '阴', 122: '阴', 176: '小雨', 263: '阵雨', 266: '毛毛雨', 281: '冻毛毛雨', 284: '冻雨', 293: '局部小雨', 296: '小雨', 299: '中雨', 302: '大雨', 305: '阵雨', 308: '强阵雨', 311: '冻雨', 314: '强冻雨', 317: '雨夹雪', 320: '雪', 323: '小雪', 326: '雪', 329: '大雪', 332: '雪', 335: '大雪', 338: '暴雪', 350: '冰雹', 353: '小阵雨', 356: '中阵雨', 359: '强阵雨', 362: '雨夹雪', 365: '雨夹雪', 368: '小雪', 371: '大雪', 374: '雨夹雪', 377: '雨夹雪', 386: '雷阵雨', 389: '雷阵雨', 392: '雷阵雨伴雪', 395: '雷阵雨伴雪' };
+function wxDesc(h) {
+  return (h.lang_zh && h.lang_zh[0] && h.lang_zh[0].value) || WX_ZH[+h.weatherCode] || h.weatherDesc[0].value;
+}
 async function loadWeather() {
   const targets = [['wx-lijiang', '丽江', '101291401'], ['wx-sanya', '三亚', '101310201']];
   for (const [id, city, code] of targets) {
@@ -2299,20 +2315,20 @@ async function loadWeather() {
       const j = await resp.json();
       const cur = j.current_condition[0];
       const today = j.weather[0];
-      const desc = (cur.lang_zh && cur.lang_zh[0] && cur.lang_zh[0].value) || cur.weatherDesc[0].value;
+      const desc = wxDesc(cur);
       const WD = ['日', '一', '二', '三', '四', '五', '六'];
       let fc = '<div class="wx-forecast">';
       j.weather.slice(0, 3).forEach((w, i) => {
         const d = new Date(w.date + 'T00:00:00');
         const label = i === 0 ? '今天' : i === 1 ? '明天' : '周' + WD[d.getDay()];
         const h = w.hourly[4] || w.hourly[0];
-        const fdesc = (h.lang_zh && h.lang_zh[0] && h.lang_zh[0].value) || h.weatherDesc[0].value;
-        fc += '<div class="wx-f-row"><span class="d">' + label + '</span><span class="t">' + fdesc +
-          '</span><span class="r">' + w.mintempC + '~' + w.maxtempC + '°</span></div>';
+        fc += '<div class="wx-f-row"><span class="d">' + label + '</span><span class="i">' + wxIcon(h.weatherCode) +
+          '</span><span class="t">' + wxDesc(h) + '</span><span class="r">' + w.mintempC + '~' + w.maxtempC + '°</span></div>';
       });
       fc += '</div>';
       el.innerHTML = '<div class="wx-city">' + city + '</div>' +
-        '<div class="wx-temp">' + cur.temp_C + '°</div>' +
+        '<div class="wx-main"><span class="wx-icon">' + wxIcon(cur.weatherCode) + '</span>' +
+        '<div class="wx-temp">' + cur.temp_C + '°</div></div>' +
         '<div class="wx-desc">' + desc + '</div>' +
         '<div class="wx-range">' + today.mintempC + '° ~ ' + today.maxtempC + '°</div>' + fc;
     } catch (e) {
