@@ -1616,19 +1616,6 @@
     <div class="mine-name">我们的婚假旅行</div>
     <div class="mine-trip">云南+三亚 · 浪漫蜜月</div>
   </div>
-  <div class="tip-card" id="qr-zone" style="display:none">
-    <div class="tip-row">
-      <div class="tip-icon-box emerald">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM21 14v1M14 21h1M18 18h3v3h-3z"/></svg>
-      </div>
-      <div class="tip-content">
-        <div class="tip-title">一次性分享二维码</div>
-        <div class="tip-desc">为朋友生成一次性二维码，扫码一次后即失效。</div>
-        <button onclick="genQR()" style="margin-top:10px;background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff;border:none;border-radius:999px;padding:9px 22px;font-size:13px;font-weight:600;cursor:pointer">生成新二维码</button>
-      </div>
-    </div>
-    <div id="qr-box" style="text-align:center;margin-top:10px"></div>
-  </div>
   <div class="section" style="padding-top:0">
     <div class="section-title">出行贴士 · 云南</div>
   </div>
@@ -1747,6 +1734,19 @@
       <input class="form-input" id="inp-check" placeholder="添加物品，如：泳衣">
       <button class="login-btn" onclick="addCheckItem()">添加</button>
     </div>
+  </div>
+  <div class="tip-card" id="qr-zone" style="display:none">
+    <div class="tip-row">
+      <div class="tip-icon-box emerald">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM21 14v1M14 21h1M18 18h3v3h-3z"/></svg>
+      </div>
+      <div class="tip-content">
+        <div class="tip-title">一次性分享二维码</div>
+        <div class="tip-desc">为朋友生成一次性二维码，扫码一次后即失效。</div>
+        <button onclick="genQR()" style="margin-top:10px;background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff;border:none;border-radius:999px;padding:9px 22px;font-size:13px;font-weight:600;cursor:pointer">生成新二维码</button>
+      </div>
+    </div>
+    <div id="qr-box" style="text-align:center;margin-top:10px"></div>
   </div>
 </div>
 
