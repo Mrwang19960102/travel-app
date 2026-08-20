@@ -146,28 +146,7 @@
   .tab-icon svg { width: 22px; height: 22px; stroke: var(--text-tertiary); transition: stroke var(--transition-fast); }
   .tab-text { font-size: 11px; color: var(--text-tertiary); transition: all var(--transition-fast); }
 
-  /* Nav Bar */
-  .navbar {
-    background: var(--primary-gradient);
-    color: #fff;
-    padding: 15px 16px;
-    text-align: center;
-    font-size: 19px;
-    font-weight: 600;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-    letter-spacing: 0.5px;
-  }
-  .navbar::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 20px;
-    background: linear-gradient(to bottom, rgba(13,148,136,0.06), transparent);
-  }
+
 
   /* SVG Icon base */
   .icon { display: inline-flex; align-items: center; justify-content: center; }
@@ -1048,7 +1027,6 @@
     .expense-item { padding: 12px 0; }
     .expense-name { font-size: 15px; }
     .expense-amount { font-size: 15px; }
-    .navbar { padding: 24px 24px 18px; font-size: 20px; }
     .section { padding: 24px 24px; }
     .hero { padding: 36px 24px; }
     .stat-val { font-size: 24px; }
@@ -1075,7 +1053,6 @@
 
 <!-- ===== HOME PAGE ===== -->
 <div id="page-home" class="page active">
-  <div class="navbar">婚假旅行</div>
   <div class="hero">
     <div class="hero-badge">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
@@ -1264,7 +1241,6 @@
 
 <!-- ===== ITINERARY PAGE ===== -->
 <div id="page-itinerary" class="page itinerary-page">
-  <div class="navbar">每日行程</div>
   <div class="day-nav">
     <span class="day-nav-label">云南</span>
     <span class="day-chip teal" onclick="goToId('day-1')">D1</span>
@@ -1441,7 +1417,6 @@
 
 <!-- ===== EXPENSE PAGE ===== -->
 <div id="page-expense" class="page expense-page">
-  <div class="navbar">费用明细</div>
   <div class="summary-pair">
     <div class="summary-card">
       <div class="summary-title">计划 · 总计（含估算）</div>
@@ -1624,7 +1599,6 @@
 
 <!-- ===== MINE PAGE ===== -->
 <div id="page-memo" class="page">
-  <div class="navbar">备忘录</div>
   <div class="section" style="padding-top:8px;padding-bottom:12px">
     <div class="section-title">行李清单</div>
   </div>
@@ -1642,7 +1616,6 @@
 </div>
 
 <div id="page-mine" class="page mine-page">
-  <div class="navbar">出行贴士</div>
   <div class="mine-header">
     <div class="mine-avatar">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
