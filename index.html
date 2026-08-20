@@ -716,6 +716,9 @@
   .checkbox.checked .checkmark { display: block; }
   .checklist-text { font-size: 14px; color: var(--text-primary); }
   .checklist-text.done { text-decoration: line-through; color: var(--text-tertiary); }
+  .check-actions { margin-left: auto; display: flex; gap: 4px; }
+  .check-act { border: none; background: none; color: var(--text-tertiary); font-size: 13px; padding: 6px; cursor: pointer; }
+  .check-act.del { color: #ef4444; }
 
   .region-divider {
     display: flex;
@@ -1931,6 +1934,7 @@ function applyRole() {
   badge.classList.toggle('guest', guest);
   document.getElementById('qr-zone').style.display = guest ? 'none' : 'block';
   renderRecords();
+  renderChecklist();
 }
 
 // ===== 一次性分享二维码 =====
@@ -2329,6 +2333,23 @@ function addCheckItem() {
   renderChecklist();
   saveChecklist().catch(() => {});
 }
+function editCheckItem(id) {
+  const it = checkItems.find(i => i.id === id);
+  if (!it) return;
+  const t = prompt('修改物品名称', it.text);
+  if (t === null) return;
+  const v = t.trim();
+  if (!v) { showToast('名称不能为空'); return; }
+  it.text = v;
+  renderChecklist();
+  saveChecklist().catch(() => {});
+}
+function delCheckItem(id) {
+  if (!confirm('删除该物品？')) return;
+  checkItems = checkItems.filter(i => i.id !== id);
+  renderChecklist();
+  saveChecklist().catch(() => {});
+}
 function renderChecklist() {
   if (!checkItems) return;
   const done = checkItems.filter(i => i.done).length;
@@ -2339,10 +2360,14 @@ function renderChecklist() {
     const items = checkItems.filter(i => i.cat === cat);
     if (!items.length) return;
     html += '<div class="check-group-title">' + cat + '</div>';
+    const admin = role !== 'guest';
     html += items.map(i =>
-      '<div class="checklist-item" onclick="toggleCheckItem(' + i.id + ')">' +
+      '<div class="checklist-item">' +
+      '<div style="display:flex;align-items:center;flex:1;min-width:0" onclick="toggleCheckItem(' + i.id + ')">' +
       '<div class="checkbox' + (i.done ? ' checked' : '') + '"><span class="checkmark">✓</span></div>' +
-      '<span class="checklist-text' + (i.done ? ' done' : '') + '">' + esc(i.text) + '</span></div>').join('');
+      '<span class="checklist-text' + (i.done ? ' done' : '') + '">' + esc(i.text) + '</span></div>' +
+      (admin ? '<div class="check-actions"><button class="check-act" onclick="editCheckItem(' + i.id + ')" aria-label="修改">✎</button><button class="check-act del" onclick="delCheckItem(' + i.id + ')" aria-label="删除">✕</button></div>' : '') +
+      '</div>').join('');
   });
   document.getElementById('checklist').innerHTML = html;
 }
