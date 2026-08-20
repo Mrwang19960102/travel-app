@@ -1628,7 +1628,6 @@
       </div>
     </div>
     <div id="qr-box" style="text-align:center;margin-top:10px"></div>
-    <div id="qr-list" style="margin-top:8px"></div>
   </div>
   <div class="section" style="padding-top:0">
     <div class="section-title">出行贴士 · 云南</div>
@@ -1941,13 +1940,8 @@ function renderQr(data, newCode) {
   if (newCode) {
     const url = 'https://mrwang19960102.github.io/travel-app/invite.html?code=' + newCode;
     box.innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=2&data=' + encodeURIComponent(url) + '" style="width:180px;height:180px;border-radius:12px" alt="一次性二维码">' +
-      '<div style="font-size:12px;color:var(--text-secondary);margin-top:6px">邀请码 ' + newCode + ' · 扫码一次后失效</div>';
+      '<div style="font-size:12px;color:var(--text-secondary);margin-top:6px">该二维码仅可扫描一次，第二次扫码自动失效</div>';
   }
-  const list = document.getElementById('qr-list');
-  list.innerHTML = Object.keys(data.codes).map(c => {
-    const r = data.codes[c];
-    return '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);padding:4px 2px;border-top:1px dashed var(--border)"><span>' + c + '</span><span style="color:' + (r.used ? '#ef4444' : '#0d9488') + '">' + (r.used ? '已失效' : '未使用') + '</span></div>';
-  }).join('');
 }
 
 function esc(s) {
