@@ -769,23 +769,31 @@
 
   .spot-scroll {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 8px;
-    padding: 4px 16px 8px;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 4px 16px 12px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
   }
-  .spot-link { display: flex; align-items: center; }
-  .spot-link svg { width: 16px; height: 16px; stroke: var(--text-tertiary); }
+  .spot-scroll::-webkit-scrollbar { display: none; }
   .spot-card {
-    width: auto;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 14px 12px;
-    box-shadow: var(--shadow-sm);
-    cursor: pointer;
-    transition: transform var(--transition-fast);
+    flex: 0 0 68%;
+    max-width: 260px;
+    scroll-snap-align: center;
+    border-radius: 16px;
+    overflow: hidden;
     position: relative;
+    cursor: pointer;
+    box-shadow: 0 6px 18px rgba(0,0,0,.14);
+    transition: transform var(--transition-fast);
+    background: var(--surface);
+  }
+  .spot-card img { width: 100%; height: 170px; object-fit: cover; display: block; }
+  .spot-overlay {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 30px 12px 10px;
+    background: linear-gradient(to top, rgba(0,0,0,.72), transparent);
   }
   .sheet-btn {
     margin-top: 14px; width: 100%; padding: 12px 0; border: none; border-radius: 12px;
@@ -793,19 +801,19 @@
     cursor: pointer; min-height: 44px;
   }
   .sheet-btn:active { transform: scale(0.97); }
-  .spot-card:active { transform: scale(0.95); }
+  .spot-card:active { transform: scale(0.97); }
   .spot-day {
-    display: inline-block;
-    font-size: 11px;
+    position: absolute; top: 8px; left: 8px;
+    font-size: 10px;
     font-weight: 600;
-    color: var(--primary);
-    background: var(--primary-bg);
-    padding: 2px 8px;
+    color: #fff;
+    background: rgba(13,148,136,.85);
+    padding: 3px 8px;
     border-radius: 10px;
-    margin-bottom: 8px;
+    backdrop-filter: blur(4px);
   }
-  .spot-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
-  .spot-desc { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; line-height: 1.4; }
+  .spot-name { font-size: 15px; font-weight: 700; color: #fff; }
+  .spot-desc { font-size: 11px; color: rgba(255,255,255,.85); margin-top: 2px; }
 
 
   .trip-arrow {
@@ -1164,55 +1172,67 @@
   </div>
   <div class="spot-scroll">
     <div class="spot-card" onclick="openSpot('y2')" role="button" aria-label="查看洱海信息">
-      <div class="spot-name">洱海</div><div class="spot-desc">沿海彩虹公路</div>
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Erhai Lake Dali China, turquoise lake, rainbow lakeside road, white clouds, cangshan mountains, sunny travel photography&image_size=landscape_4_3" alt="洱海" loading="lazy">
+      <span class="spot-day">Day 2</span>
+      <div class="spot-overlay"><div class="spot-name">洱海</div><div class="spot-desc">沿海彩虹公路</div></div>
     </div>
-    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('y1')" role="button" aria-label="查看玉龙雪山信息">
-      <div class="spot-name">玉龙雪山</div><div class="spot-desc">日照金山</div>
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Jade Dragon Snow Mountain Lijiang, snow peak glowing golden at sunrise, clear blue sky, travel photography&image_size=landscape_4_3" alt="玉龙雪山" loading="lazy">
+      <span class="spot-day">Day 4</span>
+      <div class="spot-overlay"><div class="spot-name">玉龙雪山</div><div class="spot-desc">日照金山</div></div>
     </div>
-    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('y3')" role="button" aria-label="查看蓝月谷信息">
-      <div class="spot-name">蓝月谷</div><div class="spot-desc">小九寨之称</div>
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Blue Moon Valley Lijiang, turquoise blue water pools, snow mountain background, sunny day, travel photography&image_size=landscape_4_3" alt="蓝月谷" loading="lazy">
+      <span class="spot-day">Day 4</span>
+      <div class="spot-overlay"><div class="spot-name">蓝月谷</div><div class="spot-desc">小九寨之称</div></div>
     </div>
-    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('y4')" role="button" aria-label="查看虎跳峡信息">
-      <div class="spot-name">虎跳峡</div><div class="spot-desc">第一大峡谷</div>
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Tiger Leaping Gorge China, dramatic canyon cliffs, rushing golden river, travel photography&image_size=landscape_4_3" alt="虎跳峡" loading="lazy">
+      <span class="spot-day">Day 5</span>
+      <div class="spot-overlay"><div class="spot-name">虎跳峡</div><div class="spot-desc">第一大峡谷</div></div>
     </div>
-    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('y5')" role="button" aria-label="查看独克宗信息">
-      <div class="spot-name">独克宗</div><div class="spot-desc">月光城转经筒</div>
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Dukezong ancient town Shangri-La at dusk, tibetan houses, giant prayer wheel, warm lights, travel photography&image_size=landscape_4_3" alt="独克宗" loading="lazy">
+      <span class="spot-day">Day 5</span>
+      <div class="spot-overlay"><div class="spot-name">独克宗</div><div class="spot-desc">月光城转经筒</div></div>
     </div>
-    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('y6')" role="button" aria-label="查看松赞林寺信息">
-      <div class="spot-name">松赞林寺</div><div class="spot-desc">小布达拉宫</div>
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Songzanlin tibetan monastery Shangri-La, golden roofs, white walls, blue sky, travel photography&image_size=landscape_4_3" alt="松赞林寺" loading="lazy">
+      <span class="spot-day">Day 6</span>
+      <div class="spot-overlay"><div class="spot-name">松赞林寺</div><div class="spot-desc">小布达拉宫</div></div>
     </div>
   </div>
-  <div class="section" style="padding-top:8px;padding-bottom:12px">
+  <div class="section" style="padding-top:0">
     <div class="section-title">热门景点 · 三亚</div>
   </div>
   <div class="spot-scroll">
     <div class="spot-card" onclick="openSpot('s1')" role="button" aria-label="查看椰梦长廊信息">
-      <div class="spot-name">椰梦长廊</div><div class="spot-desc">骑行随停拍照</div>
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Sanya Coconut Dream Corridor, coconut palms lining beach road, orange sunset sky, calm sea, travel photography&image_size=landscape_4_3" alt="椰梦长廊" loading="lazy">
+      <span class="spot-day">三亚 1</span>
+      <div class="spot-overlay"><div class="spot-name">椰梦长廊</div><div class="spot-desc">骑行随停拍照</div></div>
     </div>
-    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('s2')" role="button" aria-label="查看大东海信息">
-      <div class="spot-name">大东海</div><div class="spot-desc">摩托艇香蕉船</div>
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Dadonghai beach Sanya, turquoise sea, white sand, green hills skyline, sunny, travel photography&image_size=landscape_4_3" alt="大东海" loading="lazy">
+      <span class="spot-day">三亚 2</span>
+      <div class="spot-overlay"><div class="spot-name">大东海</div><div class="spot-desc">摩托艇香蕉船</div></div>
     </div>
-    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('s3')" role="button" aria-label="查看西岛信息">
-      <div class="spot-name">西岛</div><div class="spot-desc">渔村礁石栈道</div>
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=West Island Sanya, fishing village stone path, clear sea, small wooden boats, sunny, travel photography&image_size=landscape_4_3" alt="西岛" loading="lazy">
+      <span class="spot-day">三亚 3</span>
+      <div class="spot-overlay"><div class="spot-name">西岛</div><div class="spot-desc">渔村礁石栈道</div></div>
     </div>
-    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('s4')" role="button" aria-label="查看远海潜水信息">
-      <div class="spot-name">远海潜水</div><div class="spot-desc">东西排船潜</div>
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Scuba diving Sanya open sea, underwater coral reef tropical fish, clear blue water, diver photography&image_size=landscape_4_3" alt="远海潜水" loading="lazy">
+      <span class="spot-day">三亚 4</span>
+      <div class="spot-overlay"><div class="spot-name">远海潜水</div><div class="spot-desc">东西排船潜</div></div>
     </div>
-    <span class="spot-link"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
     <div class="spot-card" onclick="openSpot('s5')" role="button" aria-label="查看免税城信息">
-      <div class="spot-name">免税城</div><div class="spot-desc">cdf95折</div>
+      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=Modern duty free shopping mall interior, bright luxury stores, white architecture, photography&image_size=landscape_4_3" alt="免税城" loading="lazy">
+      <span class="spot-day">三亚 5</span>
+      <div class="spot-overlay"><div class="spot-name">免税城</div><div class="spot-desc">cdf95折</div></div>
     </div>
   </div>
-  <div class="section" style="padding-top:0">
-    <div class="section-title">快速入口</div>
+  <div class="section-title">快速入口</div>
     <div class="quick-actions">
       <div class="action-card" onclick="switchTab(1)" role="button" tabindex="0" aria-label="查看每日行程">
         <div class="action-icon rose">
