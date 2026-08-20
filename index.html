@@ -1010,6 +1010,9 @@
   .cat-stat-bar { flex: 1; height: 8px; border-radius: 4px; background: var(--border); overflow: hidden; }
   .cat-stat-fill { height: 100%; border-radius: 4px; }
   .cat-stat-row .amt { flex: 0 0 64px; text-align: right; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text-primary); }
+  .exp-tabs { display: flex; margin: 0 16px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 4px; box-shadow: var(--shadow-sm); }
+  .exp-tab { flex: 1; text-align: center; padding: 9px 0; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-secondary); cursor: pointer; transition: all .2s; }
+  .exp-tab.active { background: linear-gradient(135deg, #0d9488, #14b8a6); color: #fff; }
   .compare-card {
     margin: 0 16px 12px; background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius-md); padding: 14px 16px;
@@ -1459,6 +1462,12 @@
     </div>
   </div>
 
+  <div class="exp-tabs">
+    <div class="exp-tab active" id="exp-tab-real" onclick="switchExp('real')">实际记账</div>
+    <div class="exp-tab" id="exp-tab-plan" onclick="switchExp('plan')">计划预算</div>
+  </div>
+
+  <div id="exp-real">
   <div class="compare-card">
     <div class="compare-title">计划 vs 实际</div>
     <div class="compare-bar"><div class="compare-fill" id="compare-fill"></div></div>
@@ -1506,6 +1515,9 @@
     <div class="category-header"><span class="category-name">实际花费 · 分类统计</span></div>
     <div id="cat-stats"></div>
   </div>
+  </div>
+
+  <div id="exp-plan" style="display:none">
   <div class="region-divider">云南段 · 计划预算</div>
   <div class="category-card">
     <div class="category-header">
@@ -1603,6 +1615,7 @@
     <div class="not-included-item"><div class="not-included-dot"></div><span>大交通 - 不含往返机票费</span></div>
     <div class="not-included-item"><div class="not-included-dot"></div><span>用餐：早餐酒店包含，中餐晚餐自理</span></div>
     <div class="not-included-item"><div class="not-included-dot"></div><span>景区景：景区内的观光车/小交通不含</span></div>
+  </div>
   </div>
 </div>
 
@@ -1950,6 +1963,13 @@ function renderQr(data, newCode) {
     box.innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=2&data=' + encodeURIComponent(url) + '" style="width:180px;height:180px;border-radius:12px" alt="一次性二维码">' +
       '<div style="font-size:12px;color:var(--text-secondary);margin-top:6px">该二维码仅可扫描一次，第二次扫码自动失效</div>';
   }
+}
+
+function switchExp(tab) {
+  document.getElementById('exp-real').style.display = tab === 'real' ? 'block' : 'none';
+  document.getElementById('exp-plan').style.display = tab === 'plan' ? 'block' : 'none';
+  document.getElementById('exp-tab-real').classList.toggle('active', tab === 'real');
+  document.getElementById('exp-tab-plan').classList.toggle('active', tab === 'plan');
 }
 
 function esc(s) {
