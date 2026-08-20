@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>蜜月旅行邀请</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: -apple-system, 'PingFang SC', 'Microsoft YaHei', sans-serif; background: linear-gradient(160deg, #e8f4f2, #f0f9ff); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  .card { background: #fff; border-radius: 20px; padding: 40px 28px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 12px 40px rgba(13,148,136,.16); }
+  .icon { font-size: 46px; margin-bottom: 14px; }
+  h1 { font-size: 18px; color: #0f172a; margin: 0 0 10px; }
+  p { font-size: 13px; color: #64748b; margin: 0 0 22px; line-height: 1.8; }
+  .btn { display: inline-block; background: linear-gradient(135deg, #0d9488, #14b8a6); color: #fff; text-decoration: none; padding: 12px 34px; border-radius: 999px; font-size: 14px; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div id="icon" class="icon">💌</div>
+  <h1 id="t">正在验证邀请…</h1>
+  <p id="d">读取邀请码中，请稍候</p>
+  <a id="go" class="btn" href="index.html" style="display:none">进入行程</a>
+</div>
+<script>
+const TOKEN = 'github_pat_' + '11AKUXBTI0GWZqBHF3tEsX_' + 'lSFvuXlDXWX1cYKHzUf8ZB8wJV6BdSMchZrPIH5hGlsYXM7TLOB08yf3qWm';
+const API = 'https://api.github.com/repos/Mrwang19960102/travel-app/contents/access.json';
+const icon = document.getElementById('icon'), t = document.getElementById('t'), d = document.getElementById('d'), go = document.getElementById('go');
+function fail(msg, sub) { icon.textContent = '❌'; t.textContent = msg; d.textContent = sub; }
+(async function () {
+  const code = new URLSearchParams(location.search).get('code');
+  if (!code) { fail('无效二维码', '链接中未包含邀请码'); return; }
+  try {
+    const res = await fetch(API, { headers: { 'Authorization': 'Bearer ' + TOKEN, 'Accept': 'application/vnd.github.v3+json' } });
+    if (!res.ok) throw 0;
+    const meta = await res.json();
+    const data = JSON.parse(decodeURIComponent(escape(atob(meta.content))));
+    const rec = data.codes && data.codes[code];
+    if (!rec) { fail('无效二维码', '该邀请码不存在'); return; }
+    if (rec.used) { fail('二维码已失效', '该二维码已被扫描过，每个码仅限一次'); return; }
+    rec.used = true; rec.usedAt = new Date().toISOString();
+    const put = await fetch(API, { method: 'PUT', headers: { 'Authorization': 'Bearer ' + TOKEN, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' }, body: JSON.stringify({ message: 'redeem invite ' + code, content: btoa(JSON.stringify(data)), sha: meta.sha }) });
+    if (!put.ok) throw 0;
+    icon.textContent = '💝'; t.textContent = '邀请已激活';
+    d.innerHTML = '你被邀请观看我们的蜜月旅行行程<br>云南 + 三亚 · 13天浪漫之旅';
+    go.style.display = 'inline-block';
+  } catch (e) { fail('验证失败', '网络异常，请重新扫码'); }
+})();
+</script>
+</body>
+</html>
