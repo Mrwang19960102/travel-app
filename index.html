@@ -1607,6 +1607,24 @@
 </div>
 
 <!-- ===== MINE PAGE ===== -->
+<div id="page-memo" class="page">
+  <div class="navbar">备忘录</div>
+  <div class="section" style="padding-top:8px;padding-bottom:12px">
+    <div class="section-title">行李清单</div>
+  </div>
+  <div class="checklist-card">
+    <div class="check-progress-row">
+      <span id="check-progress-text">0/0</span>
+      <div class="check-progress"><div class="check-progress-bar" id="check-progress-bar"></div></div>
+    </div>
+    <div id="checklist"></div>
+    <div class="form-row" style="margin-top:12px;margin-bottom:0">
+      <input class="form-input" id="inp-check" placeholder="添加物品，如：泳衣">
+      <button class="login-btn" onclick="addCheckItem()">添加</button>
+    </div>
+  </div>
+</div>
+
 <div id="page-mine" class="page mine-page">
   <div class="navbar">出行贴士</div>
   <div class="mine-header">
@@ -1721,20 +1739,6 @@
       </div>
     </div>
   </div>
-  <div class="section" style="padding-top:0">
-    <div class="section-title">行李清单</div>
-  </div>
-  <div class="checklist-card">
-    <div class="check-progress-row">
-      <span id="check-progress-text">0/0</span>
-      <div class="check-progress"><div class="check-progress-bar" id="check-progress-bar"></div></div>
-    </div>
-    <div id="checklist"></div>
-    <div class="form-row" style="margin-top:12px;margin-bottom:0">
-      <input class="form-input" id="inp-check" placeholder="添加物品，如：泳衣">
-      <button class="login-btn" onclick="addCheckItem()">添加</button>
-    </div>
-  </div>
   <div class="tip-card" id="qr-zone" style="display:none">
     <div class="tip-row">
       <div class="tip-icon-box emerald">
@@ -1764,7 +1768,11 @@
     <div class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
     <div class="tab-text">费用</div>
   </div>
-  <div class="tab-item" onclick="switchTab(3)" role="tab" aria-label="我的">
+  <div class="tab-item" onclick="switchTab(3)" role="tab" aria-label="备忘录">
+    <div class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+    <div class="tab-text">备忘录</div>
+  </div>
+  <div class="tab-item" onclick="switchTab(4)" role="tab" aria-label="我的">
     <div class="tab-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
     <div class="tab-text">我的</div>
   </div>
@@ -1782,7 +1790,7 @@
 <div class="toast" id="toast"></div>
 
 <script>
-const pages = ['page-home', 'page-itinerary', 'page-expense', 'page-mine'];
+const pages = ['page-home', 'page-itinerary', 'page-expense', 'page-memo', 'page-mine'];
 const tabs = document.querySelectorAll('.tab-item');
 
 function switchTab(idx) {
