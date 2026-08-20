@@ -1616,6 +1616,20 @@
     <div class="mine-name">我们的婚假旅行</div>
     <div class="mine-trip">云南+三亚 · 浪漫蜜月</div>
   </div>
+  <div class="tip-card" id="qr-zone" style="display:none">
+    <div class="tip-row">
+      <div class="tip-icon-box emerald">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM21 14v1M14 21h1M18 18h3v3h-3z"/></svg>
+      </div>
+      <div class="tip-content">
+        <div class="tip-title">一次性分享二维码</div>
+        <div class="tip-desc">为朋友生成一次性二维码，扫码一次后即失效。</div>
+        <button onclick="genQR()" style="margin-top:10px;background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff;border:none;border-radius:999px;padding:9px 22px;font-size:13px;font-weight:600;cursor:pointer">生成新二维码</button>
+      </div>
+    </div>
+    <div id="qr-box" style="text-align:center;margin-top:10px"></div>
+    <div id="qr-list" style="margin-top:8px"></div>
+  </div>
   <div class="section" style="padding-top:0">
     <div class="section-title">出行贴士 · 云南</div>
   </div>
@@ -1895,7 +1909,45 @@ function applyRole() {
   const badge = document.getElementById('role-badge');
   badge.textContent = guest ? '查看模式' : (role === 'me' ? '噜噜·管理' : '噜妹·管理');
   badge.classList.toggle('guest', guest);
+  document.getElementById('qr-zone').style.display = guest ? 'none' : 'block';
   renderRecords();
+}
+
+// ===== 一次性分享二维码 =====
+const ACCESS_FILE = 'access.json';
+function ghAccess(method, body) {
+  return fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + ACCESS_FILE, {
+    method: method,
+    headers: { 'Authorization': 'Bearer ' + GH_TOKEN, 'Accept': 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : undefined
+  });
+}
+async function genQR() {
+  try {
+    const res = await ghAccess('GET');
+    const meta = await res.json();
+    const data = meta && meta.content ? JSON.parse(decodeURIComponent(escape(atob(meta.content)))) : { codes: {} };
+    data.codes = data.codes || {};
+    const code = Math.random().toString(36).slice(2, 8).toUpperCase();
+    data.codes[code] = { used: false, created: new Date().toISOString() };
+    const put = await ghAccess('PUT', { message: 'new invite code', content: btoa(unescape(encodeURIComponent(JSON.stringify(data)))), sha: meta.sha });
+    if (!put.ok) throw 0;
+    renderQr(data, code);
+    showToast('二维码已生成');
+  } catch (e) { showToast('生成失败，请重试'); }
+}
+function renderQr(data, newCode) {
+  const box = document.getElementById('qr-box');
+  if (newCode) {
+    const url = 'https://mrwang19960102.github.io/travel-app/invite.html?code=' + newCode;
+    box.innerHTML = '<img src="https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=2&data=' + encodeURIComponent(url) + '" style="width:180px;height:180px;border-radius:12px" alt="一次性二维码">' +
+      '<div style="font-size:12px;color:var(--text-secondary);margin-top:6px">邀请码 ' + newCode + ' · 扫码一次后失效</div>';
+  }
+  const list = document.getElementById('qr-list');
+  list.innerHTML = Object.keys(data.codes).map(c => {
+    const r = data.codes[c];
+    return '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-secondary);padding:4px 2px;border-top:1px dashed var(--border)"><span>' + c + '</span><span style="color:' + (r.used ? '#ef4444' : '#0d9488') + '">' + (r.used ? '已失效' : '未使用') + '</span></div>';
+  }).join('');
 }
 
 function esc(s) {
