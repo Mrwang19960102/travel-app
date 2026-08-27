@@ -7,34 +7,37 @@
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
 <title>婚假旅行 · 云南+三亚</title>
-<meta name="theme-color" content="#0d9488">
+<meta name="theme-color" content="#0b4f47">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest.json">
 <style>
   :root {
-    /* Semantic Color Tokens */
-    --primary: #0d9488;
+    /* Semantic Color Tokens · Quiet Luxury */
+    --primary: #0f766e;
     --primary-light: #2dd4bf;
-    --primary-bg: #f0fdfa;
-    --primary-gradient: linear-gradient(135deg, #0d9488, #14b8a6);
-    --secondary: #f59e0b;
-    --secondary-light: #fbbf24;
-    --secondary-bg: #fffbeb;
+    --primary-bg: #edf6f3;
+    --primary-gradient: linear-gradient(135deg, #0b4f47, #0f766e);
+    --secondary: #b98a2f;
+    --secondary-light: #d4af5a;
+    --secondary-bg: #f8f3e7;
+    --gold: #c19a3f;
+    --gold-gradient: linear-gradient(135deg, #b98a2f, #d4af5a);
     --accent: #8b5cf6;
     --accent-bg: #f5f3ff;
     --success: #10b981;
     --success-bg: #ecfdf5;
     --surface: #ffffff;
     --surface-alt: #fafafa;
-    --background: #f8f9fa;
-    --text-primary: #1a1a2e;
-    --text-secondary: #64748b;
-    --text-tertiary: #94a3b8;
-    --border: #f1f5f9;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.06);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.04);
-    --shadow-lg: 0 10px 30px rgba(0,0,0,0.08), 0 4px 8px rgba(0,0,0,0.04);
-    --shadow-primary: 0 4px 16px rgba(13,148,136,0.25);
+    --background: #f7f5f1;
+    --text-primary: #1c1917;
+    --text-secondary: #57534e;
+    --text-tertiary: #8a8578;
+    --border: #eceae4;
+    --font-display: 'Songti SC', 'Noto Serif SC', 'STSongti-SC', 'SimSun', serif;
+    --shadow-sm: 0 1px 2px rgba(28,25,23,0.04), 0 2px 8px rgba(28,25,23,0.04);
+    --shadow-md: 0 4px 14px rgba(28,25,23,0.07), 0 2px 4px rgba(28,25,23,0.04);
+    --shadow-lg: 0 12px 32px rgba(28,25,23,0.10), 0 4px 8px rgba(28,25,23,0.05);
+    --shadow-primary: 0 4px 16px rgba(15,118,110,0.22);
     --radius-sm: 10px;
     --radius-md: 14px;
     --radius-lg: 20px;
@@ -131,7 +134,7 @@
   .tab-item {
     flex: 1;
     text-align: center;
-    padding: 6px 0 8px;
+    padding: 6px 0 6px;
     cursor: pointer;
     transition: all var(--transition-fast);
     min-height: 44px;
@@ -141,13 +144,25 @@
     justify-content: center;
     -webkit-user-select: none;
     user-select: none;
+    position: relative;
   }
   .tab-item:active { transform: scale(0.92); }
+  .tab-item::after {
+    content: '';
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--gold);
+    margin-top: 3px;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+  }
+  .tab-item.active::after { opacity: 1; }
   .tab-item.active .tab-icon svg { stroke: var(--primary); }
   .tab-item.active .tab-text { color: var(--primary); font-weight: 600; }
   .tab-icon { margin-bottom: 2px; display: flex; align-items: center; justify-content: center; }
   .tab-icon svg { width: 22px; height: 22px; stroke: var(--text-tertiary); transition: stroke var(--transition-fast); }
-  .tab-text { font-size: 11px; color: var(--text-tertiary); transition: all var(--transition-fast); }
+  .tab-text { font-size: 11px; color: var(--text-tertiary); transition: all var(--transition-fast); letter-spacing: 1px; }
 
 
 
@@ -157,8 +172,8 @@
 
   /* ===== HOME PAGE ===== */
   .hero {
-    padding: 24px 16px 20px;
-    background: linear-gradient(180deg, var(--primary-bg) 0%, var(--background) 100%);
+    padding: 36px 20px 28px;
+    background: linear-gradient(165deg, #0a3833 0%, #0d5c53 52%, #10826f 100%);
     position: relative;
     overflow: hidden;
     text-align: center;
@@ -168,10 +183,10 @@
     position: absolute;
     top: -40px;
     right: -40px;
-    width: 120px;
-    height: 120px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(13,148,136,0.08), transparent 70%);
+    background: radial-gradient(circle, rgba(255,255,255,0.10), transparent 70%);
     animation: float 4s ease-in-out infinite;
   }
   .hero::after {
@@ -179,38 +194,45 @@
     position: absolute;
     bottom: -20px;
     left: -20px;
-    width: 80px;
-    height: 80px;
+    width: 90px;
+    height: 90px;
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(245,158,11,0.06), transparent 70%);
+    background: radial-gradient(circle, rgba(212,175,94,0.14), transparent 70%);
     animation: float 5s ease-in-out infinite 1s;
   }
   .hero-badge {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: var(--primary-gradient);
-    color: #fff;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.22);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #eadfbe;
     padding: 5px 14px;
     border-radius: 20px;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
-    margin-bottom: 12px;
-    box-shadow: var(--shadow-primary);
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+    box-shadow: none;
   }
-  .hero-badge svg { width: 16px; height: 16px; }
+  .hero-badge svg { width: 14px; height: 14px; stroke: #d4af5a; }
   .hero-title {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--text-primary);
-    line-height: 1.3;
-    letter-spacing: -0.5px;
+    font-family: var(--font-display);
+    font-size: 34px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.25;
+    letter-spacing: 6px;
+    text-indent: 6px;
   }
   .hero-sub {
-    font-size: 14px;
-    color: var(--text-secondary);
-    margin-top: 6px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.72);
+    margin-top: 8px;
     line-height: 1.5;
+    letter-spacing: 3px;
   }
 
   .stats {
@@ -232,13 +254,15 @@
     transition: transform var(--transition-fast), box-shadow var(--transition-fast);
   }
   .stat-card:active { transform: scale(0.97); }
-  .stat-val { font-size: 20px; font-weight: 700; color: var(--primary); }
-  .stat-label { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; font-weight: 500; }
+  .stat-val { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--primary); letter-spacing: 2px; }
+  .stat-label { font-size: 11px; color: var(--text-tertiary); margin-top: 3px; font-weight: 500; letter-spacing: 1px; }
 
   .section { padding: 20px 16px; }
   .section-title {
-    font-size: 17px;
+    font-family: var(--font-display);
+    font-size: 18px;
     font-weight: 700;
+    letter-spacing: 2px;
     color: var(--text-primary);
     margin-bottom: 14px;
     display: flex;
@@ -248,9 +272,9 @@
   .section-title::before {
     content: '';
     width: 3px;
-    height: 18px;
+    height: 16px;
     border-radius: 2px;
-    background: var(--primary-gradient);
+    background: var(--gold-gradient);
   }
 
   .trip-card {
@@ -281,7 +305,7 @@
   .trip-icon-box svg { width: 26px; height: 26px; }
   .trip-icon-box.rose { background: var(--primary-gradient); }
   .trip-icon-box.rose svg { stroke: #fff; }
-  .trip-icon-box.amber { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+  .trip-icon-box.amber { background: var(--gold-gradient); }
   .trip-icon-box.amber svg { stroke: #fff; }
   .trip-name { font-size: 16px; font-weight: 600; color: var(--text-primary); }
   .honey-badge {
@@ -376,9 +400,11 @@
     border-radius: 20px;
     font-size: 13px;
     font-weight: 600;
+    letter-spacing: 1px;
     margin-right: 10px;
-    box-shadow: 0 2px 8px rgba(13,148,136,0.2);
+    box-shadow: 0 2px 8px rgba(15,118,110,0.2);
   }
+  .day-badge.amber { background: var(--gold-gradient); box-shadow: 0 2px 8px rgba(185,138,47,0.25); }
   .day-date { font-size: 13px; color: var(--text-tertiary); font-weight: 500; }
   .day-title {
     font-size: 15px;
@@ -449,7 +475,7 @@
     to { transform: none; opacity: 1; }
   }
   .sheet-bar { width: 40px; height: 4px; border-radius: 2px; background: var(--border); margin: 0 auto 14px; }
-  .hotel-title { font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+  .hotel-title { font-size: 18px; font-weight: 700; font-family: var(--font-display); letter-spacing: 1px; color: var(--text-primary); margin-bottom: 6px; }
   .hotel-status { display: inline-block; font-size: 11px; font-weight: 600; padding: 2px 10px; border-radius: 10px; margin-bottom: 12px; }
   .hotel-status.ok { background: var(--success-bg); color: #065f46; }
   .hotel-status.wait { background: var(--secondary-bg); color: #92400e; }
@@ -500,7 +526,7 @@
     background: rgba(255,255,255,0.05);
   }
   .summary-title { font-size: 14px; color: rgba(255,255,255,0.85); font-weight: 500; }
-  .summary-amount { font-size: 36px; font-weight: 800; color: #fff; margin: 6px 0; letter-spacing: -1px; }
+  .summary-amount { font-family: var(--font-display); font-size: 34px; font-weight: 700; color: #fff; margin: 6px 0; letter-spacing: 0; }
   .summary-unit { font-size: 13px; color: rgba(255,255,255,0.75); }
   .summary-row {
     display: flex;
@@ -619,7 +645,7 @@
     animation: pulse-ring 2s ease-out infinite;
   }
   .mine-avatar svg { width: 40px; height: 40px; stroke: #fff; }
-  .mine-name { font-size: 20px; font-weight: 700; color: var(--text-primary); }
+  .mine-name { font-size: 22px; font-weight: 700; font-family: var(--font-display); letter-spacing: 3px; color: var(--text-primary); }
   .mine-trip { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
 
   .tip-card {
@@ -699,8 +725,10 @@
   .checklist-text { font-size: 14px; color: var(--text-primary); }
   .checklist-text.done { text-decoration: line-through; color: var(--text-tertiary); }
   .check-actions { margin-left: auto; display: flex; gap: 4px; }
-  .check-act { border: none; background: none; color: var(--text-tertiary); font-size: 13px; padding: 6px; cursor: pointer; }
+  .check-act { border: none; background: none; color: var(--text-tertiary); font-size: 13px; padding: 6px; cursor: pointer; display: flex; align-items: center; }
+  .check-act svg { width: 14px; height: 14px; }
   .check-act.del { color: #ef4444; }
+  .record-del svg { width: 12px; height: 12px; }
 
   .region-divider {
     display: flex;
@@ -723,20 +751,21 @@
   .countdown-bar {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    margin-top: 14px;
-    padding: 8px 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
+    gap: 8px;
+    margin-top: 16px;
+    padding: 9px 22px;
+    background: rgba(255,255,255,0.10);
+    border: 1px solid rgba(255,255,255,0.20);
     border-radius: 28px;
-    box-shadow: var(--shadow-sm);
-    font-size: 16px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    font-size: 14px;
     font-weight: 500;
-    padding: 10px 22px;
-    color: var(--text-secondary);
+    letter-spacing: 1px;
+    color: rgba(255,255,255,0.85);
   }
-  .countdown-bar svg { width: 19px; height: 19px; stroke: var(--primary); }
-  .countdown-num { font-size: 20px; font-weight: 800; color: var(--primary); font-variant-numeric: tabular-nums; }
+  .countdown-bar svg { width: 17px; height: 17px; stroke: #d4af5a; }
+  .countdown-num { font-size: 20px; font-weight: 800; color: #f0d9a6; font-variant-numeric: tabular-nums; }
 
   .city-nav {
     display: flex;
@@ -892,9 +921,14 @@
   .summary-pair .summary-card { margin: 0; flex: 1; padding: 20px 14px; }
   .summary-pair .summary-amount { font-size: 26px; }
   .summary-card.actual {
-    background: linear-gradient(135deg, #f59e0b, #fbbf24);
-    box-shadow: 0 4px 16px rgba(245, 158, 11, 0.3);
+    background: linear-gradient(135deg, #26221a, #3b3423);
+    box-shadow: 0 4px 16px rgba(28,25,23,0.28);
   }
+  .summary-card.actual .summary-amount { color: #f0d9a6; }
+  .summary-card.actual .summary-title { color: rgba(240,217,166,0.75); }
+  .summary-card.actual .summary-unit { color: rgba(240,217,166,0.6); }
+  .summary-card.actual .summary-item-val { color: #f5efdf; }
+  .summary-card.actual .summary-item-label { color: rgba(240,217,166,0.55); }
   @media (max-width: 400px) {
     .summary-pair .summary-amount { font-size: 22px; }
     .summary-pair .summary-item-val { font-size: 14px; }
@@ -934,26 +968,28 @@
   .empty-tip { text-align: center; color: var(--text-tertiary); font-size: 13px; padding: 16px 0 4px; }
 
   .bless-card {
-    margin: 0 16px 12px; padding: 14px 16px; border-radius: var(--radius-md);
-    background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow-sm);
+    margin: 0 16px 12px; padding: 12px 18px; border-radius: var(--radius-md);
+    background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); box-shadow: none;
     display: flex; align-items: flex-start; gap: 10px;
   }
-  .bless-card svg { width: 18px; height: 18px; fill: var(--primary); flex-shrink: 0; margin-top: 2px; }
+  .bless-card svg { width: 16px; height: 16px; fill: #d4af5a; flex-shrink: 0; margin-top: 2px; }
   .bless-label { font-size: 11px; color: var(--text-tertiary); margin-bottom: 3px; }
-  .bless-text { font-size: 14px; color: var(--text-primary); line-height: 1.6; font-weight: 500; }
+  .bless-text { font-size: 13px; color: rgba(255,255,255,0.88); line-height: 1.7; font-weight: 400; font-family: var(--font-display); letter-spacing: 1px; }
   .wx-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 0 16px 12px; }
   .wx-card {
     background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius-md); padding: 12px 14px; box-shadow: var(--shadow-sm);
     min-width: 0;
   }
-  .wx-city { font-size: 12px; color: var(--text-tertiary); }
-  .wx-temp { font-size: 22px; font-weight: 700; color: var(--primary); margin: 2px 0; font-variant-numeric: tabular-nums; }
+  .wx-city { font-size: 12px; color: var(--text-tertiary); letter-spacing: 2px; }
+  .wx-temp { font-family: var(--font-display); font-size: 24px; font-weight: 700; color: var(--primary); margin: 2px 0; font-variant-numeric: tabular-nums; }
   .wx-desc { font-size: 12px; color: var(--text-secondary); }
   .wx-range { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
   .wx-main { display: flex; align-items: center; gap: 8px; }
-  .wx-icon { font-size: 24px; line-height: 1; }
-  .wx-f-row .i { flex: 0 0 18px; font-size: 12px; }
+  .wx-icon { display: flex; align-items: center; color: var(--gold); }
+  .wx-icon svg { width: 22px; height: 22px; }
+  .wx-f-row .i { flex: 0 0 18px; display: flex; align-items: center; color: var(--text-tertiary); }
+  .wx-f-row .i svg { width: 13px; height: 13px; }
   .wx-forecast { margin-top: 8px; border-top: 1px solid var(--border); padding-top: 6px; }
   .wx-f-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-tertiary); padding: 2px 0; }
   .wx-f-row .d { flex: 0 0 34px; }
@@ -962,14 +998,15 @@
 
   /* ===== V2 FEATURES ===== */
   .today-card {
-    margin: 0 16px 12px; padding: 14px 16px; border-radius: var(--radius-md);
-    background: linear-gradient(135deg, #f59e0b, #fbbf24); color: #fff;
-    box-shadow: 0 4px 16px rgba(245,158,11,0.3); cursor: pointer;
+    margin: 12px 16px; padding: 14px 16px; border-radius: var(--radius-md);
+    background: linear-gradient(135deg, #0b4f47, #0f766e); color: #fff;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: var(--shadow-primary); cursor: pointer;
   }
   .today-card:active { transform: scale(0.98); }
-  .today-label { font-size: 11px; opacity: 0.85; }
-  .today-title { font-size: 16px; font-weight: 700; margin-top: 2px; }
-  .today-sub { font-size: 11px; opacity: 0.8; margin-top: 4px; }
+  .today-label { font-size: 11px; opacity: 0.75; letter-spacing: 2px; }
+  .today-title { font-size: 16px; font-weight: 700; margin-top: 2px; font-family: var(--font-display); letter-spacing: 1px; }
+  .today-sub { font-size: 11px; opacity: 0.7; margin-top: 4px; color: #eadfbe; }
   .day-nav { display: flex; gap: 8px; overflow-x: auto; padding: 10px 16px; scrollbar-width: none; }
   .day-nav::-webkit-scrollbar { display: none; }
   .day-chip {
@@ -1005,7 +1042,7 @@
   .cat-stat-row .amt { flex: 0 0 64px; text-align: right; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text-primary); }
   .exp-tabs { display: flex; margin: 0 16px 12px; background: var(--surface); border: 1px solid var(--border); border-radius: 999px; padding: 4px; box-shadow: var(--shadow-sm); }
   .exp-tab { flex: 1; text-align: center; padding: 9px 0; border-radius: 999px; font-size: 13px; font-weight: 600; color: var(--text-secondary); cursor: pointer; transition: all .2s; }
-  .exp-tab.active { background: linear-gradient(135deg, #0d9488, #14b8a6); color: #fff; }
+  .exp-tab.active { background: var(--primary-gradient); color: #fff; }
   .compare-card {
     margin: 0 16px 12px; background: var(--surface); border: 1px solid var(--border);
     border-radius: var(--radius-md); padding: 14px 16px;
@@ -1016,16 +1053,16 @@
   .compare-text { font-size: 12px; color: var(--text-tertiary); margin-top: 6px; }
   @media (prefers-color-scheme: dark) {
     :root {
-      --surface: #1e293b; --background: #0f172a; --border: #334155;
-      --text-primary: #f1f5f9; --text-secondary: #94a3b8; --text-tertiary: #64748b;
-      --primary-bg: rgba(13,148,136,0.16); --secondary-bg: rgba(245,158,11,0.16);
+      --surface: #201d19; --background: #141210; --border: #35312a;
+      --text-primary: #f0ede6; --text-secondary: #a8a297; --text-tertiary: #7a756b;
+      --primary-bg: rgba(15,118,110,0.18); --secondary-bg: rgba(185,138,47,0.16);
       --success-bg: rgba(16,185,129,0.16); --accent-bg: rgba(139,92,246,0.16);
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.4); --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.5); --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
     }
-    .tabbar { background: rgba(30,41,59,0.92); border-top-color: rgba(255,255,255,0.08); }
-    .form-input { background: #0f172a; }
-    .hero { background: linear-gradient(180deg, rgba(13,148,136,0.12), var(--background)); }
-    .toast { background: rgba(241,245,249,0.9); color: #0f172a; }
+    .tabbar { background: rgba(32,29,25,0.92); border-top-color: rgba(255,255,255,0.08); }
+    .form-input { background: #141210; }
+    .hero { background: linear-gradient(165deg, #06231f 0%, #0a3833 55%, #0d5c53 100%); }
+    .toast { background: rgba(240,237,230,0.92); color: #141210; }
   }
 
   /* ===== DESKTOP RESPONSIVE ===== */
@@ -1147,23 +1184,23 @@
   </div>
   <div class="route-card">
     <svg viewBox="0 0 640 100">
-      <line x1="40" y1="45" x2="390" y2="45" stroke="#0d9488" stroke-width="2"/>
-      <line x1="390" y1="45" x2="560" y2="45" stroke="#f59e0b" stroke-width="2" stroke-dasharray="6 5"/>
-      <circle cx="40" cy="45" r="6" fill="#0d9488"/><circle cx="150" cy="45" r="6" fill="#0d9488"/>
-      <circle cx="260" cy="45" r="6" fill="#0d9488"/><circle cx="390" cy="45" r="6" fill="#0d9488"/>
-      <circle cx="560" cy="45" r="6" fill="#f59e0b"/>
-      <path d="M462 32 l30 9 -30 9 7 -9 z" fill="#f59e0b"/>
-      <g font-size="16" fill="#64748b" text-anchor="middle">
+      <line x1="40" y1="45" x2="390" y2="45" stroke="#0f766e" stroke-width="2"/>
+      <line x1="390" y1="45" x2="560" y2="45" stroke="#b98a2f" stroke-width="2" stroke-dasharray="6 5"/>
+      <circle cx="40" cy="45" r="6" fill="#0f766e"/><circle cx="150" cy="45" r="6" fill="#0f766e"/>
+      <circle cx="260" cy="45" r="6" fill="#0f766e"/><circle cx="390" cy="45" r="6" fill="#0f766e"/>
+      <circle cx="560" cy="45" r="6" fill="#b98a2f"/>
+      <path d="M462 32 l30 9 -30 9 7 -9 z" fill="#b98a2f"/>
+      <g font-size="16" fill="#57534e" text-anchor="middle" font-family="Songti SC, Noto Serif SC, STSongti-SC, serif">
         <text x="40" y="78">丽江</text><text x="150" y="78">大理</text><text x="260" y="78">丽江</text>
         <text x="390" y="78">香格里拉</text><text x="560" y="78">三亚</text>
       </g>
-      <g font-size="12" fill="#94a3b8" text-anchor="middle">
+      <g font-size="12" fill="#8a8578" text-anchor="middle">
         <text x="40" y="22">D1</text><text x="150" y="22">D2</text><text x="260" y="22">D3-4</text>
         <text x="390" y="22">D5-6</text><text x="560" y="22">D7-12</text>
       </g>
-      <g font-size="11" fill="#0d9488" text-anchor="middle">
-        <text x="40" y="96">郑州出发 ✈</text>
-        <text x="560" y="96" fill="#b45309">✈ 抵达南京</text>
+      <g font-size="11" fill="#0f766e" text-anchor="middle">
+        <text x="40" y="96">郑州出发</text>
+        <text x="560" y="96" fill="#8a6a1f">抵达南京</text>
       </g>
     </svg>
   </div>
@@ -1182,7 +1219,7 @@
       <div class="spot-overlay"><div class="spot-name">玉龙雪山</div><div class="spot-desc">日照金山</div></div>
     </div>
     <div class="spot-card" onclick="openSpot('y3')" role="button" aria-label="查看蓝月谷信息">
-      <img src="https://mrwang19960102.github.io/travel-app/images/spot-y3.jpg?v=2" alt="蓝月谷" loading="lazy">
+      <img src="https://mrwang19960102.github.io/travel-app/images/spot-y3.jpg" alt="蓝月谷" loading="lazy">
       <span class="spot-day">Day 4</span>
       <div class="spot-overlay"><div class="spot-name">蓝月谷</div><div class="spot-desc">小九寨之称</div></div>
     </div>
@@ -1212,7 +1249,7 @@
       <div class="spot-overlay"><div class="spot-name">椰梦长廊</div><div class="spot-desc">骑行随停拍照</div></div>
     </div>
     <div class="spot-card" onclick="openSpot('s2')" role="button" aria-label="查看大东海信息">
-      <img src="https://mrwang19960102.github.io/travel-app/images/spot-s2.jpg?v=2" alt="大东海" loading="lazy">
+      <img src="https://mrwang19960102.github.io/travel-app/images/spot-s2.jpg" alt="大东海" loading="lazy">
       <span class="spot-day">三亚 2</span>
       <div class="spot-overlay"><div class="spot-name">大东海</div><div class="spot-desc">摩托艇香蕉船</div></div>
     </div>
@@ -1227,7 +1264,7 @@
       <div class="spot-overlay"><div class="spot-name">远海潜水</div><div class="spot-desc">东西排船潜</div></div>
     </div>
     <div class="spot-card" onclick="openSpot('s5')" role="button" aria-label="查看免税城信息">
-      <img src="https://mrwang19960102.github.io/travel-app/images/spot-s5.jpg?v=2" alt="免税城" loading="lazy">
+      <img src="https://mrwang19960102.github.io/travel-app/images/spot-s5.jpg" alt="免税城" loading="lazy">
       <span class="spot-day">三亚 5</span>
       <div class="spot-overlay"><div class="spot-name">免税城</div><div class="spot-desc">cdf95折</div></div>
     </div>
@@ -1370,7 +1407,7 @@
     三亚浪漫之旅 · 10月13日-18日
   </div>
   <div class="day-card" id="sday-1">
-    <div class="day-header"><span class="day-badge" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">Day 1</span><span class="day-date">10月13日 · 周二</span></div>
+    <div class="day-header"><span class="day-badge amber">Day 1</span><span class="day-date">10月13日 · 周二</span></div>
     <div class="day-title">落地三亚 · 椰梦长廊骑行 + 亿恒夜市</div>
     <span class="city-tag" style="background:var(--secondary-bg);color:#92400e">三亚湾</span>
     <div class="highlight-item"><div class="highlight-dot"></div><span>13:15 凤凰机场T1落地</span></div>
@@ -1382,7 +1419,7 @@
     <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">三亚政务中心河东路亚朵酒店</span></div>
   </div>
   <div class="day-card" id="sday-2">
-    <div class="day-header"><span class="day-badge" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">Day 2</span><span class="day-date">10月14日 · 周三</span></div>
+    <div class="day-header"><span class="day-badge amber">Day 2</span><span class="day-date">10月14日 · 周三</span></div>
     <div class="day-title">大东海水上项目</div>
     <span class="city-tag" style="background:var(--secondary-bg);color:#92400e">大东海</span>
     <div class="highlight-item"><div class="highlight-dot"></div><span>09:00 骑电动车前往大东海</span></div>
@@ -1392,7 +1429,7 @@
     <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">三亚政务中心河东路亚朵酒店</span></div>
   </div>
   <div class="day-card" id="sday-3">
-    <div class="day-header"><span class="day-badge" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">Day 3</span><span class="day-date">10月15日 · 周四</span></div>
+    <div class="day-header"><span class="day-badge amber">Day 3</span><span class="day-date">10月15日 · 周四</span></div>
     <div class="day-title">西岛一日游</div>
     <span class="city-tag" style="background:var(--secondary-bg);color:#92400e">西岛</span>
     <div class="highlight-item"><div class="highlight-dot"></div><span>08:30 酒店出发（大件行李留客房，随身小包，打车往返）</span></div>
@@ -1404,7 +1441,7 @@
     <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">三亚政务中心河东路亚朵酒店</span></div>
   </div>
   <div class="day-card" id="sday-4">
-    <div class="day-header"><span class="day-badge" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">Day 4</span><span class="day-date">10月16日 · 周五</span></div>
+    <div class="day-header"><span class="day-badge amber">Day 4</span><span class="day-date">10月16日 · 周五</span></div>
     <div class="day-title">搬迁万豪 + 亚龙湾远海潜水</div>
     <span class="city-tag" style="background:var(--secondary-bg);color:#92400e">亚龙湾</span>
     <div class="highlight-item"><div class="highlight-dot"></div><span>08:30 亚朵退房，行李装车</span></div>
@@ -1417,7 +1454,7 @@
     <div class="tip-box"><span class="tip-text">潜水安排在16号，距18号航班远超12小时，符合潜水飞行规范</span></div>
   </div>
   <div class="day-card" id="sday-5">
-    <div class="day-header"><span class="day-badge" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">Day 5</span><span class="day-date">10月17日 · 周六</span></div>
+    <div class="day-header"><span class="day-badge amber">Day 5</span><span class="day-date">10月17日 · 周六</span></div>
     <div class="day-title">万豪休闲 + 半日免税城</div>
     <span class="city-tag" style="background:var(--secondary-bg);color:#92400e">海棠湾</span>
     <div class="highlight-item"><div class="highlight-dot"></div><span>早餐后酒店私人沙滩浮漂、拍照</span></div>
@@ -1428,7 +1465,7 @@
     <div class="accommodation"><span class="accommodation-label">住宿：</span><span class="accommodation-value">亚龙湾万豪</span></div>
   </div>
   <div class="day-card" id="sday-6">
-    <div class="day-header"><span class="day-badge" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">Day 6</span><span class="day-date">10月18日 · 周日</span></div>
+    <div class="day-header"><span class="day-badge amber">Day 6</span><span class="day-date">10月18日 · 周日</span></div>
     <div class="day-title">三亚 → 南京 · 返程航班 16:00</div>
     <div class="highlight-item"><div class="highlight-dot"></div><span>自然醒享用早餐</span></div>
     <div class="highlight-item"><div class="highlight-dot"></div><span>09:00-11:30 沙滩、泳池休闲浮漂</span></div>
@@ -1759,7 +1796,7 @@
       <div class="tip-content">
         <div class="tip-title">一次性分享二维码</div>
         <div class="tip-desc">为朋友生成一次性二维码，扫码一次后即失效。</div>
-        <button onclick="genQR()" style="margin-top:10px;background:linear-gradient(135deg,#0d9488,#14b8a6);color:#fff;border:none;border-radius:999px;padding:9px 22px;font-size:13px;font-weight:600;cursor:pointer">生成新二维码</button>
+        <button onclick="genQR()" style="margin-top:10px;background:linear-gradient(135deg,#0b4f47,#0f766e);color:#fff;border:none;border-radius:999px;padding:9px 22px;font-size:13px;font-weight:600;cursor:pointer">生成新二维码</button>
       </div>
     </div>
     <div id="qr-box" style="text-align:center;margin-top:10px"></div>
@@ -2119,7 +2156,7 @@ function renderRecords() {
       '<div class="record-info"><div class="record-note">' + esc(r.note || c[0]) + '</div>' +
       '<div class="record-meta">' + esc(r.date) + ' · ' + (r.payer === 'me' ? '噜噜支付' : '噜妹支付') + '</div></div>' +
       '<span class="record-amount">¥' + r.amount + '</span>' +
-      (role !== 'guest' ? '<button class="record-del" onclick="delRecord(' + r.id + ')" aria-label="删除该记录">✕</button>' : '') + '</div>';
+      (role !== 'guest' ? '<button class="record-del" onclick="delRecord(' + r.id + ')" aria-label="删除该记录"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>' : '') + '</div>';
   }).join('');
 }
 // ===== 景点详情弹窗 =====
@@ -2362,7 +2399,7 @@ function renderChecklist() {
       '<div style="display:flex;align-items:center;flex:1;min-width:0" onclick="toggleCheckItem(' + i.id + ')">' +
       '<div class="checkbox' + (i.done ? ' checked' : '') + '"><span class="checkmark">✓</span></div>' +
       '<span class="checklist-text' + (i.done ? ' done' : '') + '">' + esc(i.text) + '</span></div>' +
-      (admin ? '<div class="check-actions"><button class="check-act" onclick="editCheckItem(' + i.id + ')" aria-label="修改">✎</button><button class="check-act del" onclick="delCheckItem(' + i.id + ')" aria-label="删除">✕</button></div>' : '') +
+      (admin ? '<div class="check-actions"><button class="check-act" onclick="editCheckItem(' + i.id + ')" aria-label="修改"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button><button class="check-act del" onclick="delCheckItem(' + i.id + ')" aria-label="删除"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div>' : '') +
       '</div>').join('');
   });
   document.getElementById('checklist').innerHTML = html;
@@ -2398,12 +2435,13 @@ const BLESSINGS = [
 // ===== 天气模块 =====
 function wxIcon(code) {
   code = +code;
-  if (code === 113) return '☀️';
-  if (code <= 122) return '☁️';
-  if (code >= 386) return '⛈️';
-  if (code >= 323) return '🌨️';
-  if (code >= 176) return '🌧️';
-  return '🌤️';
+  const S = 'viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"';
+  if (code === 113) return '<svg ' + S + '><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M17.66 17.66l1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="M6.34 17.66l-1.41 1.41"/><path d="M19.07 4.93l-1.41 1.41"/></svg>';
+  if (code <= 122) return '<svg ' + S + '><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/></svg>';
+  if (code >= 386) return '<svg ' + S + '><path d="M6 16.326A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 .5 8.973"/><path d="m13 12-3 5h4l-3 5"/></svg>';
+  if (code >= 323) return '<svg ' + S + '><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M8 15h.01"/><path d="M8 19h.01"/><path d="M12 17h.01"/><path d="M12 21h.01"/><path d="M16 15h.01"/><path d="M16 19h.01"/></svg>';
+  if (code >= 176) return '<svg ' + S + '><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 14v6"/><path d="M8 14v6"/><path d="M12 16v6"/></svg>';
+  return '<svg ' + S + '><path d="M12 2v2"/><path d="M4.93 4.93l1.41 1.41"/><path d="M20 12h2"/><path d="M19.07 4.93l-1.41 1.41"/><path d="M15.947 12.65a4 4 0 0 0-5.925-.412"/><path d="M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z"/></svg>';
 }
 const WX_ZH = { 113: '晴', 116: '多云', 119: '阴', 122: '阴', 176: '小雨', 263: '阵雨', 266: '毛毛雨', 281: '冻毛毛雨', 284: '冻雨', 293: '局部小雨', 296: '小雨', 299: '中雨', 302: '大雨', 305: '阵雨', 308: '强阵雨', 311: '冻雨', 314: '强冻雨', 317: '雨夹雪', 320: '雪', 323: '小雪', 326: '雪', 329: '大雪', 332: '雪', 335: '大雪', 338: '暴雪', 350: '冰雹', 353: '小阵雨', 356: '中阵雨', 359: '强阵雨', 362: '雨夹雪', 365: '雨夹雪', 368: '小雪', 371: '大雪', 374: '雨夹雪', 377: '雨夹雪', 386: '雷阵雨', 389: '雷阵雨', 392: '雷阵雨伴雪', 395: '雷阵雨伴雪' };
 function wxDesc(h) {
