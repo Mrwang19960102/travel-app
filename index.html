@@ -2287,6 +2287,42 @@ const HOTELS = {
     ],
     tips: '提前1-2天致电告知蜜月，通常有免费房间布置/水果/蛋糕，甚至升级房型'
   },
+  xisu: {
+    name: '熹宿设计师花园度假美宿（丽江）',
+    status: ['套餐含', 'ok'],
+    rows: [
+      ['地址', '丽江市古城区大研街道金安路安乐村80号'],
+      ['电话', '<a href="tel:17308881182">173-0888-1182</a>（24小时前台）'],
+      ['入住', '10-07 / 10-09 / 10-10 共3晚'],
+      ['特色', '纳西四合院花园、免费停车、距丽江古城约1.4公里'],
+      ['入离', '14:00后入住 · 12:00前退房']
+    ],
+    tips: '古城南门步行约十几分钟；前台可协助订玉龙雪山一日游与《丽江千古情》演出票'
+  },
+  liangsu: {
+    name: '良宿·网红旅拍客栈(大理洱海店)',
+    status: ['套餐含', 'ok'],
+    rows: [
+      ['地址', '大理市挖色镇挖色村8组504号'],
+      ['电话', '<a href="tel:08722466667">0872-2466667</a>'],
+      ['入住', '10-08 共1晚'],
+      ['特色', '距洱海约450米，海景房+楼顶免费旅拍、海景餐厅'],
+      ['入离', '14:00后入住 · 12:00前退房']
+    ],
+    tips: '海东线近双廊/小普陀/理想邦；楼顶旅拍免费，建议约日落时段出片'
+  },
+  lisiman: {
+    name: '丽思漫·璞悦供氧民宿(独克宗古城店)',
+    status: ['套餐含', 'ok'],
+    rows: [
+      ['地址', '香格里拉市建塘镇香巴拉大道190号'],
+      ['电话', '<a href="tel:17508877751">175-0887-7751</a>'],
+      ['入住', '10-11 / 10-12 共2晚'],
+      ['特色', '全屋地暖+24小时鼻吸制氧、免费接站，步行约10分钟到独克宗古城'],
+      ['入离', '14:00后入住 · 12:00前退房']
+    ],
+    tips: '高原第一晚避免剧烈活动；制氧机可整夜开启，前台备热牛奶与下午茶'
+  },
   yunnan: {
     name: '云南段私家团订单（七天六晚）',
     status: ['已付定金', 'ok'],
@@ -2327,7 +2363,10 @@ document.addEventListener('click', e => {
   const txt = t.textContent;
   if (txt.includes('亚朵')) openHotel('atour');
   else if (txt.includes('万豪')) openHotel('marriott');
-  else if (txt.includes('四钻') || txt.includes('熹宿') || txt.includes('良宿') || txt.includes('丽思漫')) openHotel('yunnan');
+  else if (txt.includes('熹宿')) openHotel('xisu');
+  else if (txt.includes('良宿')) openHotel('liangsu');
+  else if (txt.includes('丽思漫')) openHotel('lisiman');
+  else if (txt.includes('四钻')) openHotel('yunnan');
 });
 
 // ===== 行李清单 · 云同步 =====
