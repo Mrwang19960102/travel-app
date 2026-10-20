@@ -1909,7 +1909,7 @@ const CATS = {
   other: ['其他', '#f1f5f9', '#475569']
 };
 let records = [];
-const collapsedDates = new Set();
+const expandedDates = new Set();
 let fileSha = null;
 let payer = 'me';
 let role = localStorage.getItem('role') || 'guest';
@@ -2095,6 +2095,7 @@ function saveEdit() {
   r.cat = document.getElementById('edit-cat').value;
   r.note = document.getElementById('edit-note').value.trim();
   r.date = document.getElementById('edit-date').value || r.date;
+  expandedDates.add(toISO(r.date));
   closeEditModal();
   renderRecords();
   syncNow();
@@ -2119,6 +2120,7 @@ function addRecord() {
     payer: payer,
     date: dateVal
   });
+  expandedDates.add(toISO(dateVal));
   closeAddModal();
   clearForm();
   renderRecords();
@@ -2201,7 +2203,7 @@ function renderRecords() {
   list.innerHTML = dates.map(d => {
     const items = groups[d];
     const sub = items.reduce((s, r) => s + r.amount, 0);
-    const collapsed = collapsedDates.has(d);
+    const collapsed = !expandedDates.has(d);
     return '<div class="rec-group">' +
       '<div class="rec-group-head" onclick="toggleDateGroup(\'' + esc(d) + '\')">' +
       '<span class="rec-group-date">' + esc(fmtDate(d)) + '</span>' +
@@ -2221,7 +2223,7 @@ function rowHtml(r) {
     (role !== 'guest' ? '<button class="record-edit" onclick="editRecord(' + r.id + ')" aria-label="修改该记录"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button><button class="record-del" onclick="delRecord(' + r.id + ')" aria-label="删除该记录"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>' : '') + '</div>';
 }
 function toggleDateGroup(d) {
-  if (collapsedDates.has(d)) collapsedDates.delete(d); else collapsedDates.add(d);
+  if (expandedDates.has(d)) expandedDates.delete(d); else expandedDates.add(d);
   renderRecords();
 }
 // ===== 景点详情弹窗 =====
