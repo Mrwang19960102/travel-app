@@ -1052,9 +1052,11 @@
   .legend-name { flex: 1; color: var(--text-secondary); min-width: 0; }
   .legend-pct { flex: 0 0 36px; text-align: right; color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
   .legend-amt { flex: 0 0 62px; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text-primary); }
-  .legend-row { cursor: pointer; border-radius: 6px; }
-  .legend-row.active { background: var(--primary-bg); }
-  .legend-row.active .legend-name { color: var(--primary); font-weight: 600; }
+  .cat-filter { display: flex; gap: 8px; overflow-x: auto; padding: 12px 0 2px; scrollbar-width: none; }
+  .cat-filter::-webkit-scrollbar { display: none; }
+  .cat-chip { flex-shrink: 0; padding: 6px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--surface); font-size: 12px; color: var(--text-secondary); cursor: pointer; transition: all var(--transition-fast); }
+  .cat-chip:active { transform: scale(0.95); }
+  .cat-chip.active { background: var(--primary-gradient); color: #fff; border-color: transparent; font-weight: 600; }
   .filter-bar { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; padding: 8px 12px; background: var(--primary-bg); border-radius: 10px; font-size: 12px; color: var(--primary); font-weight: 600; }
   .filter-clear { border: none; background: none; color: var(--primary); font-size: 12px; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
   .payer-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 14px; background: var(--border); }
@@ -1557,6 +1559,7 @@
       <button class="add-btn" style="margin-bottom:8px" onclick="openAddModal()">＋ 记一笔</button>
       <button class="logout-btn" onclick="logout()">退出管理</button>
     </div>
+    <div class="cat-filter" id="cat-filter"></div>
     <div id="filter-bar" class="filter-bar" style="display:none">
       <span id="filter-text"></span>
       <button class="filter-clear" onclick="clearCatFilter()">清除筛选</button>
@@ -2212,12 +2215,12 @@ function renderRecords() {
     let acc = 0;
     const segs = entries.map(([c, v]) => {
       const frac = v / total;
-      const s = '<circle cx="60" cy="60" r="42" fill="none" stroke="' + (COLORS[c] || '#64748b') + '" stroke-width="14" stroke-dasharray="' + (frac * C).toFixed(2) + ' ' + C.toFixed(2) + '" stroke-dashoffset="' + (-acc * C).toFixed(2) + '" style="cursor:pointer" onclick="toggleCatFilter(\'' + c + '\')"/>';
+      const s = '<circle cx="60" cy="60" r="42" fill="none" stroke="' + (COLORS[c] || '#64748b') + '" stroke-width="14" stroke-dasharray="' + (frac * C).toFixed(2) + ' ' + C.toFixed(2) + '" stroke-dashoffset="' + (-acc * C).toFixed(2) + '"/>';
       acc += frac;
       return s;
     }).join('');
     const legend = entries.map(([c, v]) =>
-      '<div class="legend-row' + (filterCat === c ? ' active' : '') + '" onclick="toggleCatFilter(\'' + c + '\')"><span class="legend-dot" style="background:' + (COLORS[c] || '#64748b') + '"></span>' +
+      '<div class="legend-row"><span class="legend-dot" style="background:' + (COLORS[c] || '#64748b') + '"></span>' +
       '<span class="legend-name">' + (CATS[c] || CATS.other)[0] + '</span>' +
       '<span class="legend-pct">' + Math.round(v / total * 100) + '%</span>' +
       '<span class="legend-amt">¥' + v + '</span></div>').join('');
@@ -2254,6 +2257,10 @@ function renderRecords() {
   }
   const list = document.getElementById('record-list');
   const fb = document.getElementById('filter-bar');
+  document.getElementById('cat-filter').innerHTML =
+    '<span class="cat-chip' + (!filterCat ? ' active' : '') + '" onclick="clearCatFilter()">全部</span>' +
+    Object.keys(sums).sort((a, b) => sums[b] - sums[a]).map(k =>
+      '<span class="cat-chip' + (filterCat === k ? ' active' : '') + '" onclick="toggleCatFilter(\'' + k + '\')">' + (CATS[k] || CATS.other)[0] + '</span>').join('');
   const view = filterCat ? records.filter(r => r.cat === filterCat) : records;
   if (filterCat) {
     const fv = view.reduce((s, r) => s + r.amount, 0);
