@@ -2156,7 +2156,7 @@ function renderRecords() {
   records.forEach(r => { sums[r.cat] = (sums[r.cat] || 0) + r.amount; });
   const entries = Object.entries(sums).sort((a, b) => b[1] - a[1]);
   const groups = {};
-  records.forEach(r => { (groups[r.date] = groups[r.date] || []).push(r); });
+  records.forEach(r => { const k = toISO(r.date); (groups[k] = groups[k] || []).push(r); });
   const daySums = Object.keys(groups).map(d => [d, groups[d].reduce((s, r) => s + r.amount, 0)]);
   const maxDay = daySums.length ? Math.max.apply(null, daySums.map(x => x[1])) : 0;
   const csCard = document.getElementById('cat-stats-card');
