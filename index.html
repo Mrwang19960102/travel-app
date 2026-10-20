@@ -1062,7 +1062,8 @@
   .bar { width: 100%; max-width: 20px; border-radius: 4px 4px 0 0; background: linear-gradient(180deg, var(--primary-light), var(--primary)); }
   .bar-lbl { font-size: 9px; color: var(--text-tertiary); margin-top: 4px; font-variant-numeric: tabular-nums; }
   .fab-add {
-    position: fixed; right: 18px; bottom: calc(88px + env(safe-area-inset-bottom));
+    position: fixed; right: 18px; bottom: 96px;
+    bottom: calc(88px + env(safe-area-inset-bottom));
     width: 54px; height: 54px; border-radius: 50%; border: none;
     background: var(--primary-gradient); color: #fff;
     box-shadow: var(--shadow-primary); cursor: pointer; z-index: 95;
@@ -1539,6 +1540,7 @@
       <div class="login-hint">噜噜/噜妹输入口令后可记账、删除；访客仅可查看</div>
     </div>
     <div id="edit-zone" style="display:none">
+      <button class="add-btn" style="margin-bottom:8px" onclick="openAddModal()">＋ 记一笔</button>
       <button class="logout-btn" onclick="logout()">退出管理</button>
     </div>
     <div class="record-list" id="record-list"></div>
