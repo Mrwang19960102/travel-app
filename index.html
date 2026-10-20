@@ -1560,7 +1560,6 @@
         <input class="form-input" id="inp-note" placeholder="备注（可选，如：亿恒夜市晚餐）">
       </div>
       <button class="add-btn" id="add-btn" onclick="addRecord()">记一笔并同步</button>
-      <button class="logout-btn" id="cancel-edit" style="display:none" onclick="cancelEdit()">取消修改</button>
       <button class="logout-btn" onclick="logout()">退出管理</button>
     </div>
     <div class="record-list" id="record-list"></div>
@@ -1877,6 +1876,33 @@
   </div>
 </div>
 
+<!-- 账单修改弹窗 -->
+<div class="modal-mask" id="edit-modal" onclick="closeEditModal()">
+  <div class="hotel-sheet" onclick="event.stopPropagation()">
+    <div class="sheet-bar"></div>
+    <div class="hotel-title">修改账单</div>
+    <div class="form-row">
+      <input class="form-input amount-input" id="edit-amount" type="number" inputmode="decimal" placeholder="金额 ¥" min="0" step="0.01">
+      <select class="form-input" id="edit-cat" style="flex:0 0 96px">
+        <option value="food">餐饮</option>
+        <option value="ticket">门票</option>
+        <option value="traffic">交通</option>
+        <option value="shop">购物</option>
+        <option value="makeup">彩妆</option>
+        <option value="cloth">服装</option>
+        <option value="hotel">住宿</option>
+        <option value="other">其他</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <input class="form-input" id="edit-date" type="date" style="flex:0 0 150px">
+      <input class="form-input" id="edit-note" placeholder="备注（可选）">
+    </div>
+    <button class="add-btn" onclick="saveEdit()">保存修改</button>
+    <button class="logout-btn" onclick="closeEditModal()">取消</button>
+  </div>
+</div>
+
 <!-- 酒店详情弹窗 -->
 <div class="modal-mask" id="hotel-modal" onclick="closeHotel()">
   <div class="hotel-sheet" onclick="event.stopPropagation()">
@@ -2149,44 +2175,39 @@ function clearForm() {
   document.getElementById('inp-note').value = '';
   document.getElementById('inp-cat').value = 'food';
   document.getElementById('inp-date').value = todayStr();
-  document.getElementById('add-btn').textContent = '记一笔并同步';
-  document.getElementById('cancel-edit').style.display = 'none';
 }
 function editRecord(id) {
   const r = records.find(x => x.id === id);
   if (!r) return;
   editingId = id;
-  document.getElementById('inp-amount').value = r.amount;
-  document.getElementById('inp-cat').value = r.cat;
-  document.getElementById('inp-note').value = r.note || '';
-  document.getElementById('inp-date').value = toISO(r.date);
-  document.getElementById('add-btn').textContent = '保存修改';
-  document.getElementById('cancel-edit').style.display = 'block';
-  showToast('修改后点「保存修改」');
+  document.getElementById('edit-amount').value = r.amount;
+  document.getElementById('edit-cat').value = r.cat;
+  document.getElementById('edit-note').value = r.note || '';
+  document.getElementById('edit-date').value = toISO(r.date);
+  document.getElementById('edit-modal').classList.add('show');
 }
-function cancelEdit() {
+function closeEditModal() {
+  document.getElementById('edit-modal').classList.remove('show');
   editingId = null;
-  clearForm();
+}
+function saveEdit() {
+  const r = records.find(x => x.id === editingId);
+  const amt = parseFloat(document.getElementById('edit-amount').value);
+  if (!r) { closeEditModal(); return; }
+  if (!amt || amt <= 0) { showToast('请输入有效金额'); return; }
+  r.amount = Math.round(amt * 100) / 100;
+  r.cat = document.getElementById('edit-cat').value;
+  r.note = document.getElementById('edit-note').value.trim();
+  r.date = document.getElementById('edit-date').value || r.date;
+  closeEditModal();
+  renderRecords();
+  syncNow();
+  showToast('修改已保存并同步');
 }
 function addRecord() {
   const amt = parseFloat(document.getElementById('inp-amount').value);
   if (!amt || amt <= 0) { showToast('请输入有效金额'); return; }
   const dateVal = document.getElementById('inp-date').value || todayStr();
-  if (editingId !== null) {
-    const r = records.find(x => x.id === editingId);
-    if (r) {
-      r.amount = Math.round(amt * 100) / 100;
-      r.cat = document.getElementById('inp-cat').value;
-      r.note = document.getElementById('inp-note').value.trim();
-      r.date = dateVal;
-    }
-    editingId = null;
-    clearForm();
-    renderRecords();
-    syncNow();
-    showToast('修改已保存并同步');
-    return;
-  }
   records.unshift({
     id: Date.now(),
     amount: Math.round(amt * 100) / 100,
