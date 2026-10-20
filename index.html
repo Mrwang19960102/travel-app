@@ -952,7 +952,14 @@
     border: 1px solid var(--border); background: var(--surface); border-radius: 10px;
     color: var(--text-secondary); font-size: 13px; cursor: pointer; min-height: 40px;
   }
-  .record-list { margin-top: 14px; }
+  .record-list { margin-top: 6px; }
+  .rec-group { border-bottom: 1px solid var(--border); }
+  .rec-group:last-child { border-bottom: none; }
+  .rec-group-head { display: flex; align-items: center; gap: 8px; padding: 10px 0 4px; cursor: pointer; }
+  .rec-group-date { font-size: 13px; font-weight: 700; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+  .rec-group-meta { flex: 1; font-size: 11px; color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
+  .rec-chev { width: 16px; height: 16px; stroke: var(--text-tertiary); transition: transform var(--transition-fast); flex-shrink: 0; }
+  .rec-chev.closed { transform: rotate(-90deg); }
   .record-item { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
   .record-item:last-child { border-bottom: none; }
   .record-cat { flex-shrink: 0; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 8px; margin-right: 10px; }
@@ -1506,6 +1513,11 @@
     </div>
   </div>
 
+  <div class="category-card" id="cat-stats-card" style="display:none">
+    <div class="category-header"><span class="category-name">实际花费 · 统计图</span></div>
+    <div id="cat-stats"></div>
+  </div>
+
   <div id="exp-real">
   <!-- 实际花费记录 -->
   <div class="recorder-card">
@@ -1524,10 +1536,6 @@
       <button class="logout-btn" onclick="logout()">退出管理</button>
     </div>
     <div class="record-list" id="record-list"></div>
-  </div>
-  <div class="category-card" id="cat-stats-card" style="display:none">
-    <div class="category-header"><span class="category-name">实际花费 · 统计图</span></div>
-    <div id="cat-stats"></div>
   </div>
   </div>
 
@@ -1895,6 +1903,7 @@ const CATS = {
   other: ['其他', '#f1f5f9', '#475569']
 };
 let records = [];
+const collapsedDates = new Set();
 let fileSha = null;
 let payer = 'me';
 let role = localStorage.getItem('role') || 'guest';
@@ -2173,15 +2182,34 @@ function renderRecords() {
     list.innerHTML = '<div class="empty-tip">还没有记录，出发后在这里记第一笔</div>';
     return;
   }
-  list.innerHTML = records.map(r => {
-    const c = CATS[r.cat] || CATS.other;
-    return '<div class="record-item">' +
-      '<span class="record-cat" style="background:' + c[1] + ';color:' + c[2] + '">' + c[0] + '</span>' +
-      '<div class="record-info"><div class="record-note">' + esc(r.note || c[0]) + '</div>' +
-      '<div class="record-meta">' + esc(fmtDate(r.date)) + ' · ' + (r.payer === 'me' ? '噜噜支付' : '噜妹支付') + '</div></div>' +
-      '<span class="record-amount">¥' + r.amount + '</span>' +
-      (role !== 'guest' ? '<button class="record-edit" onclick="editRecord(' + r.id + ')" aria-label="修改该记录"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button><button class="record-del" onclick="delRecord(' + r.id + ')" aria-label="删除该记录"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>' : '') + '</div>';
+  const groups = {};
+  records.forEach(r => { (groups[r.date] = groups[r.date] || []).push(r); });
+  const dates = Object.keys(groups).sort((a, b) => toISO(b).localeCompare(toISO(a)));
+  list.innerHTML = dates.map(d => {
+    const items = groups[d];
+    const sub = items.reduce((s, r) => s + r.amount, 0);
+    const collapsed = collapsedDates.has(d);
+    return '<div class="rec-group">' +
+      '<div class="rec-group-head" onclick="toggleDateGroup(\'' + esc(d) + '\')">' +
+      '<span class="rec-group-date">' + esc(fmtDate(d)) + '</span>' +
+      '<span class="rec-group-meta">' + items.length + '笔 · ¥' + sub.toFixed(0) + '</span>' +
+      '<svg class="rec-chev' + (collapsed ? ' closed' : '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>' +
+      '<div class="rec-group-body" style="display:' + (collapsed ? 'none' : 'block') + '">' +
+      items.map(rowHtml).join('') + '</div></div>';
   }).join('');
+}
+function rowHtml(r) {
+  const c = CATS[r.cat] || CATS.other;
+  return '<div class="record-item">' +
+    '<span class="record-cat" style="background:' + c[1] + ';color:' + c[2] + '">' + c[0] + '</span>' +
+    '<div class="record-info"><div class="record-note">' + esc(r.note || c[0]) + '</div>' +
+    '<div class="record-meta">' + (r.payer === 'me' ? '噜噜支付' : '噜妹支付') + '</div></div>' +
+    '<span class="record-amount">¥' + r.amount + '</span>' +
+    (role !== 'guest' ? '<button class="record-edit" onclick="editRecord(' + r.id + ')" aria-label="修改该记录"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg></button><button class="record-del" onclick="delRecord(' + r.id + ')" aria-label="删除该记录"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button>' : '') + '</div>';
+}
+function toggleDateGroup(d) {
+  if (collapsedDates.has(d)) collapsedDates.delete(d); else collapsedDates.add(d);
+  renderRecords();
 }
 // ===== 景点详情弹窗 =====
 const SPOTS = {
