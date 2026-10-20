@@ -1055,6 +1055,12 @@
   .payer-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 14px; background: var(--border); }
   .payer-bar span { height: 100%; }
   .payer-legend { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-tertiary); margin-top: 5px; font-variant-numeric: tabular-nums; }
+  .chart-sub { font-size: 12px; font-weight: 700; color: var(--text-secondary); margin: 14px 0 2px; }
+  .bar-chart { display: flex; align-items: flex-end; gap: 4px; margin-top: 8px; height: 104px; }
+  .bar-col { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+  .bar-val { font-size: 9px; color: var(--text-tertiary); margin-bottom: 3px; font-variant-numeric: tabular-nums; }
+  .bar { width: 100%; max-width: 20px; border-radius: 4px 4px 0 0; background: linear-gradient(180deg, var(--primary-light), var(--primary)); }
+  .bar-lbl { font-size: 9px; color: var(--text-tertiary); margin-top: 4px; font-variant-numeric: tabular-nums; }
   .fab-add {
     position: fixed; right: 18px; bottom: calc(88px + env(safe-area-inset-bottom));
     width: 54px; height: 54px; border-radius: 50%; border: none;
@@ -2149,6 +2155,10 @@ function renderRecords() {
   const sums = {};
   records.forEach(r => { sums[r.cat] = (sums[r.cat] || 0) + r.amount; });
   const entries = Object.entries(sums).sort((a, b) => b[1] - a[1]);
+  const groups = {};
+  records.forEach(r => { (groups[r.date] = groups[r.date] || []).push(r); });
+  const daySums = Object.keys(groups).map(d => [d, groups[d].reduce((s, r) => s + r.amount, 0)]);
+  const maxDay = daySums.length ? Math.max.apply(null, daySums.map(x => x[1])) : 0;
   const csCard = document.getElementById('cat-stats-card');
   if (entries.length && total > 0) {
     csCard.style.display = 'block';
@@ -2173,7 +2183,12 @@ function renderRecords() {
       '<text x="60" y="73" text-anchor="middle" font-size="9" fill="var(--text-tertiary)">总花费</text></svg>' +
       '<div style="flex:1;min-width:0">' + legend + '</div></div>' +
       '<div class="payer-bar"><span style="width:' + mePct + '%;background:var(--primary)"></span><span style="width:' + (100 - mePct) + '%;background:var(--gold)"></span></div>' +
-      '<div class="payer-legend"><span>噜噜 ¥' + me.toFixed(0) + ' · ' + mePct + '%</span><span>噜妹 ¥' + ta.toFixed(0) + ' · ' + (100 - mePct) + '%</span></div>';
+      '<div class="payer-legend"><span>噜噜 ¥' + me.toFixed(0) + ' · ' + mePct + '%</span><span>噜妹 ¥' + ta.toFixed(0) + ' · ' + (100 - mePct) + '%</span></div>' +
+      '<div class="chart-sub">每日消费</div>' +
+      '<div class="bar-chart">' + daySums.sort((a, b) => toISO(a[0]).localeCompare(toISO(b[0]))).map(([d, v]) =>
+        '<div class="bar-col"><div class="bar-val">' + (v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v.toFixed(0)) + '</div>' +
+        '<div class="bar" style="height:' + Math.max(4, Math.round(v / maxDay * 62)) + 'px"></div>' +
+        '<div class="bar-lbl">' + esc(fmtDate(d)).slice(3) + '</div></div>').join('') + '</div>';
   } else {
     csCard.style.display = 'none';
   }
@@ -2182,8 +2197,6 @@ function renderRecords() {
     list.innerHTML = '<div class="empty-tip">还没有记录，出发后在这里记第一笔</div>';
     return;
   }
-  const groups = {};
-  records.forEach(r => { (groups[r.date] = groups[r.date] || []).push(r); });
   const dates = Object.keys(groups).sort((a, b) => toISO(b).localeCompare(toISO(a)));
   list.innerHTML = dates.map(d => {
     const items = groups[d];
