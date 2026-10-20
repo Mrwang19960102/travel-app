@@ -1551,6 +1551,7 @@
           <option value="shop">购物</option>
           <option value="makeup">彩妆</option>
           <option value="cloth">服装</option>
+          <option value="play">娱乐</option>
           <option value="hotel">住宿</option>
           <option value="other">其他</option>
         </select>
@@ -1890,6 +1891,7 @@
         <option value="shop">购物</option>
         <option value="makeup">彩妆</option>
         <option value="cloth">服装</option>
+        <option value="play">娱乐</option>
         <option value="hotel">住宿</option>
         <option value="other">其他</option>
       </select>
@@ -2004,6 +2006,7 @@ const CATS = {
   shop: ['购物', '#f5f3ff', '#6d28d9'],
   makeup: ['彩妆', '#fdf2f8', '#be185d'],
   cloth: ['服装', '#f0f9ff', '#0369a1'],
+  play: ['娱乐', '#f0fdf4', '#15803d'],
   hotel: ['住宿', '#fff1f2', '#e11d48'],
   other: ['其他', '#f1f5f9', '#475569']
 };
@@ -2255,7 +2258,7 @@ function renderRecords() {
   if (entries.length) {
     csCard.style.display = 'block';
     const max = entries[0][1];
-    const COLORS = { food: '#f59e0b', ticket: '#0d9488', traffic: '#3b82f6', shop: '#8b5cf6', makeup: '#be185d', cloth: '#0369a1', hotel: '#e11d48', other: '#64748b' };
+    const COLORS = { food: '#f59e0b', ticket: '#0d9488', traffic: '#3b82f6', shop: '#8b5cf6', makeup: '#be185d', cloth: '#0369a1', play: '#22c55e', hotel: '#e11d48', other: '#64748b' };
     document.getElementById('cat-stats').innerHTML = entries.map(([c, v]) =>
       '<div class="cat-stat-row"><span class="lbl">' + (CATS[c] || CATS.other)[0] + '</span>' +
       '<div class="cat-stat-bar"><div class="cat-stat-fill" style="width:' + Math.round(v / max * 100) + '%;background:' + (COLORS[c] || '#64748b') + '"></div></div>' +
