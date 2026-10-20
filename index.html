@@ -1038,19 +1038,26 @@
   .check-progress { flex: 1; height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
   .check-progress-bar { height: 100%; width: 0; background: var(--primary-gradient); border-radius: 3px; transition: width var(--transition-normal); }
   .check-group-title { font-size: 12px; font-weight: 700; color: var(--text-tertiary); margin: 10px 0 2px; }
-  .cat-stat-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .cat-stat-row .lbl { flex: 0 0 40px; font-size: 12px; color: var(--text-secondary); }
-  .cat-stat-bar { flex: 1; height: 8px; border-radius: 4px; background: var(--border); overflow: hidden; }
-  .cat-stat-fill { height: 100%; border-radius: 4px; }
-  .cat-stat-row .amt { flex: 0 0 64px; text-align: right; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text-primary); }
-  .compare-card {
-    margin: 0 16px 12px; background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius-md); padding: 14px 16px;
+  .donut-wrap { display: flex; gap: 16px; align-items: center; }
+  .donut { width: 118px; height: 118px; flex-shrink: 0; color: var(--text-primary); }
+  .legend-row { display: flex; align-items: center; gap: 8px; font-size: 12px; padding: 3px 0; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .legend-name { flex: 1; color: var(--text-secondary); min-width: 0; }
+  .legend-pct { flex: 0 0 36px; text-align: right; color: var(--text-tertiary); font-variant-numeric: tabular-nums; }
+  .legend-amt { flex: 0 0 62px; text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--text-primary); }
+  .payer-bar { display: flex; height: 8px; border-radius: 4px; overflow: hidden; margin-top: 14px; background: var(--border); }
+  .payer-bar span { height: 100%; }
+  .payer-legend { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-tertiary); margin-top: 5px; font-variant-numeric: tabular-nums; }
+  .fab-add {
+    position: fixed; right: 18px; bottom: calc(88px + env(safe-area-inset-bottom));
+    width: 54px; height: 54px; border-radius: 50%; border: none;
+    background: var(--primary-gradient); color: #fff;
+    box-shadow: var(--shadow-primary); cursor: pointer; z-index: 95;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform var(--transition-fast);
   }
-  .compare-title { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
-  .compare-bar { height: 8px; border-radius: 4px; background: var(--border); overflow: hidden; }
-  .compare-fill { height: 100%; width: 0; background: linear-gradient(90deg, var(--primary), var(--secondary)); border-radius: 4px; transition: width var(--transition-normal); }
-  .compare-text { font-size: 12px; color: var(--text-tertiary); margin-top: 6px; }
+  .fab-add svg { width: 24px; height: 24px; }
+  .fab-add:active { transform: scale(0.92); }
   @media (prefers-color-scheme: dark) {
     :root {
       --surface: #201d19; --background: #141210; --border: #35312a;
@@ -1500,12 +1507,6 @@
   </div>
 
   <div id="exp-real">
-  <div class="compare-card">
-    <div class="compare-title">计划 vs 实际</div>
-    <div class="compare-bar"><div class="compare-fill" id="compare-fill"></div></div>
-    <div class="compare-text" id="compare-text">记账后自动对比</div>
-  </div>
-
   <!-- 实际花费记录 -->
   <div class="recorder-card">
     <div class="recorder-title">
@@ -1520,35 +1521,12 @@
       <div class="login-hint">噜噜/噜妹输入口令后可记账、删除；访客仅可查看</div>
     </div>
     <div id="edit-zone" style="display:none">
-      <div class="payer-switch">
-        <div class="payer-btn active" id="payer-me" onclick="setPayer('me')">噜噜</div>
-        <div class="payer-btn" id="payer-ta" onclick="setPayer('ta')">噜妹</div>
-      </div>
-      <div class="form-row">
-        <input class="form-input amount-input" id="inp-amount" type="number" inputmode="decimal" placeholder="金额 ¥" min="0" step="0.01">
-        <select class="form-input" id="inp-cat" style="flex:0 0 96px">
-          <option value="food">餐饮</option>
-          <option value="ticket">门票</option>
-          <option value="traffic">交通</option>
-          <option value="shop">购物</option>
-          <option value="makeup">彩妆</option>
-          <option value="cloth">服装</option>
-          <option value="play">娱乐</option>
-          <option value="hotel">住宿</option>
-          <option value="other">其他</option>
-        </select>
-      </div>
-      <div class="form-row">
-        <input class="form-input" id="inp-date" type="date" style="flex:0 0 150px">
-        <input class="form-input" id="inp-note" placeholder="备注（可选，如：亿恒夜市晚餐）">
-      </div>
-      <button class="add-btn" id="add-btn" onclick="addRecord()">记一笔并同步</button>
       <button class="logout-btn" onclick="logout()">退出管理</button>
     </div>
     <div class="record-list" id="record-list"></div>
   </div>
   <div class="category-card" id="cat-stats-card" style="display:none">
-    <div class="category-header"><span class="category-name">实际花费 · 分类统计</span></div>
+    <div class="category-header"><span class="category-name">实际花费 · 统计图</span></div>
     <div id="cat-stats"></div>
   </div>
   </div>
@@ -1747,6 +1725,38 @@
   </div>
 </div>
 
+<!-- 记一笔弹窗 -->
+<div class="modal-mask" id="add-modal" onclick="closeAddModal()">
+  <div class="hotel-sheet" onclick="event.stopPropagation()">
+    <div class="sheet-bar"></div>
+    <div class="hotel-title">记一笔</div>
+    <div class="payer-switch">
+      <div class="payer-btn active" id="payer-me" onclick="setPayer('me')">噜噜</div>
+      <div class="payer-btn" id="payer-ta" onclick="setPayer('ta')">噜妹</div>
+    </div>
+    <div class="form-row">
+      <input class="form-input amount-input" id="inp-amount" type="number" inputmode="decimal" placeholder="金额 ¥" min="0" step="0.01">
+      <select class="form-input" id="inp-cat" style="flex:0 0 96px">
+        <option value="food">餐饮</option>
+        <option value="ticket">门票</option>
+        <option value="traffic">交通</option>
+        <option value="shop">购物</option>
+        <option value="makeup">彩妆</option>
+        <option value="cloth">服装</option>
+        <option value="play">娱乐</option>
+        <option value="hotel">住宿</option>
+        <option value="other">其他</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <input class="form-input" id="inp-date" type="date" style="flex:0 0 150px">
+      <input class="form-input" id="inp-note" placeholder="备注（可选，如：亿恒夜市晚餐）">
+    </div>
+    <button class="add-btn" onclick="addRecord()">记一笔并同步</button>
+    <button class="logout-btn" onclick="closeAddModal()">取消</button>
+  </div>
+</div>
+
 <!-- 账单修改弹窗 -->
 <div class="modal-mask" id="edit-modal" onclick="closeEditModal()">
   <div class="hotel-sheet" onclick="event.stopPropagation()">
@@ -1783,6 +1793,10 @@
     <button class="logout-btn" onclick="closeHotel()">关闭</button>
   </div>
 </div>
+
+<button class="fab-add" id="fab-add" style="display:none" onclick="openAddModal()" aria-label="记一笔">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></svg>
+</button>
 
 <div class="toast" id="toast"></div>
 
@@ -1914,6 +1928,7 @@ function applyRole() {
   const guest = role === 'guest';
   document.getElementById('login-zone').style.display = guest ? 'block' : 'none';
   document.getElementById('edit-zone').style.display = guest ? 'none' : 'block';
+  document.getElementById('fab-add').style.display = guest ? 'none' : 'flex';
   const badge = document.getElementById('role-badge');
   badge.textContent = guest ? '查看模式' : (role === 'me' ? '噜噜·管理' : '噜妹·管理');
   badge.classList.toggle('guest', guest);
@@ -2070,6 +2085,13 @@ function saveEdit() {
   syncNow();
   showToast('修改已保存并同步');
 }
+function openAddModal() {
+  clearForm();
+  document.getElementById('add-modal').classList.add('show');
+}
+function closeAddModal() {
+  document.getElementById('add-modal').classList.remove('show');
+}
 function addRecord() {
   const amt = parseFloat(document.getElementById('inp-amount').value);
   if (!amt || amt <= 0) { showToast('请输入有效金额'); return; }
@@ -2082,6 +2104,7 @@ function addRecord() {
     payer: payer,
     date: dateVal
   });
+  closeAddModal();
   clearForm();
   renderRecords();
   syncNow();
@@ -2118,24 +2141,33 @@ function renderRecords() {
   records.forEach(r => { sums[r.cat] = (sums[r.cat] || 0) + r.amount; });
   const entries = Object.entries(sums).sort((a, b) => b[1] - a[1]);
   const csCard = document.getElementById('cat-stats-card');
-  if (entries.length) {
+  if (entries.length && total > 0) {
     csCard.style.display = 'block';
-    const max = entries[0][1];
     const COLORS = { food: '#f59e0b', ticket: '#0d9488', traffic: '#3b82f6', shop: '#8b5cf6', makeup: '#be185d', cloth: '#0369a1', play: '#22c55e', hotel: '#e11d48', other: '#64748b' };
-    document.getElementById('cat-stats').innerHTML = entries.map(([c, v]) =>
-      '<div class="cat-stat-row"><span class="lbl">' + (CATS[c] || CATS.other)[0] + '</span>' +
-      '<div class="cat-stat-bar"><div class="cat-stat-fill" style="width:' + Math.round(v / max * 100) + '%;background:' + (COLORS[c] || '#64748b') + '"></div></div>' +
-      '<span class="amt">¥' + v + '</span></div>').join('');
+    const C = 2 * Math.PI * 42;
+    let acc = 0;
+    const segs = entries.map(([c, v]) => {
+      const frac = v / total;
+      const s = '<circle cx="60" cy="60" r="42" fill="none" stroke="' + (COLORS[c] || '#64748b') + '" stroke-width="14" stroke-dasharray="' + (frac * C).toFixed(2) + ' ' + C.toFixed(2) + '" stroke-dashoffset="' + (-acc * C).toFixed(2) + '"/>';
+      acc += frac;
+      return s;
+    }).join('');
+    const legend = entries.map(([c, v]) =>
+      '<div class="legend-row"><span class="legend-dot" style="background:' + (COLORS[c] || '#64748b') + '"></span>' +
+      '<span class="legend-name">' + (CATS[c] || CATS.other)[0] + '</span>' +
+      '<span class="legend-pct">' + Math.round(v / total * 100) + '%</span>' +
+      '<span class="legend-amt">¥' + v + '</span></div>').join('');
+    const mePct = Math.round(me / total * 100);
+    document.getElementById('cat-stats').innerHTML =
+      '<div class="donut-wrap"><svg class="donut" viewBox="0 0 120 120"><g transform="rotate(-90 60 60)">' + segs + '</g>' +
+      '<text x="60" y="58" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor">¥' + total.toFixed(0) + '</text>' +
+      '<text x="60" y="73" text-anchor="middle" font-size="9" fill="var(--text-tertiary)">总花费</text></svg>' +
+      '<div style="flex:1;min-width:0">' + legend + '</div></div>' +
+      '<div class="payer-bar"><span style="width:' + mePct + '%;background:var(--primary)"></span><span style="width:' + (100 - mePct) + '%;background:var(--gold)"></span></div>' +
+      '<div class="payer-legend"><span>噜噜 ¥' + me.toFixed(0) + ' · ' + mePct + '%</span><span>噜妹 ¥' + ta.toFixed(0) + ' · ' + (100 - mePct) + '%</span></div>';
   } else {
     csCard.style.display = 'none';
   }
-  // 计划vs实际
-  const PLAN = 13400;
-  const pct = Math.min(100, Math.round(total / PLAN * 100));
-  document.getElementById('compare-fill').style.width = pct + '%';
-  document.getElementById('compare-text').textContent = total > PLAN
-    ? '实际 ¥' + total.toFixed(0) + ' · 超计划 ¥' + (total - PLAN).toFixed(0)
-    : '实际 ¥' + total.toFixed(0) + ' / 计划 ¥' + PLAN + ' · 已用 ' + pct + '% · 剩余 ¥' + (PLAN - total).toFixed(0);
   const list = document.getElementById('record-list');
   if (!records.length) {
     list.innerHTML = '<div class="empty-tip">还没有记录，出发后在这里记第一笔</div>';
