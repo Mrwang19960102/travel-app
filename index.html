@@ -1066,6 +1066,15 @@
   .bar-val { font-size: 9px; color: var(--text-tertiary); margin-bottom: 3px; font-variant-numeric: tabular-nums; }
   .bar { width: 100%; max-width: 20px; border-radius: 4px 4px 0 0; background: linear-gradient(180deg, var(--primary-light), var(--primary)); }
   .bar-lbl { font-size: 9px; color: var(--text-tertiary); margin-top: 4px; font-variant-numeric: tabular-nums; }
+  .city-row { margin-top: 12px; }
+  .city-head { display: flex; justify-content: space-between; align-items: center; font-size: 12px; margin-bottom: 4px; }
+  .city-name { font-weight: 700; color: var(--text-primary); letter-spacing: 1px; }
+  .city-total { font-weight: 600; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+  .city-bar { display: flex; height: 10px; border-radius: 5px; overflow: hidden; background: var(--border); }
+  .city-bar span { height: 100%; }
+  .city-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .city-chip { display: inline-flex; align-items: center; gap: 4px; font-size: 10px; color: var(--text-secondary); background: var(--background); border: 1px solid var(--border); padding: 2px 8px; border-radius: 10px; font-variant-numeric: tabular-nums; }
+  .city-chip i { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
   .fab-add {
     position: fixed; right: 18px; bottom: 96px;
     bottom: calc(88px + env(safe-area-inset-bottom));
@@ -1919,6 +1928,16 @@ const CATS = {
   hotel: ['住宿', '#fff1f2', '#e11d48'],
   other: ['其他', '#f1f5f9', '#475569']
 };
+const CITY_BY_DATE = {
+  '10-07': '丽江', '10-08': '大理', '10-09': '大理', '10-10': '丽江',
+  '10-11': '香格里拉', '10-12': '香格里拉', '10-13': '香格里拉',
+  '10-14': '成都',
+  '10-15': '三亚', '10-16': '三亚', '10-17': '三亚', '10-18': '三亚', '10-19': '三亚'
+};
+const CITY_ORDER = ['丽江', '大理', '香格里拉', '成都', '三亚', '其他'];
+function cityOf(dateISO) {
+  return CITY_BY_DATE[String(dateISO).slice(5)] || '其他';
+}
 let records = [];
 const expandedDates = new Set();
 let filterCat = null;
@@ -2203,6 +2222,20 @@ function renderRecords() {
       '<span class="legend-pct">' + Math.round(v / total * 100) + '%</span>' +
       '<span class="legend-amt">¥' + v + '</span></div>').join('');
     const mePct = Math.round(me / total * 100);
+    const citySums = {};
+    records.forEach(r => {
+      const city = cityOf(toISO(r.date));
+      citySums[city] = citySums[city] || {};
+      citySums[city][r.cat] = (citySums[city][r.cat] || 0) + r.amount;
+    });
+    const cityHtml = CITY_ORDER.filter(c => citySums[c]).map(c => {
+      const cats = Object.entries(citySums[c]).sort((a, b) => b[1] - a[1]);
+      const ctotal = cats.reduce((s, x) => s + x[1], 0);
+      const segs = cats.map(([k, v]) => '<span style="width:' + (v / ctotal * 100).toFixed(1) + '%;background:' + (COLORS[k] || '#64748b') + '"></span>').join('');
+      const chips = cats.map(([k, v]) => '<span class="city-chip"><i style="background:' + (COLORS[k] || '#64748b') + '"></i>' + (CATS[k] || CATS.other)[0] + ' ¥' + v.toFixed(0) + '</span>').join('');
+      return '<div class="city-row"><div class="city-head"><span class="city-name">' + c + '</span><span class="city-total">¥' + ctotal.toFixed(0) + '</span></div>' +
+        '<div class="city-bar">' + segs + '</div><div class="city-chips">' + chips + '</div></div>';
+    }).join('');
     document.getElementById('cat-stats').innerHTML =
       '<div class="donut-wrap"><svg class="donut" viewBox="0 0 120 120"><g transform="rotate(-90 60 60)">' + segs + '</g>' +
       '<text x="60" y="58" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor">¥' + total.toFixed(0) + '</text>' +
@@ -2214,7 +2247,8 @@ function renderRecords() {
       '<div class="bar-chart">' + daySums.sort((a, b) => toISO(a[0]).localeCompare(toISO(b[0]))).map(([d, v]) =>
         '<div class="bar-col"><div class="bar-val">' + (v >= 1000 ? (v / 1000).toFixed(1) + 'k' : v.toFixed(0)) + '</div>' +
         '<div class="bar" style="height:' + Math.max(4, Math.round(v / maxDay * 62)) + 'px"></div>' +
-        '<div class="bar-lbl">' + esc(fmtDate(d)).slice(3) + '</div></div>').join('') + '</div>';
+        '<div class="bar-lbl">' + esc(fmtDate(d)).slice(3) + '</div></div>').join('') + '</div>' +
+      '<div class="chart-sub">城市花费 · 品类构成</div>' + cityHtml;
   } else {
     csCard.style.display = 'none';
   }
